@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="thiyagu.postman.com.postmanandroid">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,12 +19,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PopUpActivity"
-            android:theme="@android:style/Theme.Material.Dialog.NoActionBar"></activity>
-        <activity
-            android:name=".Params.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:name=".ParamPopUp"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+
+        </activity>
+        <activity android:name=".DeletePopUp"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+
+        </activity>
     </application>
 
 </manifest>

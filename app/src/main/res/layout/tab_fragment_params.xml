@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+
+        android:id="@+id/AddParams"
+        android:layout_width="128dp"
+        android:layout_height="40dp"
+
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:text="Add Params" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/fab"
+        android:scrollbars="vertical" />
+
+
+</LinearLayout>

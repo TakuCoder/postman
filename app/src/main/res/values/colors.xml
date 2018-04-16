@@ -9,4 +9,5 @@
     <color name="pink">#F78181</color>
     <color name ="gray">#323232</color>
     <color name="orange">#F36F22</color>
+    <color name="cardview_initial_background">#71C3DE</color>
 </resources>

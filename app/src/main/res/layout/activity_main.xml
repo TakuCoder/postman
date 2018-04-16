@@ -42,7 +42,7 @@
 
           <EditText
               android:layout_weight="1"
-              android:id="@+id/editText"
+              android:id="@+id/UrlField"
               android:layout_width="357dp"
               android:layout_height="match_parent"
               android:layout_below="@+id/material_spinner1"
@@ -61,20 +61,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:layout_height="100dp">
+            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/params"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Params"/>
+
 
             <Button
                 android:id="@+id/sendButton"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="50dp"
+
                 android:text="Send" />
 
         </LinearLayout>
@@ -89,13 +84,14 @@
                android:layout_height="wrap_content"
                android:background="?attr/colorPrimary"
                android:elevation="6dp"
+               app:tabMode="scrollable"
                android:minHeight="?attr/actionBarSize"
                />
+
            <android.support.v4.view.ViewPager
                android:id="@+id/pager"
                android:layout_width="match_parent"
-               android:layout_height="fill_parent"
-               />
+               android:layout_height="match_parent" />
        </RelativeLayout>
 
     </LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    tools:context="thiyagu.postman.com.postmanandroid.MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="2dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:text="Delete" />
+
+        </LinearLayout>
+
+
+
+
+
+</android.support.constraint.ConstraintLayout>
