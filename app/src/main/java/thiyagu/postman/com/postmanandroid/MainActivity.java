@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import okhttp3.Headers;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        final String[] request = {"GET", "POST", "DELETE", "UNLOCK"};
+        final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
         materialBetterSpinner.setAdapter(arrayadapter);
         UrlField = findViewById(R.id.UrlField);
-
+        UrlField.setText("http://192.168.1.110:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,27 +96,27 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.v("sdasdasdas", "GET");
 
-                        new RequestMaker().execute(Address, headerBuilder);
+                        new RequestMaker().execute("GET",Address, headerBuilder);
 
                         break;
 
                     case "POST":
 
                         Log.v("sdasdasdas", "POST");
-                        new RequestMaker().execute(Address,headerBuilder);
+                        new RequestMaker().execute("POST",Address,headerBuilder);
 
                         break;
 
                     case "DELETE":
 
                         Log.v("sdasdasdas", "DELETE");
-                        new RequestMaker().execute(Address,headerBuilder);
+                        new RequestMaker().execute("DELETE",Address,headerBuilder);
                         break;
 
-                    case "UNLOCK":
+                    case "PUT":
 
-                        Log.v("sdasdasdas", "UNLOCK");
-                        new RequestMaker().execute(Address,headerBuilder);
+                        Log.v("sdasdasdas", "PUT");
+                        new RequestMaker().execute("UNLOCK",Address,headerBuilder);
                         break;
 
 
@@ -148,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Object... strings) {
 
-
-            String urlvalue = (String) strings[0];
-            Headers.Builder headerbuilder = (Headers.Builder) strings[1];
+            String method = (String)strings[0];
+            String urlvalue = (String) strings[1];
+            Headers.Builder headerbuilder = (Headers.Builder) strings[2];
             if (urlvalue.contains("www") || urlvalue.contains("http")) {
 
 
@@ -162,40 +163,141 @@ public class MainActivity extends AppCompatActivity {
             }
             Log.v("thisisurl", urlvalue);
 
-            try
 
+            if(method.equals("GET"))
             {
-               OkHttpClient client = new OkHttpClient();
-//                Headers h = headerbuilder.build();
-//                Request request = new Request.Builder()
-//                        .url(urlvalue)
-//                        .get().headers(h)
-//                        .build();
-//                Response response = client.newCall(request).execute();
-//                Log.v("response", response.toString());
+                try {
+                    OkHttpClient client = new OkHttpClient();
+
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .get()
+                            .addHeader("cache-control", "no-cache")
+                            .addHeader("postman-token", "c17e5c97-0297-9916-616c-435fe2adff89")
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                }
+                catch (Exception e)
+                {
 
 
+                    e.printStackTrace();
+                }
 
-
-
-
-
-                                        RequestBody requestBody = new MultipartBody.Builder()
-                                .setType(MultipartBody.FORM)
-                                .addFormDataPart("somParam", "someValue")
-                                .build();
-
-                        Request request = new Request.Builder()
-                                .url(urlvalue)
-                                .post(requestBody)
-                                .build();
-                Response response = client.newCall(request).execute();
-            } catch (Exception e) {
-
-                Log.v("asdsdasdad", e.toString());
 
 
             }
+            else if(method.equals("POST"))
+            {
+                try {
+
+                    OkHttpClient client = new OkHttpClient();
+
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .post(null)
+                            .addHeader("cache-control", "no-cache")
+                            .addHeader("postman-token", "40a4fac7-9aa4-8b7f-7972-db3441ba2bba")
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                }
+                catch (Exception e)
+                {
+
+
+                    e.printStackTrace();
+                }
+
+
+
+            }
+            else if(method.equals("DELETE"))
+            {
+                try {
+
+                    OkHttpClient client = new OkHttpClient();
+
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .delete(null)
+                            .addHeader("cache-control", "no-cache")
+                            .addHeader("postman-token", "d3989091-6532-ceb2-a984-15dc10ec560c")
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                }
+                catch (Exception e)
+                {
+
+
+                    e.printStackTrace();
+                }
+
+
+            }
+            else if(method.equals("PUT"))
+            {
+
+                try {
+
+                    OkHttpClient client = new OkHttpClient();
+
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .put(null)
+                            .addHeader("cache-control", "no-cache")
+                            .addHeader("postman-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
+                            .build();
+
+                    Response response = client.newCall(request).execute();
+                }
+                catch (Exception e)
+                {
+
+
+                    e.printStackTrace();
+                }
+
+            }
+
+
+
+//            try
+//
+//            {
+//               OkHttpClient client = new OkHttpClient();
+////                Headers h = headerbuilder.build();
+////                Request request = new Request.Builder()
+////                        .url(urlvalue)
+////                        .get().headers(h)
+////                        .build();
+////                Response response = client.newCall(request).execute();
+////                Log.v("response", response.toString());
+//
+//
+//
+//
+//
+//
+//
+//                                RequestBody requestBody = new MultipartBody.Builder()
+//                                .setType(MultipartBody.FORM)
+//                                .addFormDataPart("somParam", "someValue")
+//                                .build();
+//
+//                        Request request = new Request.Builder()
+//                                .url(urlvalue)
+//                                .post(requestBody)
+//                                .build();
+//                Response response = client.newCall(request).execute();
+//            } catch (Exception e) {
+//
+//                Log.v("asdsdasdad", e.toString());
+//
+//
+//            }
             return null;
         }
 
