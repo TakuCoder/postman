@@ -17,19 +17,43 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "mydata.db";
-    private static final String TABLE_NAME = "Entry";
+    private static final String TABLE_NAME_PARAM = "param";
+    private static final String TABLE_NAME_BODY = "body";
+    private static final String TABLE_NAME_RESPONSE = "response";
+    private static final String COLUMN_RESPONSE = "columnresponse";
+    private static final String TABLE_NAME_HEADER = "header";
     private static final String ID = "id";
     private static final String COLUMN_KEY = "key";
     private static final String COLUMN_FLAG = "flag";
     private static final String COLUMN_VALUE = "value";
 
-    private static final String SQL_CREATE_ENTRIES =
-                    "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME + " (" +
+    private static final String SQL_CREATE_TABLE_PARAM =
+            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_PARAM + " (" +
                     FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
                     FeedReaderDbHelper.COLUMN_KEY + " TEXT," +
                     FeedReaderDbHelper.COLUMN_FLAG + " TEXT," +
                     FeedReaderDbHelper.COLUMN_VALUE + " TEXT)";
 
+
+    private static final String SQL_CREATE_TABLE_RESPONSE =
+            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_RESPONSE + " (" +
+                    FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
+                    FeedReaderDbHelper.COLUMN_RESPONSE + " TEXT)";
+
+
+    private static final String SQL_CREATE_TABLE_BODY =
+            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_BODY + " (" +
+                    FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
+                    FeedReaderDbHelper.COLUMN_KEY + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_FLAG + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_VALUE + " TEXT)";
+
+    private static final String SQL_CREATE_TABLE_HEADER =
+            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_HEADER + " (" +
+                    FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
+                    FeedReaderDbHelper.COLUMN_KEY + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_FLAG + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_VALUE + " TEXT)";
 
 
     public FeedReaderDbHelper(Context context) {
@@ -38,82 +62,228 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_TABLE_PARAM);
+        db.execSQL(SQL_CREATE_TABLE_BODY);
+        db.execSQL(SQL_CREATE_TABLE_HEADER);
+        db.execSQL(SQL_CREATE_TABLE_RESPONSE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PARAM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BODY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_HEADER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_RESPONSE);
         onCreate(db);
 
 
     }
 
-    public void addEntry(DataPojoClass dataPojoClass)
-    {
+    public void addEntryParam(DataPojoClass dataPojoClass) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_KEY,dataPojoClass.getKey());
-        values.put(COLUMN_VALUE,dataPojoClass.getValue());
-        values.put(COLUMN_FLAG,dataPojoClass.getFlag());
-        db.insert(TABLE_NAME,null,values);
-        PrintAllData();
+        values.put(COLUMN_KEY, dataPojoClass.getKey());
+        values.put(COLUMN_VALUE, dataPojoClass.getValue());
+        values.put(COLUMN_FLAG, dataPojoClass.getFlag());
+        db.insert(TABLE_NAME_PARAM, null, values);
+        PrintAllParam();
         db.close();
 
 
     }
- public ArrayList<String> getAllCotacts() {
-    ArrayList<String> array_list = new ArrayList<String>();
 
-    //hp = new HashMap();
-    SQLiteDatabase db = this.getReadableDatabase();
-    Cursor res =  db.rawQuery( "select * from "+TABLE_NAME, null );
-    res.moveToFirst();
+    public void addEntryBody(DataPojoClass dataPojoClass) {
 
-    while(res.isAfterLast() == false){
-        //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_KEY, dataPojoClass.getKey());
+        values.put(COLUMN_VALUE, dataPojoClass.getValue());
+        values.put(COLUMN_FLAG, dataPojoClass.getFlag());
+        db.insert(TABLE_NAME_BODY, null, values);
+        PrintAllBody();
+        db.close();
 
-        array_list.add(res.getString(res.getColumnIndex(ID))+"@@"+res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE)));
-        res.moveToNext();
+
     }
-    return array_list;
-}
 
-    public void PrintAllData() {
+    public void addEntryHeader(DataPojoClass dataPojoClass) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_KEY, dataPojoClass.getKey());
+        values.put(COLUMN_VALUE, dataPojoClass.getValue());
+        values.put(COLUMN_FLAG, dataPojoClass.getFlag());
+        db.insert(TABLE_NAME_HEADER, null, values);
+        PrintAllParamHeader();
+        db.close();
+
+
+    }
+
+
+    public void addResponse(ResponsePojoClass responsePojoClass) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RESPONSE, responsePojoClass.getResponse());
+        db.insert(TABLE_NAME_RESPONSE, null, values);
+        db.close();
+        PrintResponse();
+
+    }
+
+
+    public ArrayList<String> getAllParam() {
         ArrayList<String> array_list = new ArrayList<String>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from "+TABLE_NAME, null );
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_PARAM, null);
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+
+    public ArrayList<String> getAllBody() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_BODY, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public ArrayList<String> getAllHeader() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HEADER, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+
+    public void PrintAllParam() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_PARAM, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
             array_list.add(res.getString(res.getColumnIndex(ID)));
             res.moveToNext();
         }
-        Log.v("thisisallcontent",array_list.toString());
-    }
-public void DeleteOldRecords()
-    {
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.execSQL("delete from "+ TABLE_NAME);
-
-
+        Log.v("thisisallcontent", array_list.toString());
     }
 
-    public void DeleteSingleRec(int id)
-    {
-        PrintAllData();
-        Log.v("stausssss","beforeeeeeeeeeeeeeeeeeeee");
+    public void PrintResponse() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_RESPONSE, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(COLUMN_RESPONSE)));
+            res.moveToNext();
+        }
+        Log.v("thisisallcontent", array_list.toString());
+    }
+
+    public void PrintAllBody() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_BODY, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(ID)));
+            res.moveToNext();
+        }
+        Log.v("thisisallcontent", array_list.toString());
+    }
+
+
+    public void PrintAllParamHeader() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HEADER, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            array_list.add(res.getString(res.getColumnIndex(ID)));
+            res.moveToNext();
+        }
+        Log.v("thisisallcontent", array_list.toString());
+    }
+
+    public void DeleteOldRecords() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("delete from " + TABLE_NAME_PARAM);
+
+
+    }
+
+    public void DeleteSingleRecParam(int id) {
+        PrintAllParam();
+
         SQLiteDatabase db = this.getReadableDatabase();
 
-        db.execSQL("delete from "+ TABLE_NAME +" where id = "+id);
-        PrintAllData();
-        Log.v("stausssss","Afterrrrrrrrrrrrrrrrrrrrrr");
+        db.execSQL("delete from " + TABLE_NAME_PARAM + " where id = " + id);
+        PrintAllParam();
 
 
+    }
 
+    public void DeleteSingleRecBody(int id) {
+        PrintAllParam();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        db.execSQL("delete from " + TABLE_NAME_BODY + " where id = " + id);
+        PrintAllParam();
+
+
+    }
+
+    public void DeleteSingleRecHeader(int id) {
+        PrintAllParam();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        db.execSQL("delete from " + TABLE_NAME_HEADER + " where id = " + id);
+        PrintAllParam();
 
 
     }

@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:background="#ff6c37"
-        android:text="Add Params"
+        android:text="Add Header"
         android:textColor="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView

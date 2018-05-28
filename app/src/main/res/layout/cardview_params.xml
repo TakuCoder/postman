@@ -2,23 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearhead"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="2dp"
+
+        card_view:cardBackgroundColor="#464646"
         card_view:cardCornerRadius="0dp"
         card_view:contentPadding="1dp">
 
         <RelativeLayout
             android:id="@+id/realtiveeee"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+          >
 
             <TextView
                 android:id="@+id/textView"
@@ -26,8 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/checkBox"
                 android:hint="Key"
+
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -38,18 +44,19 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/textView"
                 android:layout_marginTop="10dp"
-                android:layout_toStartOf="@+id/checkBox"
                 android:hint="Value"
+
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="11dp" />
+            <!--<CheckBox-->
+            <!--android:id="@+id/checkBox"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="11dp" />-->
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

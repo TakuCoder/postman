@@ -5,94 +5,99 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
-    tools:context="thiyagu.postman.com.postmanandroid.MainActivity">
+    tools:context="thiyagu.postman.com.postmanandroid.Activities.MainActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:padding="2dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_height="match_parent">
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-          android:layout_height="wrap_content">
-
-
-          <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-              android:id="@+id/material_spinner1"
-              android:layout_width="216dp"
-              android:layout_height="match_parent"
-              android:layout_marginBottom="8dp"
-              android:layout_marginEnd="8dp"
-              android:layout_marginLeft="16dp"
-              android:layout_marginStart="8dp"
-              android:layout_marginTop="8dp"
-              android:layout_weight="0.5"
-              android:gravity="center"
-              android:hint="Request type"
-              android:textColorHint="#CFD8DC"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintHorizontal_bias="0.052"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintVertical_bias="0.048"
-              app:met_floatingLabel="normal" />
-
-          <EditText
-              android:layout_weight="1"
-              android:id="@+id/UrlField"
-              android:layout_width="357dp"
-              android:layout_height="match_parent"
-              android:layout_below="@+id/material_spinner1"
-              android:layout_centerHorizontal="true"
-              android:ems="10"
-              android:inputType="textPersonName"
-           android:hint="URL"
-              app:layout_constraintBottom_toBottomOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintHorizontal_bias="0.727"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              app:layout_constraintVertical_bias="0.227" />
-      </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
 
 
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/material_spinner1"
+                android:layout_width="216dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:hint="Request type"
+                android:textColorHint="#CFD8DC"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.052"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.048"
+                app:met_floatingLabel="normal" />
+
+            <EditText
+                android:id="@+id/UrlField"
+                android:layout_width="357dp"
+                android:textColor="@android:color/white"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="URL"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.727"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.227" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:elevation="6dp"
+                android:minHeight="?attr/actionBarSize"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/white" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="46dp">
+
+            </android.support.v4.view.ViewPager>
 
             <Button
                 android:id="@+id/sendButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-
-                android:text="Send" />
+                android:background="@drawable/sendbuttonbackground"
+                android:text="Send"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
-       <RelativeLayout
-           android:layout_width="wrap_content"
-           android:layout_height="match_parent">
-
-
-           <android.support.design.widget.TabLayout
-               android:id="@+id/tab_layout"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:background="?attr/colorPrimary"
-               android:elevation="6dp"
-               app:tabMode="scrollable"
-               android:minHeight="?attr/actionBarSize"
-               />
-
-           <android.support.v4.view.ViewPager
-               android:id="@+id/pager"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent" />
-       </RelativeLayout>
 
     </LinearLayout>
 

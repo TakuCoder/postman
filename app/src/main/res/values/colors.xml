@@ -5,9 +5,10 @@
 
     <color name="colorPrimary">#464646</color>
     <color name="colorPrimaryDark">#464646</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff6c37</color>
     <color name="pink">#F78181</color>
-    <color name ="gray">#323232</color>
-    <color name="orange">#F36F22</color>
+    <color name ="gray">#202020</color>
+    <color name="orange">#ff6c37</color>
+    <color name="buttonblue">#097bed</color>
     <color name="cardview_initial_background">#71C3DE</color>
 </resources>

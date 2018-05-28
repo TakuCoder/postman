@@ -15,15 +15,15 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.PopupActivities.HeaderPopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
 /**
  * Created by thiyagu on 4/6/2018.
  */
 
-public class BodyFragment extends Fragment {
+public class HeaderFragment extends Fragment {
     Button AddParams;
     RecyclerView recyclerView;
     Context context;
@@ -33,6 +33,11 @@ public class BodyFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -40,24 +45,20 @@ public class BodyFragment extends Fragment {
             if (resultCode == -1) {
                 String strEditText = data.getStringExtra("editTextValue");
 
-                ParamsAdapter = new BodyAdapter(getDataSet(), context);
+                ParamsAdapter = new HeaderAdapter(getDataSet(), context);
                 recyclerView.setAdapter(null);
                 recyclerView.setAdapter(ParamsAdapter);
             }
         }
     }
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         ParamLayoutManager = new LinearLayoutManager(getContext());
 
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
-        View view = inflater.inflate(R.layout.tab_fragment_body, container, false);
+        View view = inflater.inflate(R.layout.tab_fragment_header, container, false);
         context = view.getContext();
 
 
@@ -66,13 +67,13 @@ public class BodyFragment extends Fragment {
         AddParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), BodyPopUp.class);
+                Intent intent = new Intent(getContext(), HeaderPopUp.class);
                 startActivityForResult(intent, 1);
 
             }
         });
         recyclerView.setLayoutManager(ParamLayoutManager);
-        ParamsAdapter = new BodyAdapter(getDataSet(), context);
+        ParamsAdapter = new HeaderAdapter(getDataSet(), context);
 
         recyclerView.setAdapter(ParamsAdapter);
         return view;
@@ -82,20 +83,20 @@ public class BodyFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
     }
-    private ArrayList<BodyDataObject> getDataSet()
+    private ArrayList<HeaderDataObject> getDataSet()
 
     {
 
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllBody();
+        ArrayList<String> dataa = feedReaderDbHelper.getAllHeader();
         Log.v("asdasdsad", dataa.toString());
-        ArrayList<BodyDataObject> results = new ArrayList<>();
+        ArrayList<HeaderDataObject> results = new ArrayList<>();
 
         for (int i = 0; i < dataa.size(); i++) {
 
             String[] splitt = dataa.get(i).split("@@");
             // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            BodyDataObject paramDataObject = new BodyDataObject(splitt[0], splitt[1], splitt[2]);
+            HeaderDataObject paramDataObject = new HeaderDataObject(splitt[0], splitt[1], splitt[2]);
 
 
             results.add(i, paramDataObject);
@@ -106,4 +107,5 @@ public class BodyFragment extends Fragment {
 
         return results;
     }
+
 }

@@ -19,16 +19,16 @@ import java.util.ArrayList;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
-public class ParamAdapter extends RecyclerView
-        .Adapter<ParamAdapter
+public class BodyAdapter extends RecyclerView
+        .Adapter<BodyAdapter
         .DataObjectHolder> implements View.OnClickListener {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private ArrayList<ParamDataObject> mDataset;
+    private ArrayList<BodyDataObject> mDataset;
     public Context mcontext;
     private static MyClickListener myClickListener;
 
 
-    public ParamAdapter(ParamDataObject dataObject, int i)
+    public BodyAdapter(BodyDataObject dataObject, int i)
     {
         addItem(dataObject,i);
     }
@@ -61,7 +61,7 @@ public class ParamAdapter extends RecyclerView
         this.myClickListener = myClickListener;
     }
 
-    public ParamAdapter(ArrayList<ParamDataObject> myDataset, Context context) {
+    public BodyAdapter(ArrayList<BodyDataObject> myDataset, Context context) {
         mDataset = myDataset;
         mcontext = context;
     }
@@ -97,7 +97,7 @@ public class ParamAdapter extends RecyclerView
                 String sss = holder.card_view.getTag().toString();
                 Intent intent = new Intent(mcontext, DeletePopUp.class);
                 intent.putExtra("deleteid",String.valueOf(sss));
-                intent.putExtra("whichrecord","param");
+                intent.putExtra("whichrecord","body");
                 mcontext.startActivity(intent);
 
 
@@ -109,7 +109,7 @@ public class ParamAdapter extends RecyclerView
 
     }
 
-    public void addItem(ParamDataObject dataObj, int index) {
+    public void addItem(BodyDataObject dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }
