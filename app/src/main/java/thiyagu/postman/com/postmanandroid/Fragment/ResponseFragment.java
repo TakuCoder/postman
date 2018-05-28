@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +55,7 @@ public class ResponseFragment extends Fragment {
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_response, container, false);
         Context context = view.getContext();
-        //textView = view.findViewById(R.id.textView);
+        textView = view.findViewById(R.id.textView);
         time = view.findViewById(R.id.time);
         code = view.findViewById(R.id.code);
         JsonRecyclerView mRecyclewView = view.findViewById(R.id.rv_json);
@@ -72,7 +70,23 @@ public class ResponseFragment extends Fragment {
         String timevalue = prefs.getString("time", null);
         String codevalue = prefs.getString("code", null);
         //textView.setText(responsetext);
-        mRecyclewView.bindJson(responsetext);
+
+
+
+        try
+        {
+            mRecyclewView.bindJson(responsetext);
+            textView.setVisibility(View.INVISIBLE);
+
+        }
+        catch(Exception e)
+        {
+            textView.setText(responsetext);
+            mRecyclewView.setVisibility(View.GONE);
+
+
+        }
+
         time.setText(timevalue);
         code.setText(codevalue);
         if(Integer.valueOf(codevalue)<=99)
