@@ -75,6 +75,9 @@ public class ResponseFragment extends Fragment {
 
         try
         {
+            Log.v("sdsdsdsd",responsetext);
+            Log.v("sdsdsdsd",timevalue);
+            Log.v("sdsdsdsd",codevalue);
             mRecyclewView.bindJson(responsetext);
             textView.setVisibility(View.INVISIBLE);
 
@@ -89,24 +92,39 @@ public class ResponseFragment extends Fragment {
 
         time.setText(timevalue);
         code.setText(codevalue);
-        if(Integer.valueOf(codevalue)<=99)
+
+
+        try
         {
 
-            time.setTextColor(Color.parseColor("#0a8108"));
-            Log.v("amhere","1");
+            if(Integer.valueOf(codevalue)<=99)
+            {
+
+                time.setTextColor(Color.parseColor("#0a8108"));
+                Log.v("amhere","1");
+
+            }
+            else if(Integer.valueOf(codevalue)>=100 && Integer.valueOf(codevalue)<=150)
+            {
+                time.setTextColor(Color.parseColor("#cddc39"));
+                Log.v("amhere","2");
+
+            }
+            else  if(Integer.valueOf(codevalue)>=150 && Integer.valueOf(codevalue)<=200)
+            {
+                time.setTextColor(Color.parseColor("#c62828"));    Log.v("amhere","3");
+
+            }
 
         }
-        else if(Integer.valueOf(codevalue)>=100 && Integer.valueOf(codevalue)<=150)
+
+        catch(Exception e)
         {
-            time.setTextColor(Color.parseColor("#cddc39"));
-            Log.v("amhere","2");
+
+
 
         }
-        else  if(Integer.valueOf(codevalue)>=150 && Integer.valueOf(codevalue)<=200)
-        {
-           time.setTextColor(Color.parseColor("#c62828"));    Log.v("amhere","3");
 
-        }
 
 
 

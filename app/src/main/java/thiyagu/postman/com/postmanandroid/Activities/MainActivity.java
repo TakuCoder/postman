@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
-        UrlField.setText("http://192.168.1.110:8080/");
+        UrlField.setText("http://192.168.1.157:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
                         new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
 
-                        responsetab.select();
+                        //responsetab.select();
                         break;
 
                     case "POST":
@@ -159,21 +159,21 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("sdasdasdas", "POST");
                         new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
 
-                        responsetab.select();
+                        //responsetab.select();
                         break;
 
                     case "DELETE":
 
                         Log.v("sdasdasdas", "DELETE");
                         new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                        responsetab.select();
+                        //responsetab.select();
                         break;
 
                     case "PUT":
 
                         Log.v("sdasdasdas", "PUT");
                         new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
-                        responsetab.select();
+                        //responsetab.select();
                         break;
 
 
@@ -254,31 +254,9 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onResponse(Call call, Response response) throws IOException {
+                        public void onResponse(Call call,final Response response) throws IOException {
 
-                            String bodyy = response.body().string();
-                            int responsecode = response.code();
 
-                            String Headers = response.headers().toString();
-                            Log.d("thisisbody",bodyy);
-                            Log.d("responsecodeeee",String.valueOf(responsecode));
-                            Log.d("thisisheader",Headers);
-                            long tx = response.sentRequestAtMillis();
-                            long rx = response.receivedResponseAtMillis();
-                            Log.d("thisisheader","response time : "+(rx - tx)+" ms");
-                            Bundle bundle = new Bundle();
-                            bundle.putString("time",""+(rx - tx));
-
-//                            StoreResponse storeResponse = new StoreResponse(sss);
-//
-//
-//                            Log.v("adsdsdasd",storeResponse.getResponse());
-
-                            SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                            editor.putString("response", bodyy);
-                            editor.putString("code", String.valueOf(responsecode));
-                            editor.putString("time", ""+(rx - tx));
-                            editor.apply();
 //new Handler().postDelayed(new Runnable() {
 //    @Override
 //    public void run() {
@@ -288,10 +266,49 @@ public class MainActivity extends AppCompatActivity {
 
 runOnUiThread(new Runnable() {
     @Override
-    public void run() {
+    public void run()
+
+    {
+try
+{
+        String bodyy = response.body().string();
+        int responsecode = response.code();
+
+        String Headers = response.headers().toString();
+        Log.d("thisisbody", bodyy);
+        Log.d("responsecodeeee", String.valueOf(responsecode));
+        Log.d("thisisheader", Headers);
+        long tx = response.sentRequestAtMillis();
+        long rx = response.receivedResponseAtMillis();
+        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
+        Bundle bundle = new Bundle();
+        bundle.putString("time", "" + (rx - tx));
+
+//                            StoreResponse storeResponse = new StoreResponse(sss);
+//
+//
+//                            Log.v("adsdsdasd",storeResponse.getResponse());
+
+        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+        editor.putString("response", bodyy);
+        editor.putString("code", String.valueOf(responsecode));
+        editor.putString("time", "" + (rx - tx));
+        editor.apply();
         TabLayout.Tab tab = tabLayout.getTabAt(4);
         tab.select();
     }
+catch(Exception e)
+{
+
+Log.v("asdasdasd",e.toString());
+
+
+}
+}
+
+
+
+
 });
 
 //                            ResponsePojoClass responsePojoClass = new ResponsePojoClass(sss);
@@ -346,10 +363,18 @@ runOnUiThread(new Runnable() {
 
                     Response response = client.newCall(request).execute();
                     Log.v("response",response.body().string());
-                } catch (Exception e) {
+                } catch (final Exception e) {
 
 
                     e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.v("dsdsdsd",e.toString());
+                            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
 
