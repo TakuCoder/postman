@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.IOException;
@@ -30,13 +29,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
+import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ResponseFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
-import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.R;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
 
 
-
                 if (String.valueOf(i).equals("1")) {
 
 
@@ -85,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
 
 
         UrlField = findViewById(R.id.UrlField);
@@ -175,6 +181,26 @@ public class MainActivity extends AppCompatActivity {
                         new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
                         //responsetab.select();
                         break;
+default:
+
+    new MaterialTapTargetPrompt.Builder(MainActivity.this)
+            .setTarget(findViewById(R.id.material_spinner1))
+            .setPrimaryText("Select the type of request")
+            .setPromptBackground(new RectanglePromptBackground())
+            .setPromptFocal(new RectanglePromptFocal())
+            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+            {
+                @Override
+                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                    {
+                        Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            })
+            .show();
 
 
                 }
@@ -182,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 
@@ -193,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new AuthorizationFragment(), "AUTHORIZATION");
         adapter.addFragment(new HeaderFragment(), "HEADER");
         adapter.addFragment(new BodyFragment(), "BODY");
-        adapter.addFragment(new ResponseFragment(),"RESPONSE");
+        adapter.addFragment(new ResponseFragment(), "RESPONSE");
         viewPager.setAdapter(adapter);
     }
 
@@ -203,7 +230,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class RequestMaker extends AsyncTask<Object, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
+
+
+
+        }
 
         @Override
         protected String doInBackground(Object... strings) {
@@ -238,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
                     OkHttpClient client = new OkHttpClient();
 
-                    Request request = new Request.Builder()
+                            Request request = new Request.Builder()
                             .url(urlvalue)
                             .get()
                             .headers(customheader)
@@ -246,74 +280,59 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
 
-
-                    client.newCall(request).enqueue(new Callback() {
+                        client.newCall(request).enqueue(new Callback()
+                        {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            Log.d("TAG","failure");
+                            Log.d("TAG", "failure");
                         }
 
                         @Override
-                        public void onResponse(Call call,final Response response) throws IOException {
-
-
-//new Handler().postDelayed(new Runnable() {
-//    @Override
-//    public void run() {
-//
-//    }
-//},100);
-
-runOnUiThread(new Runnable() {
-    @Override
-    public void run()
-
-    {
-try
-{
-        String bodyy = response.body().string();
-        int responsecode = response.code();
-
-        String Headers = response.headers().toString();
-        Log.d("thisisbody", bodyy);
-        Log.d("responsecodeeee", String.valueOf(responsecode));
-        Log.d("thisisheader", Headers);
-        long tx = response.sentRequestAtMillis();
-        long rx = response.receivedResponseAtMillis();
-        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
-        Bundle bundle = new Bundle();
-        bundle.putString("time", "" + (rx - tx));
-
-//                            StoreResponse storeResponse = new StoreResponse(sss);
-//
-//
-//                            Log.v("adsdsdasd",storeResponse.getResponse());
-
-        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-        editor.putString("response", bodyy);
-        editor.putString("code", String.valueOf(responsecode));
-        editor.putString("time", "" + (rx - tx));
-        editor.apply();
-        TabLayout.Tab tab = tabLayout.getTabAt(4);
-        tab.select();
-    }
-catch(Exception e)
-{
-
-Log.v("asdasdasd",e.toString());
-
-
-}
-}
+                        public void onResponse(Call call, final Response response) throws IOException {
 
 
 
 
-});
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
 
-//                            ResponsePojoClass responsePojoClass = new ResponsePojoClass(sss);
-//                            FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplicationContext());
-//                            feedReaderDbHelper.addResponse(responsePojoClass);
+                                {
+                                    try
+                                    {
+                                        String bodyy = response.body().string();
+                                        int responsecode = response.code();
+
+                                        String Headers = response.headers().toString();
+                                        Log.d("thisisbody", bodyy);
+                                        Log.d("responsecodeeee", String.valueOf(responsecode));
+                                        Log.d("thisisheader", Headers);
+                                        long tx = response.sentRequestAtMillis();
+                                        long rx = response.receivedResponseAtMillis();
+                                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("time", "" + (rx - tx));
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                        editor.putString("response", bodyy);
+                                        editor.putString("code", String.valueOf(responsecode));
+                                        editor.putString("time", "" + (rx - tx));
+                                        editor.apply();
+                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                        tab.select();
+                                    } catch (Exception e)
+                                    {
+
+                                        Log.v("asdasdasd", e.toString());
+
+
+                                    }
+                                }
+
+
+                            });
+
 
                         }
                     });
@@ -327,8 +346,10 @@ Log.v("asdasdasd",e.toString());
                 }
 
 
-            } else if (method.equals("POST")) {
-                try {
+            } else if (method.equals("POST"))
+            {
+                try
+                {
 
 
                     OkHttpClient client = new OkHttpClient();
@@ -361,8 +382,59 @@ Log.v("asdasdasd",e.toString());
                             .build();
 
 
-                    Response response = client.newCall(request).execute();
-                    Log.v("response",response.body().string());
+                   // Response response = client.newCall(request).execute();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, final Response response) throws IOException {
+
+                            runOnUiThread(new Runnable()
+                            {
+                                @Override
+                                public void run()
+
+                                {
+                                    try
+                                    {
+                                        String bodyy = response.body().string();
+                                        int responsecode = response.code();
+
+                                        String Headers = response.headers().toString();
+                                        Log.d("thisisbody", bodyy);
+                                        Log.d("responsecodeeee", String.valueOf(responsecode));
+                                        Log.d("thisisheader", Headers);
+                                        long tx = response.sentRequestAtMillis();
+                                        long rx = response.receivedResponseAtMillis();
+                                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("time", "" + (rx - tx));
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                        editor.putString("response", bodyy);
+                                        editor.putString("code", String.valueOf(responsecode));
+                                        editor.putString("time", "" + (rx - tx));
+                                        editor.apply();
+                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                        tab.select();
+                                    } catch (Exception e)
+                                    {
+
+                                        Log.v("asdasdasd", e.toString());
+
+
+                                    }
+                                }
+
+
+                            });
+                        }
+                    });
+
                 } catch (final Exception e) {
 
 
@@ -371,8 +443,8 @@ Log.v("asdasdasd",e.toString());
                         @Override
                         public void run() {
 
-                            Log.v("dsdsdsd",e.toString());
-                            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                            Log.v("dsdsdsd", e.toString());
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
