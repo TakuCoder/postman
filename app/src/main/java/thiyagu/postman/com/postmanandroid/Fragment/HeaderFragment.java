@@ -24,7 +24,7 @@ import thiyagu.postman.com.postmanandroid.R;
  */
 
 public class HeaderFragment extends Fragment {
-    Button AddParams;
+    Button AddHeader;
     RecyclerView recyclerView;
     Context context;
     RecyclerView.Adapter ParamsAdapter;
@@ -63,8 +63,8 @@ public class HeaderFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
-        AddParams = view.findViewById(R.id.AddParams);
-        AddParams.setOnClickListener(new View.OnClickListener() {
+        AddHeader = view.findViewById(R.id.AddHeader);
+        AddHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HeaderPopUp.class);

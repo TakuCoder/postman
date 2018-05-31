@@ -37,6 +37,7 @@ import thiyagu.postman.com.postmanandroid.Fragment.ResponseFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
 
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tab_layout);
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, R.layout.dropdown, request);
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.material_spinner1);
@@ -186,7 +187,7 @@ default:
     new MaterialTapTargetPrompt.Builder(MainActivity.this)
             .setTarget(findViewById(R.id.material_spinner1))
             .setPrimaryText("Select the type of request")
-            .setPromptBackground(new RectanglePromptBackground())
+            .setPromptBackground(new CirclePromptBackground())
             .setPromptFocal(new RectanglePromptFocal())
             .setBackgroundColour(getResources().getColor(R.color.buttonblue))
             .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
@@ -439,12 +440,36 @@ default:
 
 
                     e.printStackTrace();
-                    runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable()
+
+
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+
+                        {
 
                             Log.v("dsdsdsd", e.toString());
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                            new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                    .setTarget(findViewById(R.id.AddBody))
+                                    .setPrimaryText("POST request must have atleast one part")
+                                    .setPromptBackground(new CirclePromptBackground())
+                                    .setPromptFocal(new RectanglePromptFocal())
+                                    .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                                    {
+                                        @Override
+                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                                        {
+                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                                            {
+                                                //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    })
+                                    .show();
+
                         }
                     });
                 }

@@ -24,7 +24,7 @@ import thiyagu.postman.com.postmanandroid.R;
  */
 
 public class BodyFragment extends Fragment {
-    Button AddParams;
+    Button AddBody;
     RecyclerView recyclerView;
     Context context;
     RecyclerView.Adapter ParamsAdapter;
@@ -62,8 +62,8 @@ public class BodyFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
-        AddParams = view.findViewById(R.id.AddParams);
-        AddParams.setOnClickListener(new View.OnClickListener() {
+        AddBody = view.findViewById(R.id.AddBody);
+        AddBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), BodyPopUp.class);
