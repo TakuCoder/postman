@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:hint="Key"
+                android:hint="@string/Key"
 
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
@@ -44,7 +44,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/textView"
                 android:layout_marginTop="10dp"
-                android:hint="Value"
+                android:hint="@string/Value"
 
                 android:textColor="@android:color/white"
                 android:textSize="20sp"

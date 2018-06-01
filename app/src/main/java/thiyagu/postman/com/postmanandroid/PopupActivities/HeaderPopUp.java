@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -39,11 +40,35 @@ public class HeaderPopUp extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), ValueField.getText().toString());
-                feedReaderDbHelper.addEntryHeader(pojoClass);
-                intent.putExtra("editTextValue", "value_here");
-                setResult(RESULT_OK, intent);
-                finish();
+
+
+                if(KeyField.getText().toString().equals(""))
+                {
+
+                    Toast.makeText(getApplicationContext(),"Please enter key",Toast.LENGTH_LONG).show();
+
+
+                }
+                else if(ValueField.getText().toString().equals(""))
+                {
+
+                    Toast.makeText(getApplicationContext(),"Please enter Value",Toast.LENGTH_LONG).show();
+                }
+
+                else
+                {
+
+                    DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), ValueField.getText().toString());
+                    feedReaderDbHelper.addEntryHeader(pojoClass);
+                    intent.putExtra("editTextValue", "value_here");
+                    setResult(RESULT_OK, intent);
+                    finish();
+
+
+                }
+
+
+
             }
         });
         materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
@@ -64,16 +89,17 @@ public class HeaderPopUp extends AppCompatActivity {
                 Log.v("Text", materialBetterSpinner.getText().toString());
 
                 String value = materialBetterSpinner.getText().toString();
-                if (value.equals("CUSTOM")) {
+                if (value.equals("CUSTOM"))
+                {
 
                     KeyField.setText("");
 
-                } else if (value.equals("Content-Type")) {
+                } else if (value.equals("CONTENT-TYPE")) {
 
-                    KeyField.setText("Content-Type");
+                    KeyField.setText("CONTENT-TYPE");
                 } else if (value.equals("ACCEPT")) {
 
-                    KeyField.setText("CUSTOM");
+                    KeyField.setText("ACCEPT");
                 } else {
 
 

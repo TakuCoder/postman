@@ -11,4 +11,10 @@
     </string>
     <string name="cardview_radius_seekbar_text">Radius</string>
     <string name="cardview_elevation_seekbar_text">Elevation</string>
+    <string name ="Request_type">Request type</string>
+    <string name ="your_url_here">your URL here</string>
+    <string name ="Send">Send</string>
+    <string name ="Value">Value</string>
+    <string name ="Key">key</string>
+    <string name="Header_Type">Header Type</string>
 </resources>

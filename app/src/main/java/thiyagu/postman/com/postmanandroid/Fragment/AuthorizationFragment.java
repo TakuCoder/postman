@@ -5,16 +5,20 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
 import thiyagu.postman.com.postmanandroid.R;
 
 /**
@@ -38,8 +42,8 @@ public class AuthorizationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
 
-
-
+        Button updateauthrequest;
+        final EditText username,password;
 
 
         View view = inflater.inflate(R.layout.tab_fragment_authorization,container,false);
@@ -47,6 +51,41 @@ public class AuthorizationFragment extends Fragment {
         materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
         final String[] authdata = {"No auth", "Basic Auth"};
         materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
+        updateauthrequest = view.findViewById(R.id.updateauthrequest);
+        username = view.findViewById(R.id.input_username);
+        password = view.findViewById(R.id.input_password);
+
+        updateauthrequest.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+
+
+                if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
+
+                    if (username.getText().toString().equals("")) {
+
+
+                    } else if (password.getText().toString().equals("")) {
+
+
+                    } else {
+
+                        AuthHolderData authHolderData = new AuthHolderData();
+                        String Credentials = username.getText().toString() + ":" + password.getText().toString();
+                        String authdata = "Basic " + Base64.encodeToString(Credentials.getBytes(), Base64.NO_WRAP);
+                        authHolderData.setBasicAuth(authdata);
+
+
+                    }
+
+
+                }
+            }
+        });
+
+
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>( context,android.R.layout.simple_dropdown_item_1line, authdata);
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,6 +98,17 @@ public class AuthorizationFragment extends Fragment {
 
 
                     Log.v("sadsadsad","1");
+
+
+//                    String credentials = USERNAME+":"+PASSWORD;
+//                    String auth = "Basic "
+//                            + Base64.encodeToString(credentials.getBytes(),
+//                            Base64.NO_WRAP);
+//                    headers.put("Authorization", auth);
+
+
+
+
 
                 }
             }
