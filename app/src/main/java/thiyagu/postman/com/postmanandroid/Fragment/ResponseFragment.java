@@ -59,8 +59,7 @@ public class ResponseFragment extends Fragment {
         time = view.findViewById(R.id.time);
         code = view.findViewById(R.id.code);
         JsonRecyclerView mRecyclewView = view.findViewById(R.id.rv_json);
-// bind json
-
+        // bind json
        // StoreResponse storeResponse = new StoreResponse();
         //Log.v("adsdsdasd",storeResponse.getResponse());
 
@@ -90,7 +89,7 @@ public class ResponseFragment extends Fragment {
 
         }
 
-        time.setText(timevalue);
+        time.setText(timevalue+ "ms");
         code.setText(codevalue);
 
 

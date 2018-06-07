@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -118,6 +119,32 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+
+
+
+
+try
+
+{
+
+
+
+    SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+    String authdata = prefs.getString("Authorization", null);
+
+    headerBuilder.add("Authorization",authdata);
+    Log.v("asdasdasdsa",authdata);
+
+
+
+}
+
+catch (Exception e)
+{
+
+Log.v("asdasdasdsa",e.toString());
+
+}
 
                 ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
                 ArrayList<String> urlencodedparams = new ArrayList<>();
@@ -268,7 +295,8 @@ default:
             }
 
             Log.v("thisisurl", urlvalue);
-            if (method.equals("GET")) {
+            if (method.equals("GET"))
+            {
                 try {
 
                     OkHttpClient client = new OkHttpClient();
@@ -277,7 +305,7 @@ default:
                             .url(urlvalue)
                             .get()
                             .headers(customheader)
-                            .header("User-Agent", "PostmanAndroid")
+                            .header("User-Agent", "Postmen-Android")
                             .build();
 
 

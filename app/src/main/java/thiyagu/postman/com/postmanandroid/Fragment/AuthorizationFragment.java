@@ -1,6 +1,7 @@
 package thiyagu.postman.com.postmanandroid.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,8 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
 import thiyagu.postman.com.postmanandroid.R;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by thiyagu on 4/6/2018.
@@ -46,7 +49,7 @@ public class AuthorizationFragment extends Fragment {
         final EditText username,password;
 
 
-        View view = inflater.inflate(R.layout.tab_fragment_authorization,container,false);
+        final View view = inflater.inflate(R.layout.tab_fragment_authorization,container,false);
         final Context context = view.getContext();
         materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
         final String[] authdata = {"No auth", "Basic Auth"};
@@ -76,6 +79,9 @@ public class AuthorizationFragment extends Fragment {
                         String Credentials = username.getText().toString() + ":" + password.getText().toString();
                         String authdata = "Basic " + Base64.encodeToString(Credentials.getBytes(), Base64.NO_WRAP);
                         authHolderData.setBasicAuth(authdata);
+                        SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                        editor.putString("Authorization", authdata);
+                        editor.apply();
 
 
                     }

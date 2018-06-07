@@ -9,7 +9,7 @@ import android.util.Log;
 public class AuthHolderData {
 
 
-    private  String BasicAuth;
+    public  String BasicAuth;
 
 
     public String getBasicAuth() {
