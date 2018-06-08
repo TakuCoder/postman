@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
             android:id="@+id/material_spinner1"
             android:layout_width="216dp"
@@ -19,9 +18,9 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:hint="@string/Request_type"
-            android:textColor="@android:color/white"
-            android:textColorHint="#ffffff"
-            android:theme="@style/Spinner"
+
+android:theme="@style/popupspinner"
+
             app:met_floatingLabel="normal" />
 
         <EditText

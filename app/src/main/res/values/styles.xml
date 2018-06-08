@@ -36,4 +36,20 @@
         <item name="android:backgroundTint">@android:color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="popupspinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:background">@android:color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:backgroundTint">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+
+
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
+
 </resources>

@@ -23,27 +23,22 @@
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
 
         </activity>
-
         <activity
             android:name=".PopupActivities.BodyPopUp"
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
 
         </activity>
-
-
         <activity
             android:name=".PopupActivities.HeaderPopUp"
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
 
         </activity>
-
-
-
-
-        <activity android:name=".PopupActivities.DeletePopUp"
+        <activity
+            android:name=".PopupActivities.DeletePopUp"
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
 
         </activity>
+
     </application>
 
 </manifest>

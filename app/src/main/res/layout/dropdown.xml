@@ -1,9 +1,12 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="?android:attr/dropDownItemStyle"
-    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
-    android:singleLine="true"
-    android:textColor="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:ellipsize="marquee" />
+    android:ellipsize="marquee"
+    android:singleLine="true"
+    android:background="@color/gray"
+
+    android:textColorHint="@android:color/white"
+    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+    android:textColor="@android:color/white" />

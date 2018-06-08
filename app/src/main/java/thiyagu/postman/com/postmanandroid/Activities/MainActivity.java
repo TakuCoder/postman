@@ -73,8 +73,11 @@ public class MainActivity extends AppCompatActivity {
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.material_spinner1);
-        materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
+        //materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
         materialBetterSpinner.setAdapter(arrayadapter);
+        materialBetterSpinner.setFloatingLabelTextColor(Color.parseColor("#ffffff"));
+        materialBetterSpinner.setHintTextColor(Color.parseColor("#ffffff"));
+        materialBetterSpinner.setTextColor(Color.parseColor("#ffffff"));
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -85,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     body.select();
-
+                    int iiii =materialBetterSpinner.getFloatingLabelTextColor();
+                    Log.v("sadasdsadcolor",String.valueOf(iiii));
                 }
             }
         });
