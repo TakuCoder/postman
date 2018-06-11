@@ -1,41 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:background="@color/gray"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray"
     android:orientation="vertical">
 
     <LinearLayout
+        android:orientation="vertical"
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-            android:id="@+id/material_spinner1"
-            android:layout_width="216dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:hint="@string/Request_type"
+        android:layout_height="120dp">
+        <!--<com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
+        <!--android:id="@+id/material_spinner1"-->
+        <!--android:layout_width="216dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginStart="1dp"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:gravity="center"-->
 
-android:theme="@style/popupspinner"
 
-            app:met_floatingLabel="normal" />
+        <!--app:ms_arrowColor="#ffffff"-->
+        <!--app:ms_arrowSize="16dp"-->
+        <!--app:ms_hintColor="@android:color/darker_gray"-->
+        <!--app:ms_floatingLabelColor="#ffffff"-->
+        <!--app:ms_floatingLabelText="Select request type"-->
+        <!--app:ms_hint="Select request type"-->
+        <!--app:ms_multiline="true"-->
+
+        <!--/>-->
 
         <EditText
             android:id="@+id/UrlField"
-            android:layout_width="357dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_weight="0.5"
             android:ems="10"
             android:hint="@string/your_url_here"
             android:inputType="textUri"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white" />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:theme="@style/SpinnerTheme"
+            app:ms_arrowColor="#ffffff"
+            app:ms_arrowSize="8dp"
+            app:ms_thickness="0.1dp"
+            app:ms_floatingLabelColor="#ffffff"
+            app:ms_floatingLabelText="request type"
+            app:ms_hint="Select request type"
+            app:ms_hintColor="@android:color/darker_gray"
+            app:ms_multiline="false" />
+
+
+
+
+        <!--<fr.ganfra.materialspinner.MaterialSpinner-->
+        <!--android:id="@+id/spinner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:ms_multiline="false"-->
+        <!--app:ms_dropDownHintView="@layout/my_custom_dropdown_hint_item_layout"-->
+        <!--app:ms_hintView="@layout/my_custom_hint_item_layout"-->
+        <!--app:ms_hint="hint"-->
+        <!--app:ms_enableFloatingLabel="false"-->
+        <!--app:ms_enableErrorLabel="false"-->
+        <!--app:ms_floatingLabelText="floating label"-->
+        <!--app:ms_baseColor="@color/base"-->
+        <!--app:ms_highlightColor="@color/highlight"-->
+        <!--app:ms_errorColor="@color/error"-->
+        <!--app:ms_typeface="typeface.ttf"-->
+        <!--app:ms_thickness="2dp"-->
+        <!--app:ms_hintColor="@color/hint"-->
+        <!--app:ms_arrowColor="@color/arrow"-->
+        <!--app:ms_arrowSize="16dp"-->
+        <!--app:ms_alignLabels="false"-->
+        <!--app:ms_floatingLabelColor="@color/floating_label"/>-->
+
+
+
+
+
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.IOException;
@@ -69,15 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, R.layout.dropdown, request);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, request);
+        arrayadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.material_spinner1);
         //materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
         materialBetterSpinner.setAdapter(arrayadapter);
-        materialBetterSpinner.setFloatingLabelTextColor(Color.parseColor("#ffffff"));
-        materialBetterSpinner.setHintTextColor(Color.parseColor("#ffffff"));
-        materialBetterSpinner.setTextColor(Color.parseColor("#ffffff"));
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
