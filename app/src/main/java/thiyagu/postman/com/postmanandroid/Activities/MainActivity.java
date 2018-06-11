@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     EditText UrlField;
     FeedReaderDbHelper feedReaderDbHelper;
 
+
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabLayout.Tab body;
