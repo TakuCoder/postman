@@ -29,12 +29,15 @@
             app:layout_constraintVertical_bias="0.048"
             app:met_floatingLabel="normal" />
         <android.support.design.widget.TextInputLayout
+            android:windowSoftInputMode="adjustPan"
+            android:isScrollContainer="true"
             android:id="@+id/input_layout_username"
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content">
 
             <EditText
+
                 android:textColorHint="@android:color/white"
                 android:id="@+id/input_username"
                 android:layout_width="match_parent"
@@ -44,6 +47,8 @@
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
+            android:windowSoftInputMode="adjustPan"
+            android:isScrollContainer="true"
             android:id="@+id/input_layout_password"
             android:layout_width="match_parent"
 
@@ -60,6 +65,8 @@
         </android.support.design.widget.TextInputLayout>
 
 <Button
+    android:windowSoftInputMode="adjustPan"
+    android:isScrollContainer="true"
     android:id="@+id/updateauthrequest"
     android:layout_marginTop="10dp"
     android:layout_width="match_parent"

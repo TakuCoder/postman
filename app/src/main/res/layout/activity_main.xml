@@ -31,6 +31,21 @@
 
         <!--/>-->
 
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/material_spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/SpinnerTheme"
+            android:hint="@string/Request_type"
+            app:met_floatingLabel="normal"
+            app:met_textColor="@color/orange"
+            app:met_baseColor="@color/orange"
+            android:drawableEnd="@drawable/arroworange"
+            app:met_floatingLabelTextColor="@color/orange"
+
+
+            />
         <EditText
             android:id="@+id/UrlField"
             android:layout_width="match_parent"
@@ -42,23 +57,6 @@
             android:inputType="textUri"
             android:textColor="@android:color/white" />
 
-        <fr.ganfra.materialspinner.MaterialSpinner
-            android:id="@+id/spinner1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:theme="@style/SpinnerTheme"
-            app:ms_arrowColor="#ffffff"
-            app:ms_arrowSize="8dp"
-            app:ms_thickness="0.1dp"
-            app:ms_floatingLabelColor="#ffffff"
-            app:ms_floatingLabelText="request type"
-            app:ms_hint="Select request type"
-            app:ms_hintColor="@android:color/darker_gray"
-            app:ms_multiline="false" />
 
 
 

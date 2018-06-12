@@ -54,9 +54,10 @@
     <!-- Base application theme. -->
     <style name="SpinnerTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">@android:color/white</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorControlNormal">#ffffff</item>
         <item name="colorAccent">#ffffff</item>
+
     </style>
 </resources>

@@ -1,7 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -29,7 +27,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -40,7 +37,6 @@ import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 
@@ -71,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, request);
-        arrayadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
+
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.material_spinner1);
-        //materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
+
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,15 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                     body.select();
-                    int iiii =materialBetterSpinner.getFloatingLabelTextColor();
-                    Log.v("sadasdsadcolor",String.valueOf(iiii));
+                    int iiii = materialBetterSpinner.getFloatingLabelTextColor();
+                    Log.v("sadasdsadcolor", String.valueOf(iiii));
                 }
             }
         });
-
-
-
-
 
 
         UrlField = findViewById(R.id.UrlField);
@@ -124,31 +116,23 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
+                try
+
+                {
 
 
+                    SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+                    String authdata = prefs.getString("Authorization", null);
 
-try
-
-{
-
-
-
-    SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-    String authdata = prefs.getString("Authorization", null);
-
-    headerBuilder.add("Authorization",authdata);
-    Log.v("asdasdasdsa",authdata);
+                    headerBuilder.add("Authorization", authdata);
+                    Log.v("asdasdasdsa", authdata);
 
 
+                } catch (Exception e) {
 
-}
+                    Log.v("asdasdasdsa", e.toString());
 
-catch (Exception e)
-{
-
-Log.v("asdasdasdsa",e.toString());
-
-}
+                }
 
                 ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
                 ArrayList<String> urlencodedparams = new ArrayList<>();
@@ -213,26 +197,23 @@ Log.v("asdasdasdsa",e.toString());
                         new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
                         //responsetab.select();
                         break;
-default:
+                    default:
 
-    new MaterialTapTargetPrompt.Builder(MainActivity.this)
-            .setTarget(findViewById(R.id.material_spinner1))
-            .setPrimaryText("Select the type of request")
-            .setPromptBackground(new CirclePromptBackground())
-            .setPromptFocal(new RectanglePromptFocal())
-            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-            {
-                @Override
-                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                {
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                    {
-                        Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            })
-            .show();
+                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                .setTarget(findViewById(R.id.material_spinner1))
+                                .setPrimaryText("Select the type of request")
+                                .setPromptBackground(new CirclePromptBackground())
+                                .setPromptFocal(new RectanglePromptFocal())
+                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                    @Override
+                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                            Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .show();
 
 
                 }
@@ -267,8 +248,6 @@ default:
             super.onPreExecute();
 
 
-
-
         }
 
         @Override
@@ -299,13 +278,12 @@ default:
             }
 
             Log.v("thisisurl", urlvalue);
-            if (method.equals("GET"))
-            {
+            if (method.equals("GET")) {
                 try {
 
                     OkHttpClient client = new OkHttpClient();
 
-                            Request request = new Request.Builder()
+                    Request request = new Request.Builder()
                             .url(urlvalue)
                             .get()
                             .headers(customheader)
@@ -313,8 +291,7 @@ default:
                             .build();
 
 
-                        client.newCall(request).enqueue(new Callback()
-                        {
+                    client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             Log.d("TAG", "failure");
@@ -324,16 +301,12 @@ default:
                         public void onResponse(Call call, final Response response) throws IOException {
 
 
-
-
-                            runOnUiThread(new Runnable()
-                            {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run()
 
                                 {
-                                    try
-                                    {
+                                    try {
                                         String bodyy = response.body().string();
                                         int responsecode = response.code();
 
@@ -354,8 +327,7 @@ default:
                                         editor.apply();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
-                                    } catch (Exception e)
-                                    {
+                                    } catch (Exception e) {
 
                                         Log.v("asdasdasd", e.toString());
 
@@ -379,10 +351,8 @@ default:
                 }
 
 
-            } else if (method.equals("POST"))
-            {
-                try
-                {
+            } else if (method.equals("POST")) {
+                try {
 
 
                     OkHttpClient client = new OkHttpClient();
@@ -415,7 +385,7 @@ default:
                             .build();
 
 
-                   // Response response = client.newCall(request).execute();
+                    // Response response = client.newCall(request).execute();
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
@@ -426,14 +396,12 @@ default:
                         @Override
                         public void onResponse(Call call, final Response response) throws IOException {
 
-                            runOnUiThread(new Runnable()
-                            {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run()
 
                                 {
-                                    try
-                                    {
+                                    try {
                                         String bodyy = response.body().string();
                                         int responsecode = response.code();
 
@@ -454,8 +422,7 @@ default:
                                         editor.apply();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
-                                    } catch (Exception e)
-                                    {
+                                    } catch (Exception e) {
 
                                         Log.v("asdasdasd", e.toString());
 
@@ -489,13 +456,10 @@ default:
                                     .setPromptBackground(new CirclePromptBackground())
                                     .setPromptFocal(new RectanglePromptFocal())
                                     .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
-                                    {
+                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                                         @Override
-                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
-                                        {
-                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
-                                            {
+                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
                                                 //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
                                             }
                                         }
