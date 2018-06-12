@@ -12,4 +12,14 @@
     <string name="Value">Value</string>
     <string name="Key">key</string>
     <string name="Header_Type">Header Type</string>
+    <string-array name="myarray">
+        <item>English (US)</item>
+        <item>Spanish</item>
+        <item>German</item>
+        <item>French</item>
+        <item>Italian</item>
+        <item>Hindi</item>
+        <item>Albanian</item>
+        <item>Romanian</item>
+    </string-array>
 </resources>
