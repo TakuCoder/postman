@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -64,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setIcon(R.drawable.postmanicon);
+        actionBar.setDisplayShowHomeEnabled(true);
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
