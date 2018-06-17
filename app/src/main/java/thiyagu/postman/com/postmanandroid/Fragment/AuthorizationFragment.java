@@ -65,7 +65,8 @@ public class AuthorizationFragment extends Fragment {
             public void onClick(View v) {
 
 
-                if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
+                if (materialBetterSpinner.getText().toString().equals("Basic Auth"))
+                {
 
                     if (username.getText().toString().equals("")) {
 
@@ -87,6 +88,17 @@ public class AuthorizationFragment extends Fragment {
                     }
 
 
+                }
+                else if(materialBetterSpinner.getText().toString().equals("No auth"))
+                {
+
+                    AuthHolderData authHolderData = new AuthHolderData();
+                    String Credentials = "No auth";
+                    String authdata = "No auth";
+                    authHolderData.setBasicAuth(authdata);
+                    SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                    editor.putString("Authorization", authdata);
+                    editor.apply();
                 }
             }
         });

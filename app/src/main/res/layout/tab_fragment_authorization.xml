@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,33 +17,55 @@
         android:layout_marginStart="10dp"
         android:layout_height="match_parent">
 
+        <!--<com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
+        <!--android:id="@+id/material_spinnerauth"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:textAlignment="textStart"-->
+
+        <!--android:layout_height="60dp"-->
+        <!--android:theme="@style/SpinnerTheme"-->
+        <!--android:gravity="center"-->
+        <!--android:hint="Auth Type"-->
+        <!--app:met_textColor="@color/orange"-->
+        <!--app:met_baseColor="@color/orange"-->
+        <!--android:drawableEnd="@drawable/arroworange"-->
+        <!--app:met_floatingLabelTextColor="@color/orange"-->
+        <!--android:textColorHint="#CFD8DC"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.052"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.048"-->
+        <!--app:met_floatingLabel="normal" />-->
+
         <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
             android:id="@+id/material_spinnerauth"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:hint="Request type"
-            android:textColorHint="#CFD8DC"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.048"
-            app:met_floatingLabel="normal" />
+            android:layout_height="wrap_content"
+            android:theme="@style/SpinnerTheme"
+            android:hint="@string/Auth_type"
+            app:met_floatingLabel="normal"
+            app:met_textColor="@color/orange"
+            app:met_baseColor="@color/orange"
+            android:drawableEnd="@drawable/arroworange"
+            app:met_floatingLabelTextColor="@color/orange"/>
+
         <android.support.design.widget.TextInputLayout
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
             android:id="@+id/input_layout_username"
             android:layout_width="match_parent"
-
+            android:textColorHint="@color/orange"
             android:layout_height="wrap_content">
 
             <EditText
 
                 android:textColorHint="@android:color/white"
                 android:id="@+id/input_username"
+                android:windowSoftInputMode="adjustPan"
+                android:isScrollContainer="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -47,11 +73,12 @@
 
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
+
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
             android:id="@+id/input_layout_password"
             android:layout_width="match_parent"
-
+            android:textColorHint="@color/orange"
             android:layout_height="wrap_content">
 
             <EditText
@@ -59,21 +86,26 @@
                 android:textColorHint="@android:color/white"
                 android:layout_width="match_parent"
                 android:textColor="@android:color/white"
+                android:windowSoftInputMode="adjustPan"
+                android:isScrollContainer="true"
                 android:layout_height="wrap_content"
                 android:hint="password" />
 
         </android.support.design.widget.TextInputLayout>
 
-<Button
-    android:windowSoftInputMode="adjustPan"
-    android:isScrollContainer="true"
-    android:id="@+id/updateauthrequest"
-    android:layout_marginTop="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@color/orange"
-    android:textColor="@android:color/white"
-    android:text="Update Request"/>
+        <Button
+            android:windowSoftInputMode="adjustPan"
+            android:isScrollContainer="true"
+            android:id="@+id/updateauthrequest"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/orange"
+            android:textColor="@android:color/white"
+            android:text="Update Request"/>
     </LinearLayout>
+
+</ScrollView>
+
 
 </RelativeLayout>

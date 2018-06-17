@@ -95,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
-        UrlField.setText("http://192.168.1.157:8080/");
+       // UrlField.setText("http://192.168.1.157:8080/");
+        UrlField.setText("http://192.168.1.110:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,8 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 {
 
 
+
+
                     SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+
+
                     String authdata = prefs.getString("Authorization", null);
+
 
                     headerBuilder.add("Authorization", authdata);
                     Log.v("asdasdasdsa", authdata);
@@ -450,7 +456,8 @@ public class MainActivity extends AppCompatActivity {
                         public void run()
 
                         {
-
+                            TabLayout.Tab tab = tabLayout.getTabAt(3);
+                            tab.select();
                             Log.v("dsdsdsd", e.toString());
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                             new MaterialTapTargetPrompt.Builder(MainActivity.this)
