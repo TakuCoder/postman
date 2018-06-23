@@ -7,45 +7,57 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
-
         android:layout_width="match_parent"
-        android:layout_height="120dp">
-        <!--<com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
-        <!--android:id="@+id/material_spinner1"-->
-        <!--android:layout_width="216dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginStart="1dp"-->
-        <!--android:layout_marginTop="2dp"-->
-        <!--android:layout_weight="0.5"-->
-        <!--android:gravity="center"-->
 
+        android:layout_height="120dp"
+        android:orientation="vertical">
 
-        <!--app:ms_arrowColor="#ffffff"-->
-        <!--app:ms_arrowSize="16dp"-->
-        <!--app:ms_hintColor="@android:color/darker_gray"-->
-        <!--app:ms_floatingLabelColor="#ffffff"-->
-        <!--app:ms_floatingLabelText="Select request type"-->
-        <!--app:ms_hint="Select request type"-->
-        <!--app:ms_multiline="true"-->
-
-        <!--/>-->
-
-
-        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-            android:id="@+id/material_spinner1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/SpinnerTheme"
-            android:hint="@string/Request_type"
-            app:met_floatingLabel="normal"
-            app:met_textColor="@color/orange"
-            app:met_baseColor="@color/orange"
-            android:drawableEnd="@drawable/arroworange"
-            app:met_floatingLabelTextColor="@color/orange"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/req_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:drawableEnd="@drawable/arroworange"
+                android:hint="@string/Request_type"
+                android:theme="@style/SpinnerTheme"
+                app:met_baseColor="@color/orange"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelTextColor="@color/orange"
+                app:met_textColor="@color/orange"
 
 
-            />
+                />
+
+<!--<Space-->
+    <!--android:layout_weight=""-->
+    <!--android:layout_width="30dp"-->
+    <!--android:layout_height="match_parent" />-->
+
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/req_type_spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:drawableEnd="@drawable/arroworange"
+                android:hint="@string/your_url_here"
+                android:theme="@style/SpinnerTheme"
+                app:met_baseColor="@color/orange"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelTextColor="@color/orange"
+                app:met_textColor="@color/orange"
+
+
+                />
+
+        </LinearLayout>
+
+
         <EditText
             android:id="@+id/UrlField"
             android:layout_width="match_parent"
@@ -56,9 +68,6 @@
             android:hint="@string/your_url_here"
             android:inputType="textUri"
             android:textColor="@android:color/white" />
-
-
-
 
 
         <!--<fr.ganfra.materialspinner.MaterialSpinner-->
@@ -82,10 +91,6 @@
         <!--app:ms_arrowSize="16dp"-->
         <!--app:ms_alignLabels="false"-->
         <!--app:ms_floatingLabelColor="@color/floating_label"/>-->
-
-
-
-
 
 
     </LinearLayout>

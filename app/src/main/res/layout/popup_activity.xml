@@ -60,7 +60,7 @@
                 android:id="@+id/ValueField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/material_spinner1"
+                android:layout_below="@+id/req_type_spinner"
                 android:layout_centerHorizontal="true"
                 android:layout_weight="1"
                 android:ems="10"

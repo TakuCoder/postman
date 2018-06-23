@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
-        materialBetterSpinner = findViewById(R.id.material_spinner1);
+        materialBetterSpinner = findViewById(R.id.req_type_spinner);
 
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
-       // UrlField.setText("http://192.168.1.157:8080/");
-        UrlField.setText("http://192.168.1.110:8080/");
+        UrlField.setText("http://192.168.1.157:8080/");
+       // UrlField.setText("http://192.168.1.110:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,10 +131,19 @@ public class MainActivity extends AppCompatActivity {
 
 
                     String authdata = prefs.getString("Authorization", null);
+if(authdata=="No auth")
+{
+    Log.v("postman","auth value neglected");
+
+}
+else {
+
+    headerBuilder.add("Authorization", authdata);
+    Log.v("asdasdasdsa", authdata);
+
+}
 
 
-                    headerBuilder.add("Authorization", authdata);
-                    Log.v("asdasdasdsa", authdata);
 
 
                 } catch (Exception e) {
@@ -209,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
 
                         new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                .setTarget(findViewById(R.id.material_spinner1))
+                                .setTarget(findViewById(R.id.req_type_spinner))
                                 .setPrimaryText("Select the type of request")
                                 .setPromptBackground(new CirclePromptBackground())
                                 .setPromptFocal(new RectanglePromptFocal())
