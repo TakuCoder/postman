@@ -2,6 +2,8 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
@@ -29,6 +32,8 @@ public class BodyFragment extends Fragment {
     Context context;
     RecyclerView.Adapter ParamsAdapter;
     RecyclerView.LayoutManager ParamLayoutManager;
+    AssetManager assetManager ;
+    Typeface roboto;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +64,10 @@ public class BodyFragment extends Fragment {
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_body, container, false);
         context = view.getContext();
+
+assetManager = view.getContext().getAssets();
+//roboto = Typeface.createFromAsset(assetManager,
+//        String.format(Locale.US, "fonts/%s", "Roboto-Regular.ttf"));
 
 
         recyclerView = view.findViewById(R.id.my_recycler_view);

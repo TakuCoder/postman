@@ -25,7 +25,7 @@
                 android:layout_weight="0.5"
                 android:drawableEnd="@drawable/arroworange"
                 android:hint="@string/Request_type"
-                android:theme="@style/SpinnerTheme"
+
                 app:met_baseColor="@color/orange"
                 app:met_floatingLabel="normal"
                 app:met_floatingLabelTextColor="@color/orange"
@@ -39,21 +39,21 @@
     <!--android:layout_width="30dp"-->
     <!--android:layout_height="match_parent" />-->
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/req_type_spinner1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:drawableEnd="@drawable/arroworange"
-                android:hint="@string/your_url_here"
-                android:theme="@style/SpinnerTheme"
-                app:met_baseColor="@color/orange"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelTextColor="@color/orange"
-                app:met_textColor="@color/orange"
+            <!--<com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
+                <!--android:id="@+id/req_type_spinner1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="0.5"-->
+                <!--android:drawableEnd="@drawable/arroworange"-->
+                <!--android:hint="@string/your_url_here"-->
+                <!--android:theme="@style/SpinnerTheme"-->
+                <!--app:met_baseColor="@color/orange"-->
+                <!--app:met_floatingLabel="normal"-->
+                <!--app:met_floatingLabelTextColor="@color/orange"-->
+                <!--app:met_textColor="@color/orange"-->
 
 
-                />
+                <!--/>-->
 
         </LinearLayout>
 

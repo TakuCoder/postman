@@ -34,7 +34,7 @@
                 android:hint="@string/Key"
 
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:hint="@string/Value"
 
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <!--<CheckBox-->

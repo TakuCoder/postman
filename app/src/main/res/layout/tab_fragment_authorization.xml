@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -67,6 +68,8 @@
                 android:windowSoftInputMode="adjustPan"
                 android:isScrollContainer="true"
                 android:layout_width="match_parent"
+                android:maxLines="1"
+                android:nextFocusForward="@id/input_layout_password"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:hint="username" />
@@ -82,6 +85,8 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:maxLines="1"
+                android:imeOptions="actionGo"
                 android:id="@+id/input_password"
                 android:textColorHint="@android:color/white"
                 android:layout_width="match_parent"
@@ -106,6 +111,8 @@
     </LinearLayout>
 
 </ScrollView>
+
+
 
 
 </RelativeLayout>
