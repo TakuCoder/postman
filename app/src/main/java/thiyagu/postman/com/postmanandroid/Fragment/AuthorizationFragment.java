@@ -19,8 +19,12 @@ import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
 import thiyagu.postman.com.postmanandroid.R;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,6 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AuthorizationFragment extends Fragment {
     MaterialBetterSpinner materialBetterSpinner;
+    Context context;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +47,7 @@ public class AuthorizationFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
 
         Button updateauthrequest;
@@ -50,13 +55,15 @@ public class AuthorizationFragment extends Fragment {
 
 
         final View view = inflater.inflate(R.layout.tab_fragment_authorization,container,false);
-        final Context context = view.getContext();
+        context = view.getContext();
         materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
         final String[] authdata = {"No auth", "Basic Auth"};
         materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
+
         updateauthrequest = view.findViewById(R.id.updateauthrequest);
         username = view.findViewById(R.id.input_username);
         password = view.findViewById(R.id.input_password);
+        materialBetterSpinner.setHideUnderline(true);
 
         updateauthrequest.setOnClickListener(new View.OnClickListener()
 
@@ -64,9 +71,38 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+if(!materialBetterSpinner.isSelected())
+{
+
+    Log.v("asdasdasdsa","nulllllll");
+    new MaterialTapTargetPrompt.Builder(getActivity())
+            .setTarget(view.findViewById(R.id.material_spinnerauth))
+            .setPrimaryText("Select the auth type")
+            .setPromptBackground(new CirclePromptBackground())
+            .setPromptFocal(new RectanglePromptFocal())
+            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                @Override
+                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                        Toast.makeText(context, "presseddddd", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            })
+            .show();
+
+}
+
+
 
                 if (materialBetterSpinner.getText().toString().equals("Basic Auth"))
                 {
+
+
+
+
+
+
 
                     if (username.getText().toString().equals("")) {
 

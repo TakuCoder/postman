@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:windowSoftInputMode="adjustPan"
+    android:isScrollContainer="true"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
@@ -50,7 +52,7 @@
             app:met_floatingLabel="normal"
             app:met_textColor="@color/orange"
             app:met_baseColor="@color/orange"
-            android:drawableEnd="@drawable/arroworange"
+            android:drawableEnd="@drawable/arrow"
             app:met_floatingLabelTextColor="@color/orange"/>
 
         <android.support.design.widget.TextInputLayout
@@ -69,7 +71,9 @@
                 android:isScrollContainer="true"
                 android:layout_width="match_parent"
                 android:maxLines="1"
-                android:nextFocusForward="@id/input_layout_password"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:nextFocusForward="@id/input_password"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:hint="username" />
@@ -86,7 +90,9 @@
 
             <EditText
                 android:maxLines="1"
-                android:imeOptions="actionGo"
+
+                android:singleLine="true"
+                android:imeOptions="actionDone"
                 android:id="@+id/input_password"
                 android:textColorHint="@android:color/white"
                 android:layout_width="match_parent"
