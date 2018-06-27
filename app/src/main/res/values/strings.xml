@@ -12,6 +12,7 @@
     <string name="your_url_here">your URL here</string>
     <string name="Send">Send</string>
     <string name="Value">Value</string>
+    <string name="null_response">Response will visible here</string>
     <string name="Key">key</string>
     <string name="Header_Type">Header Type</string>
     <string-array name="myarray">

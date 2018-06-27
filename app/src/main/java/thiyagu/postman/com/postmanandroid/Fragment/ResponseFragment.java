@@ -3,7 +3,9 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,7 +27,11 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class ResponseFragment extends Fragment {
-
+    TextView textView;
+    TextView time;
+    TextView code;
+    TextView status,timee,error;
+    Typeface roboto;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +54,6 @@ public class ResponseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        TextView textView;
-        TextView time;
-        TextView code;
 
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_response, container, false);
@@ -58,7 +61,15 @@ public class ResponseFragment extends Fragment {
         textView = view.findViewById(R.id.textView);
         time = view.findViewById(R.id.time);
         code = view.findViewById(R.id.code);
+        status=view.findViewById(R.id.status);
+        timee=view.findViewById(R.id.timee);
+        error= view.findViewById(R.id.error);
         JsonRecyclerView mRecyclewView = view.findViewById(R.id.rv_json);
+        AssetManager assetManager = context.getAssets();
+        roboto = Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
+
+
+
         // bind json
        // StoreResponse storeResponse = new StoreResponse();
         //Log.v("adsdsdasd",storeResponse.getResponse());
@@ -90,6 +101,21 @@ public class ResponseFragment extends Fragment {
         }
 
         time.setText(timevalue+ "ms");
+        String val = time.getText().toString();
+        if(val.contains("null"))
+        {
+
+            textView.setVisibility(View.INVISIBLE);
+            code.setVisibility(View.INVISIBLE);
+            time.setVisibility(View.INVISIBLE);
+            status.setVisibility(View.INVISIBLE);
+            timee.setVisibility(View.INVISIBLE);
+            error.setVisibility(View.VISIBLE);
+            error.setTypeface(roboto);
+
+
+
+        }
         code.setText(codevalue);
 
 

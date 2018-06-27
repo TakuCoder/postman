@@ -17,18 +17,18 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            <thiyagu.postman.com.postmanandroid.MaterialBetterSpinner
                 android:id="@+id/req_type_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:drawableEnd="@drawable/arrow"
+                android:drawableEnd="@drawable/arrow_white"
                 android:hint="@string/Request_type"
 
                 app:met_baseColor="@color/orange"
                 app:met_floatingLabel="normal"
                 app:met_floatingLabelTextColor="@color/orange"
-                app:met_textColor="@color/orange"
+                app:met_textColor="@color/white"
 
 
                 />
@@ -59,6 +59,7 @@
 
         <EditText
             android:id="@+id/UrlField"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
@@ -86,7 +87,7 @@
         <!--app:ms_typeface="typeface.ttf"-->
         <!--app:ms_thickness="2dp"-->
         <!--app:ms_hintColor="@color/hint"-->
-        <!--app:ms_arrowColor="@color/arrow"-->
+        <!--app:ms_arrowColor="@color/arrow_orange"-->
         <!--app:ms_arrowSize="16dp"-->
         <!--app:ms_alignLabels="false"-->
         <!--app:ms_floatingLabelColor="@color/floating_label"/>-->

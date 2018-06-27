@@ -17,7 +17,7 @@
         app:met_floatingLabel="normal"
         app:met_textColor="@color/orange"
         app:met_baseColor="@color/orange"
-        android:drawableEnd="@drawable/arroworange"
+        android:drawableEnd="@drawable/arrow_white"
         app:met_floatingLabelTextColor="@color/orange"
 
 

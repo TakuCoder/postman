@@ -35,6 +35,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class AuthorizationFragment extends Fragment {
     MaterialBetterSpinner materialBetterSpinner;
     Context context;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +52,10 @@ public class AuthorizationFragment extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
 
         Button updateauthrequest;
-        final EditText username,password;
+        final EditText username, password;
 
 
-        final View view = inflater.inflate(R.layout.tab_fragment_authorization,container,false);
+        final View view = inflater.inflate(R.layout.tab_fragment_authorization, container, false);
         context = view.getContext();
         materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
         final String[] authdata = {"No auth", "Basic Auth"};
@@ -71,37 +72,32 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-if(!materialBetterSpinner.isSelected())
-{
+                if (!materialBetterSpinner.isSelected()) {
 
-    Log.v("asdasdasdsa","nulllllll");
-    new MaterialTapTargetPrompt.Builder(getActivity())
-            .setTarget(view.findViewById(R.id.material_spinnerauth))
-            .setPrimaryText("Select the auth type")
-            .setPromptBackground(new CirclePromptBackground())
-            .setPromptFocal(new RectanglePromptFocal())
-            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                @Override
-                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                        Toast.makeText(context, "presseddddd", Toast.LENGTH_SHORT).show();
-                    }
+
+
+
+                    Log.v("asdasdasdsa", "nulllllll");
+                    new MaterialTapTargetPrompt.Builder(getActivity())
+                            .setTarget(view.findViewById(R.id.material_spinnerauth))
+                            .setPrimaryText("Select the auth type")
+                            .setPromptBackground(new CirclePromptBackground())
+                            .setPromptFocal(new RectanglePromptFocal())
+                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                @Override
+                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                        Toast.makeText(context, "presseddddd", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .show();
+
                 }
-            })
-            .show();
-
-}
 
 
-
-                if (materialBetterSpinner.getText().toString().equals("Basic Auth"))
-                {
-
-
-
-
-
+                if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
 
 
                     if (username.getText().toString().equals("")) {
@@ -124,9 +120,7 @@ if(!materialBetterSpinner.isSelected())
                     }
 
 
-                }
-                else if(materialBetterSpinner.getText().toString().equals("No auth"))
-                {
+                } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
 
                     AuthHolderData authHolderData = new AuthHolderData();
                     String Credentials = "No auth";
@@ -140,7 +134,7 @@ if(!materialBetterSpinner.isSelected())
         });
 
 
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>( context,android.R.layout.simple_dropdown_item_1line, authdata);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, authdata);
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -151,7 +145,7 @@ if(!materialBetterSpinner.isSelected())
                 if (String.valueOf(i).equals("1")) {
 
 
-                    Log.v("sadsadsad","1");
+                    Log.v("sadsadsad", "1");
 
 
 //                    String credentials = USERNAME+":"+PASSWORD;
@@ -159,9 +153,6 @@ if(!materialBetterSpinner.isSelected())
 //                            + Base64.encodeToString(credentials.getBytes(),
 //                            Base64.NO_WRAP);
 //                    headers.put("Authorization", auth);
-
-
-
 
 
                 }

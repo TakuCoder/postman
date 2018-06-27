@@ -1,13 +1,17 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ResponseFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
+import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
@@ -76,8 +80,25 @@ public class MainActivity extends AppCompatActivity {
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.req_type_spinner);
 
+        materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+               // Drawable drawable = getDrawable(R.drawable.arrow_orange);
+               // materialBetterSpinner.setDropDownAnchor(R.drawable.arrow_orange);
+               // Drawable dropdownIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_white);
+                //materialBetterSpinner.setCompoundDrawables(drawable,null,drawable,null);
+//materialBetterSpinner.setCompoundDrawablesWithIntrinsicBounds(dropdownIcon,dropdownIcon,dropdownIcon,dropdownIcon);
+                //materialBetterSpinner.setCompoundDrawablesRelative( null, null, drawable, null);
+        //android:drawableEnd="@drawable/arrow_orange"
+
+                Log.v("Tag","touching req selection");
+
+                return false;
+            }
+        });
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();

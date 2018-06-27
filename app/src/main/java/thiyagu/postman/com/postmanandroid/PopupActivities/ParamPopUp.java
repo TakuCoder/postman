@@ -93,14 +93,15 @@ public class ParamPopUp extends AppCompatActivity {
                 String value = materialBetterSpinner.getText().toString();
                 if (value.equals("CUSTOM"))
                 {
-
+                    KeyField.setEnabled(true);
                     KeyField.setText("");
 
                 } else if (value.equals("CONTENT-TYPE")) {
 
                     KeyField.setText("CONTENT-TYPE");
+                    KeyField.setEnabled(false);
                 } else if (value.equals("ACCEPT")) {
-
+                    KeyField.setEnabled(false);
                     KeyField.setText("ACCEPT");
                 } else {
 
