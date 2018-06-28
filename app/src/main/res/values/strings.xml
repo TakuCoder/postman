@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Postmen</string>
+    <string name="app_name">Postman-Android</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="title_activity_card_view">CardViewActivity</string>
@@ -9,7 +9,7 @@
     <string name="Request_type">Request type</string>
     <string name="Url_type">url type</string>
     <string name="Auth_type">Auth type</string>
-    <string name="your_url_here">your URL here</string>
+    <string name="your_url_here">URL here</string>
     <string name="Send">Send</string>
     <string name="Value">Value</string>
     <string name="null_response">Response will visible here</string>

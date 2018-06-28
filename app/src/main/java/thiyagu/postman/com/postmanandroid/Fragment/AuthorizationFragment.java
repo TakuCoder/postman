@@ -72,7 +72,9 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (!materialBetterSpinner.isSelected()) {
+                Log.v("adaasdasdasd",materialBetterSpinner.getHint().toString());
+
+                if (materialBetterSpinner.getHint().toString()=="Auth type") {
 
 
 
@@ -95,6 +97,8 @@ public class AuthorizationFragment extends Fragment {
                             .show();
 
                 }
+
+
 
 
                 if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
@@ -140,7 +144,7 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
-
+              materialBetterSpinner.setHint("Auth Type");
 
                 if (String.valueOf(i).equals("1")) {
 

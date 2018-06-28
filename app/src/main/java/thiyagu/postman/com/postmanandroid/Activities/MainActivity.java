@@ -2,6 +2,9 @@ package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,27 +13,40 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CipherSuite;
+import okhttp3.ConnectionSpec;
 import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.TlsVersion;
+import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -51,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     Button sendButton;
     EditText UrlField;
     FeedReaderDbHelper feedReaderDbHelper;
-
+    Typeface roboto;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -61,17 +77,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        AssetManager assetManager = this.getAssets();
+        ActionBar actionBar = getSupportActionBar();
+
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+        SpannableStringBuilder SS = new SpannableStringBuilder("MY Actionbar Tittle");
+        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        actionBar.setTitle(SS);
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
+
 
         viewPager = findViewById(R.id.pager);
 
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(R.drawable.postmanicon);
-        actionBar.setDisplayShowHomeEnabled(true);
+
+        ////actionBar.setIcon(R.drawable.postmanicon);
+        //actionBar.setDisplayShowHomeEnabled(true);
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
@@ -83,15 +111,15 @@ public class MainActivity extends AppCompatActivity {
         materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-               // Drawable drawable = getDrawable(R.drawable.arrow_orange);
-               // materialBetterSpinner.setDropDownAnchor(R.drawable.arrow_orange);
-               // Drawable dropdownIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_white);
+                // Drawable drawable = getDrawable(R.drawable.arrow_orange);
+                // materialBetterSpinner.setDropDownAnchor(R.drawable.arrow_orange);
+                // Drawable dropdownIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_white);
                 //materialBetterSpinner.setCompoundDrawables(drawable,null,drawable,null);
 //materialBetterSpinner.setCompoundDrawablesWithIntrinsicBounds(dropdownIcon,dropdownIcon,dropdownIcon,dropdownIcon);
                 //materialBetterSpinner.setCompoundDrawablesRelative( null, null, drawable, null);
-        //android:drawableEnd="@drawable/arrow_orange"
+                //android:drawableEnd="@drawable/arrow_orange"
 
-                Log.v("Tag","touching req selection");
+                Log.v("Tag", "touching req selection");
 
                 return false;
             }
@@ -116,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
-        UrlField.setText("http://192.168.1.157:8080/");
-       // UrlField.setText("http://192.168.1.110:8080/");
+        // UrlField.setText("http://192.168.1.157:8080/");
+        // UrlField.setText("http://192.168.1.110:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,25 +174,19 @@ public class MainActivity extends AppCompatActivity {
                 {
 
 
-
-
                     SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
 
                     String authdata = prefs.getString("Authorization", null);
-if(authdata=="No auth")
-{
-    Log.v("postman","auth value neglected");
+                    if (authdata == "No auth") {
+                        Log.v("postman", "auth value neglected");
 
-}
-else {
+                    } else {
 
-    headerBuilder.add("Authorization", authdata);
-    Log.v("asdasdasdsa", authdata);
+                        headerBuilder.add("Authorization", authdata);
+                        Log.v("asdasdasdsa", authdata);
 
-}
-
-
+                    }
 
 
                 } catch (Exception e) {
@@ -297,10 +319,22 @@ else {
             Headers.Builder headerbuilder = (Headers.Builder) strings[2];
             ArrayList<String> paramlist = (ArrayList<String>) strings[3];
             Headers customheader = headerbuilder.build();
-            if (urlvalue.contains("www") || urlvalue.contains("http")) {
+
+            if (urlvalue.contains("www") || urlvalue.contains("https")) {
+
+                //urlvalue = "https://" + urlvalue;
+            }
 
 
-            } else {
+
+            else if (urlvalue.contains("www") || urlvalue.contains("http")) {
+
+                //urlvalue = "http://" + urlvalue;
+            }
+            else
+
+
+            {
 
                 urlvalue = "http://" + urlvalue;
 
@@ -326,7 +360,7 @@ else {
                             .url(urlvalue)
                             .get()
                             .headers(customheader)
-                            .header("User-Agent", "Postmen-Android")
+                            .header("User-Agent", "Postman-Android")
                             .build();
 
 
@@ -514,17 +548,43 @@ else {
             } else if (method.equals("DELETE")) {
                 try {
 
+//                    OkHttpClient client = new OkHttpClient();
+//
+//                    Request request = new Request.Builder()
+//                            .url(urlvalue)
+//                            .delete(null)
+//
+//                            .addHeader("cache-control", "no-cache")
+//                            .addHeader("postman-android-token", "d3989091-6532-ceb2-a984-15dc10ec560c")
+//                            .build();
+//
+//                    Response response = client.newCall(request).execute();
+
+
+//                    ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//                            .tlsVersions(TlsVersion.TLS_1_2)
+//                            .cipherSuites(
+//                                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                                    CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//                            .build();
+//
+//                    OkHttpClient client = new OkHttpClient.Builder()
+//                            .connectionSpecs(Collections.singletonList(spec))
+//                            .build();
                     OkHttpClient client = new OkHttpClient();
 
                     Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .delete(null)
-
+                            .url("https://httpbin.org/get")
+                            .get()
                             .addHeader("cache-control", "no-cache")
-                            .addHeader("postman-token", "d3989091-6532-ceb2-a984-15dc10ec560c")
+                            .addHeader("postman-token", "46ff633c-bac1-39f0-f8ec-366902d40c72")
                             .build();
 
                     Response response = client.newCall(request).execute();
+
+                    Log.v("asdasdasd", response.toString());
+
                 } catch (Exception e) {
 
 
@@ -542,7 +602,7 @@ else {
                             .url(urlvalue)
                             .put(null)
                             .addHeader("cache-control", "no-cache")
-                            .addHeader("postman-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
+                            .addHeader("postman-android-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
                             .build();
 
                     Response response = client.newCall(request).execute();

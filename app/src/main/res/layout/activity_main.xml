@@ -19,19 +19,19 @@
 
             <thiyagu.postman.com.postmanandroid.MaterialBetterSpinner
                 android:id="@+id/req_type_spinner"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
+                android:alpha="2"
+
                 android:drawableEnd="@drawable/arrow_white"
                 android:hint="@string/Request_type"
-
                 app:met_baseColor="@color/orange"
                 app:met_floatingLabel="normal"
+
+
                 app:met_floatingLabelTextColor="@color/orange"
-                app:met_textColor="@color/white"
-
-
-                />
+                app:met_textColor="@color/white" />
 
 <!--<Space-->
     <!--android:layout_weight=""-->
@@ -59,15 +59,17 @@
 
         <EditText
             android:id="@+id/UrlField"
-            android:imeOptions="actionDone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="0dp"
             android:layout_weight="0.5"
+            android:alpha="10"
             android:ems="10"
             android:hint="@string/your_url_here"
+            android:imeOptions="actionDone"
             android:inputType="textUri"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/orangedim" />
 
 
         <!--<fr.ganfra.materialspinner.MaterialSpinner-->

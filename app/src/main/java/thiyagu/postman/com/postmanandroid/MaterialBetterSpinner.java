@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implements AdapterView.OnItemClickListener {
 
-    private static final int MAX_CLICK_DURATION = 3000;
+    private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime;
     private boolean isPopup;
 
@@ -59,26 +59,38 @@ public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implemen
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-//        switch (event.getAction())
-//        {
-//            case MotionEvent.ACTION_DOWN: {
-//                startClickTime = Calendar.getInstance().getTimeInMillis();
-//                break;
-//            }
-//            case MotionEvent.ACTION_UP: {
-//                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-//                if (clickDuration < MAX_CLICK_DURATION) {
-//                    if (isPopup) {
-//                        dismissDropDown();
-//                        isPopup = false;
-//                    } else {
-//                        requestFocus();
-//                        showDropDown();
-//                        isPopup = true;
-//                    }
-//                }
-//            }
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN: {
+                startClickTime = Calendar.getInstance().getTimeInMillis();
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                if (clickDuration < MAX_CLICK_DURATION) {
+                    if (isPopup) {
+                        dismissDropDown();
+                        isPopup = false;
+                    } else {
+                        requestFocus();
+                        showDropDown();
+                        isPopup = true;
+                    }
+                }
+            }
+        }
+//
+//
+//
+// if (isPopup) {
+//            dismissDropDown();
+//            isPopup = false;
+//        } else {
+//            requestFocus();
+//            showDropDown();
+//            isPopup = true;
 //        }
+//        return super.onTouchEvent(event);
         if (isPopup) {
             dismissDropDown();
             isPopup = false;
