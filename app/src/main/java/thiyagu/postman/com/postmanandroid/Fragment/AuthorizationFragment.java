@@ -74,7 +74,8 @@ public class AuthorizationFragment extends Fragment {
 
                 Log.v("adaasdasdasd",materialBetterSpinner.getHint().toString());
 
-                if (materialBetterSpinner.getHint().toString()=="Auth type") {
+                if (materialBetterSpinner.getHint().toString().equals("Auth type"))
+                {
 
 
 
@@ -96,44 +97,65 @@ public class AuthorizationFragment extends Fragment {
                             })
                             .show();
 
+
                 }
+                else if(materialBetterSpinner.getHint().toString().equals("Auth Type"))
+                {
+
+                    if (materialBetterSpinner.getText().toString().equals("Basic Auth"))
+                    {
+
+                        int username_length=username.getText().toString().length();
+                        int password_length=password.getText().toString().length();
+Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length));
+
+                        if(username_length>0 && password_length>0)
+                        {
+
+
+                            AuthHolderData authHolderData = new AuthHolderData();
+                            String Credentials = username.getText().toString() + ":" + password.getText().toString();
+                            String authdata = "Basic " + Base64.encodeToString(Credentials.getBytes(), Base64.NO_WRAP);
+                            authHolderData.setBasicAuth(authdata);
+                            SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                            editor.putString("Authorization", authdata);
+                            editor.apply();
+                            Toast.makeText(getActivity(),"Authorization data updated",Toast.LENGTH_LONG).show();
+
+                        }
+                        else
+                        {
+
+
+                            Toast.makeText(getActivity(),"Enter Fields",Toast.LENGTH_LONG).show();
+
+                        }
 
 
 
 
-                if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
 
-
-                    if (username.getText().toString().equals("")) {
-
-
-                    } else if (password.getText().toString().equals("")) {
-
-
-                    } else {
+                    } else if (materialBetterSpinner.getText().toString().equals("No auth"))
+                    {
 
                         AuthHolderData authHolderData = new AuthHolderData();
-                        String Credentials = username.getText().toString() + ":" + password.getText().toString();
-                        String authdata = "Basic " + Base64.encodeToString(Credentials.getBytes(), Base64.NO_WRAP);
+                        String Credentials = "No auth";
+                        String authdata = "No auth";
                         authHolderData.setBasicAuth(authdata);
                         SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                         editor.putString("Authorization", authdata);
                         editor.apply();
-
-
                     }
 
 
-                } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
 
-                    AuthHolderData authHolderData = new AuthHolderData();
-                    String Credentials = "No auth";
-                    String authdata = "No auth";
-                    authHolderData.setBasicAuth(authdata);
-                    SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                    editor.putString("Authorization", authdata);
-                    editor.apply();
+
                 }
+//
+//
+//
+//
+
             }
         });
 
@@ -146,10 +168,16 @@ public class AuthorizationFragment extends Fragment {
                 Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
               materialBetterSpinner.setHint("Auth Type");
 
-                if (String.valueOf(i).equals("1")) {
+                if (String.valueOf(i).equals("0"))
+                {
 
-
-                    Log.v("sadsadsad", "1");
+                    username.setEnabled(false);
+                    password.setEnabled(false);
+                    username.setText("");
+                    password.setText("");
+                    username.setHintTextColor(getResources().getColor(R.color.gray));
+                    password.setHintTextColor(getResources().getColor(R.color.gray));
+                    Log.v("sadsadsad", "0");
 
 
 //                    String credentials = USERNAME+":"+PASSWORD;
@@ -157,6 +185,14 @@ public class AuthorizationFragment extends Fragment {
 //                            + Base64.encodeToString(credentials.getBytes(),
 //                            Base64.NO_WRAP);
 //                    headers.put("Authorization", auth);
+
+
+                }
+                else  if(String.valueOf(i).equals("1"))
+                {
+                    username.requestFocus();
+                    username.setEnabled(true);
+                    password.setEnabled(true);
 
 
                 }

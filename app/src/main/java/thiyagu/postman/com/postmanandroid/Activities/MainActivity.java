@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -27,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,10 +71,14 @@ public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
 
+
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
+
+    private ProgressDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +91,9 @@ public class MainActivity extends AppCompatActivity {
         AssetManager assetManager = this.getAssets();
         ActionBar actionBar = getSupportActionBar();
 
+        dialog = new ProgressDialog(MainActivity.this);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-        SpannableStringBuilder SS = new SpannableStringBuilder("MY Actionbar Tittle");
+        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         actionBar.setTitle(SS);
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -178,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     String authdata = prefs.getString("Authorization", null);
-                    if (authdata == "No auth") {
+                    if (authdata.equals("No auth")) {
                         Log.v("postman", "auth value neglected");
 
                     } else {
@@ -304,11 +311,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class RequestMaker extends AsyncTask<Object, String, String> {
+
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-
+           // progressDialog.show();
+            dialog.setMessage("Activating hyperdrive, please wait.");
+            dialog.show();
         }
 
         @Override
@@ -320,14 +331,17 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> paramlist = (ArrayList<String>) strings[3];
             Headers customheader = headerbuilder.build();
 
-            if (urlvalue.contains("www") || urlvalue.contains("https")) {
+
+
+
+
+            if (urlvalue.contains("www") || urlvalue.contains("https://")) {
 
                 //urlvalue = "https://" + urlvalue;
             }
 
 
-
-            else if (urlvalue.contains("www") || urlvalue.contains("http")) {
+            else if (urlvalue.contains("www") || urlvalue.contains("http://")) {
 
                 //urlvalue = "http://" + urlvalue;
             }
@@ -336,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
 
             {
 
-                urlvalue = "http://" + urlvalue;
+                urlvalue = "http://www." + urlvalue;
 
 
             }
@@ -366,8 +380,16 @@ public class MainActivity extends AppCompatActivity {
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
+                        public void onFailure(Call call, final IOException e) {
                             Log.d("TAG", "failure");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+
                         }
 
                         @Override
@@ -614,13 +636,38 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+            try
+            {
+                Thread.sleep(2000);
 
+            }
+
+            catch (Exception e)
+            {
+
+
+
+
+            }
 
             return null;
         }
 
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(dialog != null)
+                dialog.dismiss();
+
+        }
     }
 
+    @Override
+    public void onPause(){
 
+        super.onPause();
+        if(dialog != null)
+            dialog.dismiss();
+    }
 }

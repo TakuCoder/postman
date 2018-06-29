@@ -89,6 +89,11 @@ public class ResponseFragment extends Fragment {
             Log.v("sdsdsdsd",timevalue);
             Log.v("sdsdsdsd",codevalue);
             mRecyclewView.bindJson(responsetext);
+            mRecyclewView.setKeyColor(getResources().getColor(R.color.lawn_green));
+            mRecyclewView.setValueTextColor(getResources().getColor(R.color.keycolor));
+            mRecyclewView.setValueNumberColor(getResources().getColor(R.color.keycolor));
+            mRecyclewView.setValueUrlColor(getResources().getColor(R.color.keycolor));
+
             textView.setVisibility(View.INVISIBLE);
 
         }
@@ -121,23 +126,24 @@ public class ResponseFragment extends Fragment {
 
         try
         {
+            int msvalue=Integer.valueOf(timevalue);
 
-            if(Integer.valueOf(codevalue)<=99)
+            if(msvalue>=0 && msvalue<=99)
             {
 
                 time.setTextColor(Color.parseColor("#0a8108"));
-                Log.v("amhere","1");
+                Log.v("amhere","1"+msvalue);
 
             }
-            else if(Integer.valueOf(codevalue)>=100 && Integer.valueOf(codevalue)<=150)
+            else if(msvalue>=100 && msvalue<=199)
             {
                 time.setTextColor(Color.parseColor("#cddc39"));
-                Log.v("amhere","2");
+                Log.v("amhere","2"+msvalue);
 
             }
-            else  if(Integer.valueOf(codevalue)>=150 && Integer.valueOf(codevalue)<=200)
+            else  if(msvalue>=200)
             {
-                time.setTextColor(Color.parseColor("#c62828"));    Log.v("amhere","3");
+                time.setTextColor(Color.parseColor("#c62828"));    Log.v("amhere","3"+msvalue);
 
             }
 
@@ -150,7 +156,33 @@ public class ResponseFragment extends Fragment {
 
         }
 
+        try
+        {
+            int responsecodevalue=Integer.valueOf(codevalue);
 
+            if(responsecodevalue==200 ||responsecodevalue==201 ||responsecodevalue==202||responsecodevalue==203||responsecodevalue==204||responsecodevalue==205||responsecodevalue==206||responsecodevalue==207 || responsecodevalue==208 ||responsecodevalue==226)
+            {
+
+                code.setTextColor(getResources().getColor(R.color.lawn_green));
+                Log.v("amhere","1"+responsecodevalue);
+
+            }
+            else if(responsecodevalue>=400 && responsecodevalue<=499)
+            {
+                code.setTextColor(Color.parseColor("##dc3838"));
+                Log.v("amhere","2"+responsecodevalue);
+
+            }
+
+
+        }
+
+        catch(Exception e)
+        {
+
+
+
+        }
 
 
         return view;
