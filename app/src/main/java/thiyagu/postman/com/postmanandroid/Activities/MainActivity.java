@@ -65,12 +65,13 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 
 public class MainActivity extends AppCompatActivity {
 
+
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
     EditText UrlField;
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
-
+    public String ssss;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -83,12 +84,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+
+        try
+        {
+
+            SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+
+            String value= prefs.getString("urlvalue",null);
+            Log.v("dadsfgsdfgsdgdsgsd",value);
+
+        }
+        catch (Exception e)
+        {
+            Log.v("dadsfgsdfgsdgdsgsd",e.toString());
+
+        }
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        AssetManager assetManager = this.getAssets();
+
         ActionBar actionBar = getSupportActionBar();
 
         dialog = new ProgressDialog(MainActivity.this);
@@ -96,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
         SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         actionBar.setTitle(SS);
-        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
+        AssetManager assetManager = this.getAssets();
+        roboto = Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
 
         viewPager = findViewById(R.id.pager);
 
@@ -150,7 +169,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+
         UrlField = findViewById(R.id.UrlField);
+        sendButton.setTypeface(roboto);
+        UrlField.setTypeface(roboto);
+        materialBetterSpinner.setTypeface(roboto);
         // UrlField.setText("http://192.168.1.157:8080/");
         // UrlField.setText("http://192.168.1.110:8080/");
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -663,11 +688,79 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public String getUrlData()
+    {
+String sss=UrlField.getText().toString();
+return sss;
+
+    }
     @Override
     public void onPause(){
+        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+        editor.putString("urlvalue", UrlField.getText().toString());
+
+        Log.v("statestate","am in onpause insatnce");
+
 
         super.onPause();
         if(dialog != null)
             dialog.dismiss();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+//        savedInstanceState.putBoolean("req_type", true);
+//        savedInstanceState.putDouble("myDouble", 1.9);
+//        savedInstanceState.putInt("MyInt", 1);
+        savedInstanceState.putString("req_type", "thiyagu");
+        Log.v("statestate","am in on saved insatnce");
+
+
+        ssss= getUrlData();
+
+
+        // etc.
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.v("statestate","am in restore saved insatnce");
+
+//        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
+//        double myDouble = savedInstanceState.getDouble("myDouble");
+//        int myInt = savedInstanceState.getInt("MyInt");
+//        String myString = savedInstanceState.getString("MyString");
+
+
+
+
+
+
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v("statestate","restart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v("statestate","destroy");
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+
+        Log.v("statestate","stopppppp");
     }
 }

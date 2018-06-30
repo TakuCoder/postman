@@ -2,6 +2,8 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +17,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.PopupActivities.HeaderPopUp;
 import thiyagu.postman.com.postmanandroid.R;
@@ -60,7 +63,9 @@ public class HeaderFragment extends Fragment {
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_header, container, false);
         context = view.getContext();
-
+        Typeface roboto;
+        AssetManager assetManager = context.getAssets();
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
         AddHeader = view.findViewById(R.id.AddHeader);
@@ -68,10 +73,12 @@ public class HeaderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HeaderPopUp.class);
+                intent.putExtra("urldata", ((MainActivity) getActivity()).getUrlData());
                 startActivityForResult(intent, 1);
 
             }
         });
+        AddHeader.setTypeface(roboto);
         recyclerView.setLayoutManager(ParamLayoutManager);
         ParamsAdapter = new HeaderAdapter(getDataSet(), context);
 

@@ -2,7 +2,9 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,30 +56,31 @@ public class AuthorizationFragment extends Fragment {
         Button updateauthrequest;
         final EditText username, password;
 
-
+        Typeface roboto;
         final View view = inflater.inflate(R.layout.tab_fragment_authorization, container, false);
         context = view.getContext();
         materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
         final String[] authdata = {"No auth", "Basic Auth"};
         materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
-
+        AssetManager assetManager = context.getAssets();
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         updateauthrequest = view.findViewById(R.id.updateauthrequest);
         username = view.findViewById(R.id.input_username);
         password = view.findViewById(R.id.input_password);
         materialBetterSpinner.setHideUnderline(true);
-
+        username.setTypeface(roboto);
+        password.setTypeface(roboto);
+        updateauthrequest.setTypeface(roboto);
+        materialBetterSpinner.setTypeface(roboto);
         updateauthrequest.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View v) {
 
-                Log.v("adaasdasdasd",materialBetterSpinner.getHint().toString());
+                Log.v("adaasdasdasd", materialBetterSpinner.getHint().toString());
 
-                if (materialBetterSpinner.getHint().toString().equals("Auth type"))
-                {
-
-
+                if (materialBetterSpinner.getHint().toString().equals("Auth type")) {
 
 
                     Log.v("asdasdasdsa", "nulllllll");
@@ -98,19 +101,15 @@ public class AuthorizationFragment extends Fragment {
                             .show();
 
 
-                }
-                else if(materialBetterSpinner.getHint().toString().equals("Auth Type"))
-                {
+                } else if (materialBetterSpinner.getHint().toString().equals("Auth Type")) {
 
-                    if (materialBetterSpinner.getText().toString().equals("Basic Auth"))
-                    {
+                    if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
 
-                        int username_length=username.getText().toString().length();
-                        int password_length=password.getText().toString().length();
-Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length));
+                        int username_length = username.getText().toString().length();
+                        int password_length = password.getText().toString().length();
+                        Log.v("qqqqwwww", String.valueOf(username_length) + String.valueOf(password_length));
 
-                        if(username_length>0 && password_length>0)
-                        {
+                        if (username_length > 0 && password_length > 0) {
 
 
                             AuthHolderData authHolderData = new AuthHolderData();
@@ -120,23 +119,17 @@ Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length)
                             SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                             editor.putString("Authorization", authdata);
                             editor.apply();
-                            Toast.makeText(getActivity(),"Authorization data updated",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Authorization data updated", Toast.LENGTH_LONG).show();
+
+                        } else {
+
+
+                            Toast.makeText(getActivity(), "Enter Fields", Toast.LENGTH_LONG).show();
 
                         }
-                        else
-                        {
 
 
-                            Toast.makeText(getActivity(),"Enter Fields",Toast.LENGTH_LONG).show();
-
-                        }
-
-
-
-
-
-                    } else if (materialBetterSpinner.getText().toString().equals("No auth"))
-                    {
+                    } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
 
                         AuthHolderData authHolderData = new AuthHolderData();
                         String Credentials = "No auth";
@@ -146,8 +139,6 @@ Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length)
                         editor.putString("Authorization", authdata);
                         editor.apply();
                     }
-
-
 
 
                 }
@@ -166,10 +157,9 @@ Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
-              materialBetterSpinner.setHint("Auth Type");
+                materialBetterSpinner.setHint("Auth Type");
 
-                if (String.valueOf(i).equals("0"))
-                {
+                if (String.valueOf(i).equals("0")) {
 
                     username.setEnabled(false);
                     password.setEnabled(false);
@@ -187,9 +177,7 @@ Log.v("qqqqwwww",String.valueOf(username_length)+String.valueOf(password_length)
 //                    headers.put("Authorization", auth);
 
 
-                }
-                else  if(String.valueOf(i).equals("1"))
-                {
+                } else if (String.valueOf(i).equals("1")) {
                     username.requestFocus();
                     username.setEnabled(true);
                     password.setEnabled(true);

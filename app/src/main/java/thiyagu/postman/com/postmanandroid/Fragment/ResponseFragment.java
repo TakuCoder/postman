@@ -68,7 +68,10 @@ public class ResponseFragment extends Fragment {
         AssetManager assetManager = context.getAssets();
         roboto = Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
 
-
+        time.setTypeface(roboto);
+        code.setTypeface(roboto);
+        status.setTypeface(roboto);
+        timee.setTypeface(roboto);
 
         // bind json
        // StoreResponse storeResponse = new StoreResponse();

@@ -18,6 +18,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
@@ -32,8 +33,7 @@ public class BodyFragment extends Fragment {
     Context context;
     RecyclerView.Adapter ParamsAdapter;
     RecyclerView.LayoutManager ParamLayoutManager;
-    AssetManager assetManager ;
-    Typeface roboto;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,22 +64,23 @@ public class BodyFragment extends Fragment {
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_body, container, false);
         context = view.getContext();
-
-assetManager = view.getContext().getAssets();
-//roboto = Typeface.createFromAsset(assetManager,
-//        String.format(Locale.US, "fonts/%s", "Roboto-Regular.ttf"));
-
+        Typeface roboto;
+        AssetManager assetManager = context.getAssets();
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
+
         AddBody = view.findViewById(R.id.AddBody);
         AddBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), BodyPopUp.class);
+
                 startActivityForResult(intent, 1);
 
             }
         });
+        AddBody.setTypeface(roboto);
         recyclerView.setLayoutManager(ParamLayoutManager);
         ParamsAdapter = new BodyAdapter(getDataSet(), context);
 
