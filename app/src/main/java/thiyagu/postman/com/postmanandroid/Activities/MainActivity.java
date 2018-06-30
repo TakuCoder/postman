@@ -698,7 +698,7 @@ return sss;
     public void onPause(){
         SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         editor.putString("urlvalue", UrlField.getText().toString());
-
+        editor.apply();
         Log.v("statestate","am in onpause insatnce");
 
 
