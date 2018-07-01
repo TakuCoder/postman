@@ -15,6 +15,7 @@
     <string name="null_response">Response will visible here</string>
     <string name="Key">key</string>
     <string name="Header_Type">Header Type</string>
+    <string name="delete">Delete</string>
     <string-array name="myarray">
         <item>English (US)</item>
         <item>Spanish</item>

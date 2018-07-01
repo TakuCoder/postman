@@ -87,20 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        try
-        {
 
-            SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-
-            String value= prefs.getString("urlvalue",null);
-            Log.v("dadsfgsdfgsdgdsgsd",value);
-
-        }
-        catch (Exception e)
-        {
-            Log.v("dadsfgsdfgsdgdsgsd",e.toString());
-
-        }
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -314,7 +301,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        try
+        {
 
+            SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+
+            String url_value= prefs.getString("url_value",null);
+            String req_value= prefs.getString("req_value",null);
+            materialBetterSpinner.setText(req_value);
+            //materialBetterSpinner.setSe
+            UrlField.setText(url_value);
+            Log.v("postman_android","=============================");
+            Log.v("postman_android","setting value on on create");
+            Log.v("postman_android",url_value);
+            Log.v("postman_android",req_value);
+            Log.v("postman_android","=============================");
+        }
+        catch (Exception e)
+        {
+            Log.v("dadsfgsdfgsdgdsgsd",e.toString());
+
+        }
 
     }
 
@@ -697,7 +704,9 @@ return sss;
     @Override
     public void onPause(){
         SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-        editor.putString("urlvalue", UrlField.getText().toString());
+        editor.putString("url_value", UrlField.getText().toString());
+        editor.putString("req_value", materialBetterSpinner.getText().toString());
+
         editor.apply();
         Log.v("statestate","am in onpause insatnce");
 

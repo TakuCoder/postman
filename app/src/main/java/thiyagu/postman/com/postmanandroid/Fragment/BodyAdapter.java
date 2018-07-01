@@ -111,8 +111,6 @@ public class BodyAdapter extends RecyclerView
                 mcontext.startActivity(intent);
 
 
-                // ParamFragment oneFragment = new ParamFragment();
-                //oneFragment.RefereshView();
 
             }
         });
