@@ -148,7 +148,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
             res.moveToNext();
         }
+        db.close();
         return array_list;
+
     }
 
 
@@ -166,6 +168,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
             res.moveToNext();
         }
+        db.close();
         return array_list;
     }
 
@@ -183,6 +186,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
             res.moveToNext();
         }
+        db.close();
         return array_list;
     }
 
@@ -199,6 +203,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)));
             res.moveToNext();
         }
+        db.close();
         Log.v("thisisallcontent", array_list.toString());
     }
 
@@ -214,6 +219,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(COLUMN_RESPONSE)));
             res.moveToNext();
         }
+        db.close();
         Log.v("thisisallcontent", array_list.toString());
     }
 
@@ -229,6 +235,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)));
             res.moveToNext();
         }
+        db.close();
         Log.v("thisisallcontent", array_list.toString());
     }
 
@@ -245,6 +252,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(ID)));
             res.moveToNext();
         }
+        db.close();
         Log.v("thisisallcontent", array_list.toString());
     }
 
@@ -252,7 +260,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("delete from " + TABLE_NAME_PARAM);
 
-
+        db.close();
     }
 
     public void DeleteSingleRecParam(int id) {
@@ -262,7 +270,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("delete from " + TABLE_NAME_PARAM + " where id = " + id);
         PrintAllParam();
-
+        db.close();
 
     }
 
@@ -273,7 +281,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("delete from " + TABLE_NAME_BODY + " where id = " + id);
         PrintAllParam();
-
+        db.close();
 
     }
 
@@ -285,6 +293,6 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL("delete from " + TABLE_NAME_HEADER + " where id = " + id);
         PrintAllParam();
 
-
+        db.close();
     }
 }

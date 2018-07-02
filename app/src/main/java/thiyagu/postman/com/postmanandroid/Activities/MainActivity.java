@@ -5,23 +5,34 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -37,6 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.CipherSuite;
@@ -86,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-
-
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -103,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setTitle(SS);
 
         AssetManager assetManager = this.getAssets();
-        roboto = Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
         viewPager = findViewById(R.id.pager);
 
@@ -154,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
 
         UrlField = findViewById(R.id.UrlField);
@@ -250,32 +257,69 @@ public class MainActivity extends AppCompatActivity {
                     case "GET":
 
                         Log.v("sdasdasdas", "GET");
+                        if (isOnline()) {
+                            new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
 
-                        new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
+                        } else {
+//
+//    LayoutInflater inflater = getLayoutInflater();
+//
+//    View layout = inflater.inflate(R.layout.layout_custome_toast,
+//            (ViewGroup) findViewById(R.id.custom_toast_container));
+//
+//// set a message
+//    TextView text = (TextView) layout.findViewById(R.id.text);
+//    text.setText("Button is clicked!");
+//
+//// Toast...
+//    Toast toast = new Toast(getApplicationContext());
+//    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 300);
+//    toast.setDuration(Toast.LENGTH_LONG);
+//    toast.setView(layout);
+//    toast.show();
 
-                        //responsetab.select();
+                            ShowNetError();
+
+                        }
+
+
                         break;
 
                     case "POST":
 
                         Log.v("sdasdasdas", "POST");
-                        new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+                        if (isOnline()) {
+                            new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+                        } else {
 
-                        //responsetab.select();
+                            ShowNetError();
+
+                        }
                         break;
 
                     case "DELETE":
 
                         Log.v("sdasdasdas", "DELETE");
-                        new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                        //responsetab.select();
+
+                        if (isOnline()) {
+                            new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
+                        } else {
+
+                            ShowNetError();
+
+                        }
                         break;
 
                     case "PUT":
 
-                        Log.v("sdasdasdas", "PUT");
-                        new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
-                        //responsetab.select();
+                        if (isOnline()) {
+
+                            Log.v("sdasdasdas", "PUT");
+                            new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
+                        } else {
+                            ShowNetError();
+
+                        }
                         break;
                     default:
 
@@ -301,25 +345,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        try
-        {
+        try {
 
             SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
-            String url_value= prefs.getString("url_value",null);
-            String req_value= prefs.getString("req_value",null);
+            String url_value = prefs.getString("url_value", null);
+            String req_value = prefs.getString("req_value", null);
             materialBetterSpinner.setText(req_value);
             //materialBetterSpinner.setSe
             UrlField.setText(url_value);
-            Log.v("postman_android","=============================");
-            Log.v("postman_android","setting value on on create");
-            Log.v("postman_android",url_value);
-            Log.v("postman_android",req_value);
-            Log.v("postman_android","=============================");
-        }
-        catch (Exception e)
-        {
-            Log.v("dadsfgsdfgsdgdsgsd",e.toString());
+            Log.v("postman_android", "=============================");
+            Log.v("postman_android", "setting value on on create");
+            Log.v("postman_android", url_value);
+            Log.v("postman_android", req_value);
+            Log.v("postman_android", "=============================");
+        } catch (Exception e) {
+            Log.v("dadsfgsdfgsdgdsgsd", e.toString());
 
         }
 
@@ -349,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-           // progressDialog.show();
+            // progressDialog.show();
             dialog.setMessage("Activating hyperdrive, please wait.");
             dialog.show();
         }
@@ -364,20 +405,13 @@ public class MainActivity extends AppCompatActivity {
             Headers customheader = headerbuilder.build();
 
 
-
-
-
             if (urlvalue.contains("www") || urlvalue.contains("https://")) {
 
                 //urlvalue = "https://" + urlvalue;
-            }
-
-
-            else if (urlvalue.contains("www") || urlvalue.contains("http://")) {
+            } else if (urlvalue.contains("www") || urlvalue.contains("http://")) {
 
                 //urlvalue = "http://" + urlvalue;
-            }
-            else
+            } else
 
 
             {
@@ -397,7 +431,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Log.v("thisisurl", urlvalue);
-            if (method.equals("GET")) {
+            if (method.equals("GET"))
+            {
                 try {
 
                     OkHttpClient client = new OkHttpClient();
@@ -410,14 +445,15 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
 
-                    client.newCall(request).enqueue(new Callback() {
+                    client.newCall(request).enqueue(new Callback()
+                    {
                         @Override
                         public void onFailure(Call call, final IOException e) {
                             Log.d("TAG", "failure");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -489,21 +525,38 @@ public class MainActivity extends AppCompatActivity {
 
                     ArrayList<String> arrayList = feedReaderDbHelper.getAllBody();
 
-
-                    if (arrayList.size() > 0) {
+                    String[] subvalue=null;
+                    if (arrayList.size() > 0)
+                    {
 
                         for (int i = 0; i < arrayList.size(); i++)
 
                         {
+                            try {
+                                 subvalue = arrayList.get(i).split("@@");
 
-                            String[] subvalue = arrayList.get(i).split("@@");
+
+                                Log.v("asdasdasdsa", subvalue[0]);
+                                Log.v("asdasdasdsa", subvalue[1]);
+                                builder.addFormDataPart(subvalue[1], subvalue[2]);
+                                Log.v("statestate", "testcase1");
 
 
-                            Log.v("asdasdasdsa", subvalue[0]);
-                            Log.v("asdasdasdsa", subvalue[1]);
-                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                            } catch (Exception e) {
+                                Log.v("statestate", "exception happened in Post method formation");
+                                Log.v("asdasdasdsa", e.toString());
+                                Log.v("statestate", "exception happened in Post method formation");
+                            }
+
                         }
+
+
                     }
+
+
+                   Log.v("statestate", String.valueOf(subvalue.length));
                     requestBody = builder.build();
                     Request request = new Request.Builder()
                             .url(urlvalue)
@@ -511,91 +564,125 @@ public class MainActivity extends AppCompatActivity {
                             .post(requestBody)
                             .build();
 
+if(subvalue.length>0)
+{
 
-                    // Response response = client.newCall(request).execute();
 
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
+    client.newCall(request).enqueue(new Callback()
+    {
+        @Override
+        public void onFailure(Call call, final IOException e) {
+            Log.d("TAG", "failure");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
 
-                        }
 
-                        @Override
-                        public void onResponse(Call call, final Response response) throws IOException {
+        }
 
-                            runOnUiThread(new Runnable() {
+        @Override
+        public void onResponse(Call call, final Response response) throws IOException {
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run()
+
+                {
+                    try {
+                        String bodyy = response.body().string();
+                        int responsecode = response.code();
+
+                        String Headers = response.headers().toString();
+                        Log.d("thisisbody", bodyy);
+                        Log.d("responsecodeeee", String.valueOf(responsecode));
+                        Log.d("thisisheader", Headers);
+                        long tx = response.sentRequestAtMillis();
+                        long rx = response.receivedResponseAtMillis();
+                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
+                        Bundle bundle = new Bundle();
+                        bundle.putString("time", "" + (rx - tx));
+
+                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                        editor.putString("response", bodyy);
+                        editor.putString("code", String.valueOf(responsecode));
+                        editor.putString("time", "" + (rx - tx));
+                        editor.apply();
+                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                        tab.select();
+                    } catch (Exception e) {
+
+                        Log.v("asdasdasd", e.toString());
+
+
+                    }
+                }
+
+
+            });
+
+
+        }
+    });
+
+
+}
+else
+{
+
+    runOnUiThread(new Runnable()
+
+
+    {
+        @Override
+        public void run()
+
+        {
+            TabLayout.Tab tab = tabLayout.getTabAt(3);
+            tab.select();
+
+
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                            .setTarget(findViewById(R.id.AddBody))
+                            .setPrimaryText("POST request must have atleast one part")
+                            .setPromptBackground(new CirclePromptBackground())
+                            .setPromptFocal(new RectanglePromptFocal())
+                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                                 @Override
-                                public void run()
-
-                                {
-                                    try {
-                                        String bodyy = response.body().string();
-                                        int responsecode = response.code();
-
-                                        String Headers = response.headers().toString();
-                                        Log.d("thisisbody", bodyy);
-                                        Log.d("responsecodeeee", String.valueOf(responsecode));
-                                        Log.d("thisisheader", Headers);
-                                        long tx = response.sentRequestAtMillis();
-                                        long rx = response.receivedResponseAtMillis();
-                                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("time", "" + (rx - tx));
-
-                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                                        editor.putString("response", bodyy);
-                                        editor.putString("code", String.valueOf(responsecode));
-                                        editor.putString("time", "" + (rx - tx));
-                                        editor.apply();
-                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                        tab.select();
-                                    } catch (Exception e) {
-
-                                        Log.v("asdasdasd", e.toString());
-
-
+                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                        //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
                                     }
                                 }
+                            })
+                            .show();
+
+                }
+            }, 3000);
+        }
+    });
 
 
-                            });
-                        }
-                    });
+}
 
-                } catch (final Exception e) {
+
+                } catch (final Exception e)
+                {
 
 
                     e.printStackTrace();
-                    runOnUiThread(new Runnable()
 
-
-                    {
-                        @Override
-                        public void run()
-
-                        {
-                            TabLayout.Tab tab = tabLayout.getTabAt(3);
-                            tab.select();
-                            Log.v("dsdsdsd", e.toString());
-                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                            new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                    .setTarget(findViewById(R.id.AddBody))
-                                    .setPrimaryText("POST request must have atleast one part")
-                                    .setPromptBackground(new CirclePromptBackground())
-                                    .setPromptFocal(new RectanglePromptFocal())
-                                    .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                        @Override
-                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    })
-                                    .show();
-
-                        }
-                    });
                 }
 
 
@@ -668,16 +755,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            try
-            {
+            try {
                 Thread.sleep(2000);
 
-            }
-
-            catch (Exception e)
-            {
-
-
+            } catch (Exception e) {
 
 
             }
@@ -689,63 +770,51 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(dialog != null)
+            if (dialog != null)
                 dialog.dismiss();
 
         }
     }
 
-    public String getUrlData()
-    {
-String sss=UrlField.getText().toString();
-return sss;
+    public String getUrlData() {
+        String sss = UrlField.getText().toString();
+        return sss;
 
     }
+
     @Override
-    public void onPause(){
+    public void onPause() {
         SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         editor.putString("url_value", UrlField.getText().toString());
         editor.putString("req_value", materialBetterSpinner.getText().toString());
 
         editor.apply();
-        Log.v("statestate","am in onpause insatnce");
+        Log.v("statestate", "am in onpause insatnce");
 
 
         super.onPause();
-        if(dialog != null)
+        if (dialog != null)
             dialog.dismiss();
     }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        // Save UI state changes to the savedInstanceState.
-        // This bundle will be passed to onCreate if the process is
-        // killed and restarted.
-//        savedInstanceState.putBoolean("req_type", true);
-//        savedInstanceState.putDouble("myDouble", 1.9);
-//        savedInstanceState.putInt("MyInt", 1);
+
         savedInstanceState.putString("req_type", "thiyagu");
-        Log.v("statestate","am in on saved insatnce");
+        Log.v("statestate", "am in on saved insatnce");
 
 
-        ssss= getUrlData();
+        ssss = getUrlData();
 
 
         // etc.
     }
+
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.v("statestate","am in restore saved insatnce");
-
-//        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
-//        double myDouble = savedInstanceState.getDouble("myDouble");
-//        int myInt = savedInstanceState.getInt("MyInt");
-//        String myString = savedInstanceState.getString("MyString");
-
-
-
-
+        Log.v("statestate", "am in restore saved insatnce");
 
 
 
@@ -754,15 +823,14 @@ return sss;
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.v("statestate","restart");
+        Log.v("statestate", "restart");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("statestate","destroy");
+        Log.v("statestate", "destroy");
     }
-
 
 
     @Override
@@ -770,6 +838,19 @@ return sss;
         super.onStop();
 
 
-        Log.v("statestate","stopppppp");
+        Log.v("statestate", "stopppppp");
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    public void ShowNetError() {
+
+        Toasty.warning(MainActivity.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
+
     }
 }

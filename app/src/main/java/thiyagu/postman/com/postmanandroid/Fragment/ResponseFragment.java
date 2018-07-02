@@ -172,7 +172,7 @@ public class ResponseFragment extends Fragment {
             }
             else if(responsecodevalue>=400 && responsecodevalue<=499)
             {
-                code.setTextColor(Color.parseColor("##dc3838"));
+                code.setTextColor(Color.parseColor("#dc3838"));
                 Log.v("amhere","2"+responsecodevalue);
 
             }
