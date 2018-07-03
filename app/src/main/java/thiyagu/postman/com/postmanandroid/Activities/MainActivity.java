@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String seletecvalue = materialBetterSpinner.getText().toString();
 
+
                 String Address = UrlField.getText().toString();
                 switch (seletecvalue) {
 
