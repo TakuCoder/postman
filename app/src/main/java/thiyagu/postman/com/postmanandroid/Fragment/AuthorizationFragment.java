@@ -22,11 +22,12 @@ import android.widget.Toast;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
-import thiyagu.postman.com.postmanandroid.Database.AuthHolderData;
+
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
+
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -112,10 +113,10 @@ public class AuthorizationFragment extends Fragment {
                         if (username_length > 0 && password_length > 0) {
 
 
-                            AuthHolderData authHolderData = new AuthHolderData();
+
                             String Credentials = username.getText().toString() + ":" + password.getText().toString();
                             String authdata = "Basic " + Base64.encodeToString(Credentials.getBytes(), Base64.NO_WRAP);
-                            authHolderData.setBasicAuth(authdata);
+
                             SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                             editor.putString("Authorization", authdata);
                             editor.apply();
@@ -131,10 +132,10 @@ public class AuthorizationFragment extends Fragment {
 
                     } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
 
-                        AuthHolderData authHolderData = new AuthHolderData();
+
                         String Credentials = "No auth";
                         String authdata = "No auth";
-                        authHolderData.setBasicAuth(authdata);
+
                         SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                         editor.putString("Authorization", authdata);
                         editor.apply();

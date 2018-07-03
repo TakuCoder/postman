@@ -5,61 +5,42 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.CipherSuite;
-import okhttp3.ConnectionSpec;
 import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.TlsVersion;
 import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
@@ -77,14 +58,13 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFoc
 
 public class MainActivity extends AppCompatActivity {
 
-
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
     EditText UrlField;
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
     public String ssss;
-
+    public String Tag="postman-trace";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabLayout.Tab body;
@@ -134,15 +114,9 @@ public class MainActivity extends AppCompatActivity {
         materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                // Drawable drawable = getDrawable(R.drawable.arrow_orange);
-                // materialBetterSpinner.setDropDownAnchor(R.drawable.arrow_orange);
-                // Drawable dropdownIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.arrow_white);
-                //materialBetterSpinner.setCompoundDrawables(drawable,null,drawable,null);
-//materialBetterSpinner.setCompoundDrawablesWithIntrinsicBounds(dropdownIcon,dropdownIcon,dropdownIcon,dropdownIcon);
-                //materialBetterSpinner.setCompoundDrawablesRelative( null, null, drawable, null);
-                //android:drawableEnd="@drawable/arrow_orange"
 
-                Log.v("Tag", "touching req selection");
+
+                Log.v(Tag, "touching req selection");
 
                 return false;
             }
@@ -175,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                TabLayout.Tab tab = tabLayout.getTabAt(0);
+                tab.select();
                 feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
                 ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                 Headers.Builder headerBuilder = new Headers.Builder();
@@ -188,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
                         String[] subvalue = headerlist.get(i).split("@@");
 
 
-                        Log.v("asdasdasdsa", subvalue[0]);
-                        Log.v("asdasdasdsa", subvalue[1]);
+                        Log.v(Tag, subvalue[0]);
+                        Log.v(Tag, subvalue[1]);
                         headerBuilder.add(subvalue[1], subvalue[2]);
                     }
                 }
@@ -210,14 +185,14 @@ public class MainActivity extends AppCompatActivity {
                     } else {
 
                         headerBuilder.add("Authorization", authdata);
-                        Log.v("asdasdasdsa", authdata);
+                        Log.v(Tag, authdata);
 
                     }
 
 
                 } catch (Exception e) {
 
-                    Log.v("asdasdasdsa", e.toString());
+                    Log.v(Tag, e.toString());
 
                 }
 
@@ -232,8 +207,8 @@ public class MainActivity extends AppCompatActivity {
                         String[] subvalue = paramlist.get(i).split("@@");
 
 
-                        Log.v("asdasdasdsa", subvalue[0]);
-                        Log.v("asdasdasdsa", subvalue[1]);
+                        Log.v(Tag, subvalue[0]);
+                        Log.v(Tag, subvalue[1]);
 
                         if (i != paramlist.size() - 1) {
                             urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
@@ -256,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case "GET":
 
-                        Log.v("sdasdasdas", "GET");
+                        Log.v(Tag, "GET");
                         if (isOnline()) {
                             new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
 
@@ -287,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case "POST":
 
-                        Log.v("sdasdasdas", "POST");
+                        Log.v(Tag, "POST");
                         if (isOnline()) {
                             new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
                         } else {
@@ -299,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case "DELETE":
 
-                        Log.v("sdasdasdas", "DELETE");
+                        Log.v(Tag, "DELETE");
 
                         if (isOnline()) {
                             new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
@@ -314,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (isOnline()) {
 
-                            Log.v("sdasdasdas", "PUT");
+                            Log.v(Tag, "PUT");
                             new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
                         } else {
                             ShowNetError();
@@ -354,13 +329,13 @@ public class MainActivity extends AppCompatActivity {
             materialBetterSpinner.setText(req_value);
             //materialBetterSpinner.setSe
             UrlField.setText(url_value);
-            Log.v("postman_android", "=============================");
-            Log.v("postman_android", "setting value on on create");
-            Log.v("postman_android", url_value);
-            Log.v("postman_android", req_value);
-            Log.v("postman_android", "=============================");
+            Log.v(Tag, "=============================");
+            Log.v(Tag, "setting value on on create");
+            Log.v(Tag, url_value);
+            Log.v(Tag, req_value);
+            Log.v(Tag, "=============================");
         } catch (Exception e) {
-            Log.v("dadsfgsdfgsdgdsgsd", e.toString());
+            Log.v(Tag, e.toString());
 
         }
 
@@ -431,8 +406,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Log.v("thisisurl", urlvalue);
-            if (method.equals("GET"))
-            {
+            if (method.equals("GET")) {
                 try {
 
                     OkHttpClient client = new OkHttpClient();
@@ -445,11 +419,10 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
 
-                    client.newCall(request).enqueue(new Callback()
-                    {
+                    client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
-                            Log.d("TAG", "failure");
+                            Log.d(Tag, "failure");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -474,12 +447,12 @@ public class MainActivity extends AppCompatActivity {
                                         int responsecode = response.code();
 
                                         String Headers = response.headers().toString();
-                                        Log.d("thisisbody", bodyy);
-                                        Log.d("responsecodeeee", String.valueOf(responsecode));
-                                        Log.d("thisisheader", Headers);
+                                        Log.d(Tag, bodyy);
+                                        Log.d(Tag, String.valueOf(responsecode));
+                                        Log.d(Tag, Headers);
                                         long tx = response.sentRequestAtMillis();
                                         long rx = response.receivedResponseAtMillis();
-                                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
+                                        Log.d(Tag, "response time : " + (rx - tx) + " ms");
                                         Bundle bundle = new Bundle();
                                         bundle.putString("time", "" + (rx - tx));
 
@@ -492,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
                                         tab.select();
                                     } catch (Exception e) {
 
-                                        Log.v("asdasdasd", e.toString());
+                                        Log.v(Tag, e.toString());
 
 
                                     }
@@ -524,30 +497,27 @@ public class MainActivity extends AppCompatActivity {
                     builder.setType(MultipartBody.FORM);
 
                     ArrayList<String> arrayList = feedReaderDbHelper.getAllBody();
-
-                    String[] subvalue=null;
-                    if (arrayList.size() > 0)
-                    {
+                    Log.v(Tag, String.valueOf(arrayList.size()));
+                    String[] subvalue = null;
+                    if (arrayList.size() > 0) {
 
                         for (int i = 0; i < arrayList.size(); i++)
 
                         {
                             try {
-                                 subvalue = arrayList.get(i).split("@@");
+                                subvalue = arrayList.get(i).split("@@");
 
 
-                                Log.v("asdasdasdsa", subvalue[0]);
-                                Log.v("asdasdasdsa", subvalue[1]);
+                                Log.v(Tag, subvalue[0]);
+                                Log.v(Tag, subvalue[1]);
                                 builder.addFormDataPart(subvalue[1], subvalue[2]);
-                                Log.v("statestate", "testcase1");
-
-
+                                Log.v(Tag, "testcase1");
 
 
                             } catch (Exception e) {
-                                Log.v("statestate", "exception happened in Post method formation");
-                                Log.v("asdasdasdsa", e.toString());
-                                Log.v("statestate", "exception happened in Post method formation");
+                                Log.v(Tag, "exception happened in Post method formation");
+                                Log.v(Tag, e.toString());
+                                Log.v(Tag, "exception happened in Post method formation");
                             }
 
                         }
@@ -556,129 +526,130 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                   Log.v("statestate", String.valueOf(subvalue.length));
-                    requestBody = builder.build();
-                    Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .headers(customheader)
-                            .post(requestBody)
-                            .build();
-
-if(subvalue.length>0)
-{
 
 
-    client.newCall(request).enqueue(new Callback()
-    {
-        @Override
-        public void onFailure(Call call, final IOException e) {
-            Log.d("TAG", "failure");
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+
+                    if (arrayList.size() > 0) {
 
 
-        }
+                        requestBody = builder.build();
+                        Request request = new Request.Builder()
+                                .url(urlvalue)
+                                .headers(customheader)
+                                .post(requestBody)
+                                .build();
 
-        @Override
-        public void onResponse(Call call, final Response response) throws IOException {
+                        client.newCall(request).enqueue(new Callback()
+                        {
+                            @Override
+                            public void onFailure(Call call, final IOException e) {
+                                Log.d(Tag, "failure");
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
 
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run()
+                            }
 
-                {
-                    try {
-                        String bodyy = response.body().string();
-                        int responsecode = response.code();
+                            @Override
+                            public void onResponse(Call call, final Response response) throws IOException {
 
-                        String Headers = response.headers().toString();
-                        Log.d("thisisbody", bodyy);
-                        Log.d("responsecodeeee", String.valueOf(responsecode));
-                        Log.d("thisisheader", Headers);
-                        long tx = response.sentRequestAtMillis();
-                        long rx = response.receivedResponseAtMillis();
-                        Log.d("thisisheader", "response time : " + (rx - tx) + " ms");
-                        Bundle bundle = new Bundle();
-                        bundle.putString("time", "" + (rx - tx));
 
-                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                        editor.putString("response", bodyy);
-                        editor.putString("code", String.valueOf(responsecode));
-                        editor.putString("time", "" + (rx - tx));
-                        editor.apply();
-                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                        tab.select();
-                    } catch (Exception e) {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
 
-                        Log.v("asdasdasd", e.toString());
+                                    {
+                                        try {
+                                            String bodyy = response.body().string();
+                                            int responsecode = response.code();
+
+                                            String Headers = response.headers().toString();
+                                            Log.d(Tag, bodyy);
+                                            Log.d(Tag, String.valueOf(responsecode));
+                                            Log.d(Tag, Headers);
+                                            long tx = response.sentRequestAtMillis();
+                                            long rx = response.receivedResponseAtMillis();
+                                            Log.d(Tag, "response time : " + (rx - tx) + " ms");
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("time", "" + (rx - tx));
+
+                                            SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                            editor.putString("response", bodyy);
+                                            editor.putString("code", String.valueOf(responsecode));
+                                            editor.putString("time", "" + (rx - tx));
+                                            editor.apply();
+//
+//                                            ResponsePojoClass pojoClass = new ResponsePojoClass(String.valueOf(responsecode)+"postmandelimeter"+(rx - tx)+"postmandelimeter"+bodyy);
+//                                            feedReaderDbHelper.addResponse(pojoClass);
+                                            TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                            tab.select();
+                                        } catch (Exception e) {
+
+                                            Log.v(Tag, e.toString());
+
+
+                                        }
+                                    }
+
+
+                                });
+
+
+                            }
+                        });
+
+
+                    } else {
+
+                        runOnUiThread(new Runnable()
+
+
+                        {
+                            @Override
+                            public void run()
+
+                            {
+                                TabLayout.Tab tab = tabLayout.getTabAt(3);
+                                tab.select();
+
+
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+
+                                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                                .setTarget(findViewById(R.id.AddBody))
+                                                .setPrimaryText("POST request must have atleast one part")
+                                                .setPromptBackground(new CirclePromptBackground())
+                                                .setPromptFocal(new RectanglePromptFocal())
+                                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                                    @Override
+                                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                })
+                                                .show();
+
+                                    }
+                                }, 1000);
+                            }
+                        });
 
 
                     }
-                }
 
 
-            });
-
-
-        }
-    });
-
-
-}
-else
-{
-
-    runOnUiThread(new Runnable()
-
-
-    {
-        @Override
-        public void run()
-
-        {
-            TabLayout.Tab tab = tabLayout.getTabAt(3);
-            tab.select();
-
-
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                            .setTarget(findViewById(R.id.AddBody))
-                            .setPrimaryText("POST request must have atleast one part")
-                            .setPromptBackground(new CirclePromptBackground())
-                            .setPromptFocal(new RectanglePromptFocal())
-                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                @Override
-                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                        //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            })
-                            .show();
-
-                }
-            }, 3000);
-        }
-    });
-
-
-}
-
-
-                } catch (final Exception e)
-                {
+                } catch (final Exception e) {
 
 
                     e.printStackTrace();
@@ -724,7 +695,7 @@ else
 
                     Response response = client.newCall(request).execute();
 
-                    Log.v("asdasdasd", response.toString());
+                    Log.v(Tag, response.toString());
 
                 } catch (Exception e) {
 
@@ -756,7 +727,7 @@ else
 
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
 
             } catch (Exception e) {
 
@@ -789,7 +760,7 @@ else
         editor.putString("req_value", materialBetterSpinner.getText().toString());
 
         editor.apply();
-        Log.v("statestate", "am in onpause insatnce");
+        Log.v(Tag, "am in onpause insatnce");
 
 
         super.onPause();
@@ -802,7 +773,7 @@ else
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putString("req_type", "thiyagu");
-        Log.v("statestate", "am in on saved insatnce");
+        Log.v(Tag, "am in on saved insatnce");
 
 
         ssss = getUrlData();
@@ -814,8 +785,7 @@ else
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.v("statestate", "am in restore saved insatnce");
-
+        Log.v(Tag, "am in restore saved insatnce");
 
 
     }
@@ -823,13 +793,13 @@ else
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.v("statestate", "restart");
+        Log.v(Tag, "restart");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("statestate", "destroy");
+        Log.v(Tag, "destroy");
     }
 
 
@@ -838,7 +808,7 @@ else
         super.onStop();
 
 
-        Log.v("statestate", "stopppppp");
+        Log.v(Tag, "stopppppp");
     }
 
     public boolean isOnline() {
@@ -852,5 +822,10 @@ else
 
         Toasty.warning(MainActivity.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
 
+
+
     }
+
+
+
 }

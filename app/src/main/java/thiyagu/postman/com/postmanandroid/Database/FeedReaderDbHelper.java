@@ -35,10 +35,6 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     FeedReaderDbHelper.COLUMN_VALUE + " TEXT)";
 
 
-    private static final String SQL_CREATE_TABLE_RESPONSE =
-            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_RESPONSE + " (" +
-                    FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
-                    FeedReaderDbHelper.COLUMN_RESPONSE + " TEXT)";
 
 
     private static final String SQL_CREATE_TABLE_BODY =
@@ -65,7 +61,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_PARAM);
         db.execSQL(SQL_CREATE_TABLE_BODY);
         db.execSQL(SQL_CREATE_TABLE_HEADER);
-        db.execSQL(SQL_CREATE_TABLE_RESPONSE);
+
+
     }
 
     @Override
@@ -73,7 +70,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PARAM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BODY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_HEADER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_RESPONSE);
+
         onCreate(db);
 
 
@@ -122,16 +119,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addResponse(ResponsePojoClass responsePojoClass) {
 
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_RESPONSE, responsePojoClass.getResponse());
-        db.insert(TABLE_NAME_RESPONSE, null, values);
-        db.close();
-        PrintResponse();
-
-    }
 
 
     public ArrayList<String> getAllParam() {
@@ -152,7 +140,24 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         return array_list;
 
     }
+    public ArrayList<String> getAllResponse() {
+        ArrayList<String> array_list = new ArrayList<String>();
 
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_RESPONSE, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
+            res.moveToNext();
+        }
+        db.close();
+        return array_list;
+
+    }
 
     public ArrayList<String> getAllBody() {
         ArrayList<String> array_list = new ArrayList<String>();
@@ -207,21 +212,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         Log.v("thisisallcontent", array_list.toString());
     }
 
-    public void PrintResponse() {
-        ArrayList<String> array_list = new ArrayList<String>();
 
-        //hp = new HashMap();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME_RESPONSE, null);
-        res.moveToFirst();
-
-        while (res.isAfterLast() == false) {
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_RESPONSE)));
-            res.moveToNext();
-        }
-        db.close();
-        Log.v("thisisallcontent", array_list.toString());
-    }
 
     public void PrintAllBody() {
         ArrayList<String> array_list = new ArrayList<String>();
@@ -295,4 +286,5 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         db.close();
     }
+
 }

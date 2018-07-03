@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import android.widget.TextView;
 
 import com.yuyh.jsonviewer.library.JsonRecyclerView;
 
+import java.util.ArrayList;
+
+import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -32,6 +36,7 @@ public class ResponseFragment extends Fragment {
     TextView code;
     TextView status,timee,error;
     Typeface roboto;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,21 +78,26 @@ public class ResponseFragment extends Fragment {
         status.setTypeface(roboto);
         timee.setTypeface(roboto);
 
-        // bind json
-       // StoreResponse storeResponse = new StoreResponse();
-        //Log.v("adsdsdasd",storeResponse.getResponse());
 
 
         SharedPreferences prefs = context.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         String responsetext = prefs.getString("response", null);
         String timevalue = prefs.getString("time", null);
         String codevalue = prefs.getString("code", null);
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+        editor.putString("response", "");
+        editor.putString("code", "");
+        editor.putString("time", "");
+        editor.apply();
         //textView.setText(responsetext);
 
 
 
         try
         {
+
+
+
             Log.v("sdsdsdsd",responsetext);
             Log.v("sdsdsdsd",timevalue);
             Log.v("sdsdsdsd",codevalue);
@@ -191,9 +201,11 @@ public class ResponseFragment extends Fragment {
         return view;
     }
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
         super.setUserVisibleHint(isVisibleToUser);
 
     }
+
 
 }
