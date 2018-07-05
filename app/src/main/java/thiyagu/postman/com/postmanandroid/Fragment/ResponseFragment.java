@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.yuyh.jsonviewer.library.JsonRecyclerView;
@@ -53,6 +54,9 @@ public class ResponseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Log.v("whichfragment","ResponseFragment");
+
     }
 
     @Nullable
@@ -69,7 +73,7 @@ public class ResponseFragment extends Fragment {
         status=view.findViewById(R.id.status);
         timee=view.findViewById(R.id.timee);
         error= view.findViewById(R.id.error);
-        JsonRecyclerView mRecyclewView = view.findViewById(R.id.rv_json);
+        final JsonRecyclerView mRecyclewView = view.findViewById(R.id.rv_json);
         AssetManager assetManager = context.getAssets();
         roboto = Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
 
@@ -81,37 +85,46 @@ public class ResponseFragment extends Fragment {
 
 
         SharedPreferences prefs = context.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-        String responsetext = prefs.getString("response", null);
-        String timevalue = prefs.getString("time", null);
-        String codevalue = prefs.getString("code", null);
+        final String responsetext = prefs.getString("response", null);
+        final String timevalue = prefs.getString("time", null);
+        final String codevalue = prefs.getString("code", null);
         SharedPreferences.Editor editor = getActivity().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         editor.putString("response", "");
         editor.putString("code", "");
         editor.putString("time", "");
         editor.apply();
         //textView.setText(responsetext);
-
+        Log.v("sdsdsdsd",responsetext);
+        Log.v("sdsdsdsd",timevalue);
+        Log.v("sdsdsdsd",codevalue);
 
 
         try
         {
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mRecyclewView.setVisibility(View.VISIBLE);
+                    Log.v("responsetext2","=====================================");
+                    Log.v("responsetext2",responsetext);
+                    mRecyclewView.bindJson(responsetext);
+                    Log.v("responsetext2","=====================================");
+                    mRecyclewView.setKeyColor(getResources().getColor(R.color.lawn_green));
+                    mRecyclewView.setValueTextColor(getResources().getColor(R.color.keycolor));
+                    mRecyclewView.setValueNumberColor(getResources().getColor(R.color.keycolor));
+                    mRecyclewView.setValueUrlColor(getResources().getColor(R.color.keycolor));
+
+                    textView.setVisibility(View.INVISIBLE);
+                }
+            });
 
 
-            Log.v("sdsdsdsd",responsetext);
-            Log.v("sdsdsdsd",timevalue);
-            Log.v("sdsdsdsd",codevalue);
-            mRecyclewView.bindJson(responsetext);
-            mRecyclewView.setKeyColor(getResources().getColor(R.color.lawn_green));
-            mRecyclewView.setValueTextColor(getResources().getColor(R.color.keycolor));
-            mRecyclewView.setValueNumberColor(getResources().getColor(R.color.keycolor));
-            mRecyclewView.setValueUrlColor(getResources().getColor(R.color.keycolor));
-
-            textView.setVisibility(View.INVISIBLE);
 
         }
         catch(Exception e)
         {
+            textView.setVisibility(View.VISIBLE);
             textView.setText(responsetext);
             mRecyclewView.setVisibility(View.GONE);
 
@@ -122,7 +135,7 @@ public class ResponseFragment extends Fragment {
         String val = time.getText().toString();
         if(val.contains("null"))
         {
-
+            Log.v("statestate","its null");
             textView.setVisibility(View.INVISIBLE);
             code.setVisibility(View.INVISIBLE);
             time.setVisibility(View.INVISIBLE);
@@ -200,12 +213,12 @@ public class ResponseFragment extends Fragment {
 
         return view;
     }
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    {
-        super.setUserVisibleHint(isVisibleToUser);
-
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser)
+//    {
+//        super.setUserVisibleHint(isVisibleToUser);
+//
+//    }
 
 
 }

@@ -64,7 +64,7 @@ public class ParamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-
+        Log.v("whichfragment","ParamFragment");
         ParamLayoutManager = new LinearLayoutManager(getContext());
 
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();

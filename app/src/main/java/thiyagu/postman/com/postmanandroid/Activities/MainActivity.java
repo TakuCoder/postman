@@ -64,14 +64,14 @@ public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
     public String ssss;
-    public String Tag="postman-trace";
+    public String Tag = "postman-trace";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
 
     private ProgressDialog dialog;
-
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-
+        prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         ActionBar actionBar = getSupportActionBar();
 
         dialog = new ProgressDialog(MainActivity.this);
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
 
-                Log.v(Tag, "touching req selection");
+                Log.v(Tag, "selecting material spinner" + "-------------->" + materialBetterSpinner.getText());
 
                 return false;
             }
@@ -133,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     body.select();
-                    int iiii = materialBetterSpinner.getFloatingLabelTextColor();
-                    Log.v("sadasdsadcolor", String.valueOf(iiii));
+
                 }
             }
         });
@@ -144,8 +143,7 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
         materialBetterSpinner.setTypeface(roboto);
-        // UrlField.setText("http://192.168.1.157:8080/");
-        // UrlField.setText("http://192.168.1.110:8080/");
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
                         String[] subvalue = headerlist.get(i).split("@@");
 
 
-                        Log.v(Tag, subvalue[0]);
-                        Log.v(Tag, subvalue[1]);
+                        Log.v(Tag, "btn_send_selected" + subvalue[0]);
+                        Log.v(Tag, "btn_send_selected" + subvalue[1]);
                         headerBuilder.add(subvalue[1], subvalue[2]);
                     }
                 }
@@ -185,21 +183,21 @@ public class MainActivity extends AppCompatActivity {
                     } else {
 
                         headerBuilder.add("Authorization", authdata);
-                        Log.v(Tag, authdata);
+                        Log.v(Tag, "Authorization====================> " + authdata);
 
                     }
 
 
                 } catch (Exception e) {
 
-                    Log.v(Tag, e.toString());
-
+                    Log.v(Tag, "Exception while clicking send button" + e.toString());
+                    //Toasty.error(getApplicationContext(),e.toString());
                 }
 
                 ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
                 ArrayList<String> urlencodedparams = new ArrayList<>();
                 if (paramlist.size() > 0) {
-
+                    Log.v(Tag, "Adding Params====================> ");
                     for (int i = 0; i < paramlist.size(); i++)
 
                     {
@@ -207,8 +205,8 @@ public class MainActivity extends AppCompatActivity {
                         String[] subvalue = paramlist.get(i).split("@@");
 
 
-                        Log.v(Tag, subvalue[0]);
-                        Log.v(Tag, subvalue[1]);
+                        Log.v(Tag, "param1=========>" + subvalue[0]);
+                        Log.v(Tag, "param1=========>" + subvalue[1]);
 
                         if (i != paramlist.size() - 1) {
                             urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
@@ -222,37 +220,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                Log.v(Tag, "Added Params====================> ");
+
 
                 String seletecvalue = materialBetterSpinner.getText().toString();
-
-
                 String Address = UrlField.getText().toString();
                 switch (seletecvalue) {
 
 
                     case "GET":
 
-                        Log.v(Tag, "GET");
+                        Log.v(Tag, "Diving Into GET");
                         if (isOnline()) {
                             new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
 
                         } else {
-//
-//    LayoutInflater inflater = getLayoutInflater();
-//
-//    View layout = inflater.inflate(R.layout.layout_custome_toast,
-//            (ViewGroup) findViewById(R.id.custom_toast_container));
-//
-//// set a message
-//    TextView text = (TextView) layout.findViewById(R.id.text);
-//    text.setText("Button is clicked!");
-//
-//// Toast...
-//    Toast toast = new Toast(getApplicationContext());
-//    toast.setGravity(Gravity.CENTER_VERTICAL, 0, 300);
-//    toast.setDuration(Toast.LENGTH_LONG);
-//    toast.setView(layout);
-//    toast.show();
 
                             ShowNetError();
 
@@ -263,9 +245,58 @@ public class MainActivity extends AppCompatActivity {
 
                     case "POST":
 
-                        Log.v(Tag, "POST");
+                        Log.v(Tag, "Diving Into POST");
                         if (isOnline()) {
-                            new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+
+                            ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                            Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                            if (part.size() > 0) {
+                                Log.v(Tag, "======================part size greater than 0========================");
+                                new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+
+                            } else {
+                                Log.v(Tag, "======================part size lseer or equal to 0========================");
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+
+                                    {
+                                        TabLayout.Tab tab = tabLayout.getTabAt(3);
+                                        tab.select();
+
+
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+
+                                                new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                                        .setTarget(findViewById(R.id.AddBody))
+                                                        .setPrimaryText("POST request must have atleast one part")
+                                                        .setPromptBackground(new CirclePromptBackground())
+                                                        .setPromptFocal(new RectanglePromptFocal())
+                                                        .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                                            @Override
+                                                            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                                                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                                                    //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        })
+                                                        .show();
+
+                                            }
+                                        }, 1000);
+                                    }
+                                });
+
+
+                            }
+
+
                         } else {
 
                             ShowNetError();
@@ -275,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case "DELETE":
 
-                        Log.v(Tag, "DELETE");
+                        Log.v(Tag, "Diving Into DELETE");
 
                         if (isOnline()) {
                             new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
@@ -290,15 +321,15 @@ public class MainActivity extends AppCompatActivity {
 
                         if (isOnline()) {
 
-                            Log.v(Tag, "PUT");
-                            new RequestMaker().execute("UNLOCK", Address, headerBuilder, urlencodedparams);
+                            Log.v(Tag, "Diving Into PUT");
+                            new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
                         } else {
                             ShowNetError();
 
                         }
                         break;
                     default:
-
+                        Log.v(Tag, "Nothing selected in request");
                         new MaterialTapTargetPrompt.Builder(MainActivity.this)
                                 .setTarget(findViewById(R.id.req_type_spinner))
                                 .setPrimaryText("Select the type of request")
@@ -323,18 +354,18 @@ public class MainActivity extends AppCompatActivity {
         });
         try {
 
-            SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-
+            Log.v(Tag, "==============================================");
+            Log.v(Tag, "setting default value for url and req type");
             String url_value = prefs.getString("url_value", null);
             String req_value = prefs.getString("req_value", null);
             materialBetterSpinner.setText(req_value);
-            //materialBetterSpinner.setSe
             UrlField.setText(url_value);
             Log.v(Tag, "=============================");
             Log.v(Tag, "setting value on on create");
-            Log.v(Tag, url_value);
-            Log.v(Tag, req_value);
-            Log.v(Tag, "=============================");
+            Log.v(Tag, "URL VALUE=========================> " + url_value);
+            Log.v(Tag, "REQUEST VALUE=========================> " + req_value);
+            Log.v(Tag, "setting value for url and req type done");
+            Log.v(Tag, "==============================================");
         } catch (Exception e) {
             Log.v(Tag, e.toString());
 
@@ -365,35 +396,40 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            Log.v(Tag, "======================onPreExecute========================");
             // progressDialog.show();
             dialog.setMessage("Activating hyperdrive, please wait.");
             dialog.show();
+            Log.v(Tag, "======================onPreExecute done========================");
         }
 
         @Override
         protected String doInBackground(Object... strings) {
-
+            Log.v(Tag, "======================DOINBACKGROUND========================");
             String method = (String) strings[0];
             String urlvalue = (String) strings[1];
             Headers.Builder headerbuilder = (Headers.Builder) strings[2];
             ArrayList<String> paramlist = (ArrayList<String>) strings[3];
             Headers customheader = headerbuilder.build();
 
-
-            if (urlvalue.contains("www") || urlvalue.contains("https://")) {
-
+            Log.v(Tag, "======================URL CHECK========================");
+            if (urlvalue.contains("www") && urlvalue.contains("http://")) {
+                Log.v(Tag, "contains www and http");
                 //urlvalue = "https://" + urlvalue;
-            } else if (urlvalue.contains("www") || urlvalue.contains("http://")) {
-
+            } else if (urlvalue.contains("www") && urlvalue.contains("https://")) {
+                Log.v(Tag, "contains www and https");
                 //urlvalue = "http://" + urlvalue;
-            } else
+            } else if (!urlvalue.contains("www"))
 
 
             {
-
+                Log.v(Tag, "dont contain www");
                 urlvalue = "http://www." + urlvalue;
 
+
+            } else {
+
+                urlvalue = "http://" + urlvalue;
 
             }
 
@@ -406,8 +442,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            Log.v("thisisurl", urlvalue);
+
             if (method.equals("GET")) {
+                Log.v(Tag, "======================GET========================");
                 try {
 
                     OkHttpClient client = new OkHttpClient();
@@ -423,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
-                            Log.d(Tag, "failure");
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -431,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
 
-
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         }
 
                         @Override
@@ -446,29 +483,42 @@ public class MainActivity extends AppCompatActivity {
                                     try {
                                         String bodyy = response.body().string();
                                         int responsecode = response.code();
-
                                         String Headers = response.headers().toString();
-                                        Log.d(Tag, bodyy);
-                                        Log.d(Tag, String.valueOf(responsecode));
-                                        Log.d(Tag, Headers);
                                         long tx = response.sentRequestAtMillis();
                                         long rx = response.receivedResponseAtMillis();
-                                        Log.d(Tag, "response time : " + (rx - tx) + " ms");
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("time", "" + (rx - tx));
 
+                                        Log.v(Tag, "======================BODY========================");
+                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+//                                        Bundle bundle = new Bundle();
+//                                        bundle.putString("time", "" + (rx - tx));
+
+
+                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
                                         SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                                         editor.putString("response", bodyy);
                                         editor.putString("code", String.valueOf(responsecode));
                                         editor.putString("time", "" + (rx - tx));
                                         editor.apply();
+                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+
+
+                                        Log.d(Tag, "===============selecting 4th tab=========================>" + bodyy);
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
+
+                                        Log.d(Tag, "===============tab selection done=========================>" + bodyy);
+
+
                                     } catch (Exception e) {
 
-                                        Log.v(Tag, e.toString());
+                                        Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
 
-
+                                        Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
                                     }
                                 }
 
@@ -481,57 +531,56 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } catch (Exception e) {
-
+                    Log.v(Tag, "exception happened  get request" + e.toString());
 
                     e.printStackTrace();
-
+                    Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
                 }
 
 
             } else if (method.equals("POST")) {
                 try {
 
-
+                    Log.v(Tag, "======================POST========================");
                     OkHttpClient client = new OkHttpClient();
                     MultipartBody.Builder builder = new MultipartBody.Builder();
                     RequestBody requestBody = null;
                     builder.setType(MultipartBody.FORM);
 
-                    ArrayList<String> arrayList = feedReaderDbHelper.getAllBody();
-                    Log.v(Tag, String.valueOf(arrayList.size()));
+                    ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                    Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
                     String[] subvalue = null;
-                    if (arrayList.size() > 0) {
 
-                        for (int i = 0; i < arrayList.size(); i++)
+
+                    if (part.size() > 0)
+
+
+                    {
+
+                        Log.v(Tag, "====================Adding Builder=========================================");
+
+
+                        for (int i = 0; i < part.size(); i++)
 
                         {
+
+
                             try {
-                                subvalue = arrayList.get(i).split("@@");
+                                subvalue = part.get(i).split("@@");
 
 
-                                Log.v(Tag, subvalue[0]);
-                                Log.v(Tag, subvalue[1]);
+                                Log.v(Tag, "builder" + i + subvalue[0]);
+                                Log.v(Tag, "builder" + i + subvalue[1]);
                                 builder.addFormDataPart(subvalue[1], subvalue[2]);
-                                Log.v(Tag, "testcase1");
 
 
                             } catch (Exception e) {
-                                Log.v(Tag, "exception happened in Post method formation");
+                                Log.v(Tag, "exception happened while adding builder in post");
                                 Log.v(Tag, e.toString());
-                                Log.v(Tag, "exception happened in Post method formation");
+
                             }
 
                         }
-
-
-                    }
-
-
-
-
-
-                    if (arrayList.size() > 0) {
-
 
                         requestBody = builder.build();
                         Request request = new Request.Builder()
@@ -540,114 +589,102 @@ public class MainActivity extends AppCompatActivity {
                                 .post(requestBody)
                                 .build();
 
-                        client.newCall(request).enqueue(new Callback()
-                        {
+                        client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, final IOException e) {
                                 Log.d(Tag, "failure");
+                                Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                     }
                                 });
-
+                                Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                             }
 
                             @Override
                             public void onResponse(Call call, final Response response) throws IOException {
 
+                                String bodyy = response.body().string();
+                                int responsecode = response.code();
 
-                                runOnUiThread(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
+                                String Headers = response.headers().toString();
 
-                                    {
-                                        try {
-                                            String bodyy = response.body().string();
-                                            int responsecode = response.code();
-
-                                            String Headers = response.headers().toString();
-                                            Log.d(Tag, bodyy);
-                                            Log.d(Tag, String.valueOf(responsecode));
-                                            Log.d(Tag, Headers);
-                                            long tx = response.sentRequestAtMillis();
-                                            long rx = response.receivedResponseAtMillis();
-                                            Log.d(Tag, "response time : " + (rx - tx) + " ms");
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("time", "" + (rx - tx));
-
-                                            SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                                            editor.putString("response", bodyy);
-                                            editor.putString("code", String.valueOf(responsecode));
-                                            editor.putString("time", "" + (rx - tx));
-                                            editor.apply();
-//
-//                                            ResponsePojoClass pojoClass = new ResponsePojoClass(String.valueOf(responsecode)+"postmandelimeter"+(rx - tx)+"postmandelimeter"+bodyy);
-//                                            feedReaderDbHelper.addResponse(pojoClass);
-                                            TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                            tab.select();
-                                        } catch (Exception e) {
-
-                                            Log.v(Tag, e.toString());
+                                long tx = response.sentRequestAtMillis();
+                                long rx = response.receivedResponseAtMillis();
 
 
-                                        }
-                                    }
+                                Log.v(Tag, "======================BODY========================");
+                                Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
 
-                                });
+                                Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                            }
-                        });
+                                SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                editor.putString("response", bodyy);
+                                editor.putString("code", String.valueOf(responsecode));
+                                editor.putString("time", "" + (rx - tx));
+                                editor.apply();
+                                Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
 
 
-                    } else {
-
-                        runOnUiThread(new Runnable()
-
-
-                        {
-                            @Override
-                            public void run()
-
-                            {
-                                TabLayout.Tab tab = tabLayout.getTabAt(3);
-                                tab.select();
-
-
-                                Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-
-                                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                                .setTarget(findViewById(R.id.AddBody))
-                                                .setPrimaryText("POST request must have atleast one part")
-                                                .setPromptBackground(new CirclePromptBackground())
-                                                .setPromptFocal(new RectanglePromptFocal())
-                                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                                    @Override
-                                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                })
-                                                .show();
-
-                                    }
-                                }, 1000);
                             }
                         });
 
 
                     }
+
+//                    else
+//
+//                        {
+//
+//                        runOnUiThread(new Runnable()
+//
+//
+//                        {
+//                            @Override
+//                            public void run()
+//
+//                            {
+//                                TabLayout.Tab tab = tabLayout.getTabAt(3);
+//                                tab.select();
+//
+//
+//                                Handler handler = new Handler();
+//                                handler.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//
+//
+//                                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+//                                                .setTarget(findViewById(R.id.AddBody))
+//                                                .setPrimaryText("POST request must have atleast one part")
+//                                                .setPromptBackground(new CirclePromptBackground())
+//                                                .setPromptFocal(new RectanglePromptFocal())
+//                                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+//                                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+//                                                    @Override
+//                                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+//                                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+//                                                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    }
+//                                                })
+//                                                .show();
+//
+//                                    }
+//                                }, 1000);
+//                            }
+//                        });
+//
+//
+//                    }
 
 
                 } catch (final Exception e) {
@@ -661,30 +698,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (method.equals("DELETE")) {
                 try {
 
-//                    OkHttpClient client = new OkHttpClient();
-//
-//                    Request request = new Request.Builder()
-//                            .url(urlvalue)
-//                            .delete(null)
-//
-//                            .addHeader("cache-control", "no-cache")
-//                            .addHeader("postman-android-token", "d3989091-6532-ceb2-a984-15dc10ec560c")
-//                            .build();
-//
-//                    Response response = client.newCall(request).execute();
 
-
-//                    ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-//                            .tlsVersions(TlsVersion.TLS_1_2)
-//                            .cipherSuites(
-//                                    CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-//                                    CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-//                                    CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-//                            .build();
-//
-//                    OkHttpClient client = new OkHttpClient.Builder()
-//                            .connectionSpecs(Collections.singletonList(spec))
-//                            .build();
                     OkHttpClient client = new OkHttpClient();
 
                     Request request = new Request.Builder()
@@ -734,7 +748,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-
+            Log.v(Tag, "======================DOINBACKGROUND END========================");
             return null;
         }
 
@@ -742,9 +756,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            Log.v(Tag, "======================onPostExecute========================");
             if (dialog != null)
                 dialog.dismiss();
-
+//            TabLayout.Tab tab = tabLayout.getTabAt(4);
+//            tab.select();
+            Log.v(Tag, "======================onPostExecute END========================");
         }
     }
 
@@ -824,9 +841,7 @@ public class MainActivity extends AppCompatActivity {
         Toasty.warning(MainActivity.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
 
 
-
     }
-
 
 
 }

@@ -53,7 +53,7 @@ public class AuthorizationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-
+        Log.v("whichfragment","AuthFragment");
         Button updateauthrequest;
         final EditText username, password;
 
