@@ -92,6 +92,7 @@ public class BodyAdapter extends RecyclerView
         Typeface typeface = holder.roboto;
         holder.key.setTypeface(typeface);
         holder.value.setTypeface(typeface);
+
         holder.key.setText(mDataset.get(position).getmText1());
         holder.value.setText(mDataset.get(position).getmText2());
         holder.card_view.setTag(mDataset.get(position).getTag());
