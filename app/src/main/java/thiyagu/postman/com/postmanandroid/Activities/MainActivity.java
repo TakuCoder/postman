@@ -448,6 +448,7 @@ public class MainActivity extends AppCompatActivity {
         Log.v(Tag, urlvalue);
         Log.v(Tag, "======================AFTER DETECTION========================");
 
+
         if (method.equals("GET")) {
             Log.v(Tag, "======================GET========================");
             try {
