@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
+    public static String flag;
 
     private ProgressDialog dialog;
     SharedPreferences prefs;
@@ -232,8 +234,8 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.v(Tag, "Diving Into GET");
                         if (isOnline()) {
-                            new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
-
+                           // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
+                            GetRequest("GET", Address, headerBuilder, urlencodedparams);
                         } else {
 
                             ShowNetError();
@@ -252,12 +254,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
                             if (part.size() > 0) {
                                 Log.v(Tag, "======================part size greater than 0========================");
-                                new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
-
+                               // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+                                GetRequest("POST", Address, headerBuilder, urlencodedparams);
                             } else {
                                 Log.v(Tag, "======================part size lseer or equal to 0========================");
-                                runOnUiThread(new Runnable()
-                                {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run()
 
@@ -309,7 +310,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.v(Tag, "Diving Into DELETE");
 
                         if (isOnline()) {
-                            new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
+                            //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
+                            GetRequest("DELETE", Address, headerBuilder, urlencodedparams);
+
                         } else {
 
                             ShowNetError();
@@ -322,7 +325,8 @@ public class MainActivity extends AppCompatActivity {
                         if (isOnline()) {
 
                             Log.v(Tag, "Diving Into PUT");
-                            new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
+                            //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
+                            GetRequest("PUT", Address, headerBuilder, urlencodedparams);
                         } else {
                             ShowNetError();
 
@@ -390,76 +394,214 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public class RequestMaker extends AsyncTask<Object, String, String> {
 
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.v(Tag, "======================onPreExecute========================");
-            // progressDialog.show();
-            dialog.setMessage("Activating hyperdrive, please wait.");
-            dialog.show();
-            Log.v(Tag, "======================onPreExecute done========================");
+
+    public void GetRequest(Object... strings)
+    {
+
+        Log.v(Tag, "======================onPreExecute========================");
+
+        dialog.setMessage("Activating hyperdrive, please wait.");
+        dialog.show();
+        Log.v(Tag, "======================onPreExecute done========================");
+        Log.v(Tag, "======================DOINBACKGROUND========================");
+        String method = (String) strings[0];
+        String urlvalue = (String) strings[1];
+        Headers.Builder headerbuilder = (Headers.Builder) strings[2];
+        ArrayList<String> paramlist = (ArrayList<String>) strings[3];
+        Headers customheader = headerbuilder.build();
+
+        Log.v(Tag, "======================URL CHECK========================");
+        Log.v(Tag, "======================BEFORE DETECTION========================");
+        Log.v(Tag, urlvalue);
+        Log.v(Tag, "======================BEFORE DETECTION========================");
+//        if (urlvalue.contains("www") && urlvalue.contains("http://")) {
+//            Log.v(Tag, "contains www and http");
+//            //urlvalue = "https://" + urlvalue;
+//        } else if (urlvalue.contains("www") && urlvalue.contains("https://")) {
+//            Log.v(Tag, "contains www and https");
+//            //urlvalue = "http://" + urlvalue;
+//        } else if (!urlvalue.contains("www"))
+//
+//
+//        {
+//            Log.v(Tag, "dont contain www");
+//            urlvalue = "http://www." + urlvalue;
+//
+//
+//        } else {
+//
+//            urlvalue = "http://" + urlvalue;
+//
+//        }
+
+        if (paramlist.size() > 0) {
+            urlvalue = urlvalue + "?";
+            for (int i = 0; i < paramlist.size(); i++) {
+                urlvalue = urlvalue + paramlist.get(i);
+            }
+
+
         }
+        Log.v(Tag, "======================AFTER DETECTION========================");
+        Log.v(Tag, urlvalue);
+        Log.v(Tag, "======================AFTER DETECTION========================");
 
-        @Override
-        protected String doInBackground(Object... strings) {
-            Log.v(Tag, "======================DOINBACKGROUND========================");
-            String method = (String) strings[0];
-            String urlvalue = (String) strings[1];
-            Headers.Builder headerbuilder = (Headers.Builder) strings[2];
-            ArrayList<String> paramlist = (ArrayList<String>) strings[3];
-            Headers customheader = headerbuilder.build();
+        if (method.equals("GET")) {
+            Log.v(Tag, "======================GET========================");
+            try {
 
-            Log.v(Tag, "======================URL CHECK========================");
-            if (urlvalue.contains("www") && urlvalue.contains("http://")) {
-                Log.v(Tag, "contains www and http");
-                //urlvalue = "https://" + urlvalue;
-            } else if (urlvalue.contains("www") && urlvalue.contains("https://")) {
-                Log.v(Tag, "contains www and https");
-                //urlvalue = "http://" + urlvalue;
-            } else if (!urlvalue.contains("www"))
+                OkHttpClient client1 = new OkHttpClient();
+                OkHttpClient client = client1.newBuilder()
+                        .readTimeout(12, TimeUnit.SECONDS)
+                        .connectTimeout(12, TimeUnit.SECONDS)
 
+                        .build();
 
-            {
-                Log.v(Tag, "dont contain www");
-                urlvalue = "http://www." + urlvalue;
+                Request request = new Request.Builder()
+                        .url(urlvalue)
+                        .get()
+                        .headers(customheader)
+                        .header("User-Agent", "Postman-Android")
+                        .build();
 
 
-            } else {
+                client.newCall(request).enqueue(new Callback()
+                {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        MainActivity.flag = "failure";
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
-                urlvalue = "http://" + urlvalue;
 
+                        if (dialog != null)
+                            dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run()
+
+                            {
+                                try {
+                                    String bodyy = response.body().string();
+                                    int responsecode = response.code();
+                                    String Headers = response.headers().toString();
+                                    long tx = response.sentRequestAtMillis();
+                                    long rx = response.receivedResponseAtMillis();
+
+                                    Log.v(Tag, "======================BODY========================");
+                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+                                    MainActivity.flag = "success";
+//                                        Bundle bundle = new Bundle();
+//                                        bundle.putString("time", "" + (rx - tx));
+
+
+                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                    SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                    editor.putString("response", bodyy);
+                                    editor.putString("code", String.valueOf(responsecode));
+                                    editor.putString("time", "" + (rx - tx));
+                                    editor.apply();
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    if (dialog != null)
+                                        dialog.dismiss();
+
+                                } catch (Exception e) {
+
+                                    Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
+
+                                    Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+
+                                }
+                            }
+
+
+                        });
+
+
+                    }
+                });
+
+
+            } catch (Exception e) {
+                Log.v(Tag, "exception happened  get request" + e.toString());
+
+                e.printStackTrace();
+                Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-            if (paramlist.size() > 0) {
-                urlvalue = urlvalue + "?";
-                for (int i = 0; i < paramlist.size(); i++) {
-                    urlvalue = urlvalue + paramlist.get(i);
-                }
+        } else if (method.equals("POST")) {
+            try {
+
+                Log.v(Tag, "======================POST========================");
+                OkHttpClient client = new OkHttpClient();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                RequestBody requestBody = null;
+                builder.setType(MultipartBody.FORM);
+
+                ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                String[] subvalue = null;
 
 
-            }
+                if (part.size() > 0)
 
 
-            if (method.equals("GET")) {
-                Log.v(Tag, "======================GET========================");
-                try {
+                {
 
-                    OkHttpClient client = new OkHttpClient();
+                    Log.v(Tag, "====================Adding Builder=========================================");
 
+
+                    for (int i = 0; i < part.size(); i++)
+
+                    {
+
+
+                        try {
+                            subvalue = part.get(i).split("@@");
+
+
+                            Log.v(Tag, "builder" + i + subvalue[0]);
+                            Log.v(Tag, "builder" + i + subvalue[1]);
+                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                        } catch (Exception e) {
+                            Log.v(Tag, "exception happened while adding builder in post");
+                            Log.v(Tag, e.toString());
+
+                        }
+
+                    }
+
+                    requestBody = builder.build();
                     Request request = new Request.Builder()
                             .url(urlvalue)
-                            .get()
                             .headers(customheader)
-                            .header("User-Agent", "Postman-Android")
+                            .post(requestBody)
                             .build();
-
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
+                            Log.d(Tag, "failure");
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -467,303 +609,120 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 }
                             });
-
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
                         }
 
                         @Override
                         public void onResponse(Call call, final Response response) throws IOException {
 
+                            String bodyy = response.body().string();
+                            int responsecode = response.code();
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run()
+                            String Headers = response.headers().toString();
 
-                                {
-                                    try {
-                                        String bodyy = response.body().string();
-                                        int responsecode = response.code();
-                                        String Headers = response.headers().toString();
-                                        long tx = response.sentRequestAtMillis();
-                                        long rx = response.receivedResponseAtMillis();
-
-                                        Log.v(Tag, "======================BODY========================");
-                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+                            long tx = response.sentRequestAtMillis();
+                            long rx = response.receivedResponseAtMillis();
 
 
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putString("time", "" + (rx - tx));
+                            Log.v(Tag, "======================BODY========================");
+                            Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                            Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                            Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                            Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
 
-                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
-                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                                        editor.putString("response", bodyy);
-                                        editor.putString("code", String.valueOf(responsecode));
-                                        editor.putString("time", "" + (rx - tx));
-                                        editor.apply();
-                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                            Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                        Log.d(Tag, "===============selecting 4th tab=========================>" + bodyy);
-                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                        tab.select();
-
-                                        Log.d(Tag, "===============tab selection done=========================>" + bodyy);
-
-
-                                    } catch (Exception e) {
-
-                                        Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
-
-                                        Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
-                                    }
-                                }
-
-
-                            });
+                            SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                            editor.putString("response", bodyy);
+                            editor.putString("code", String.valueOf(responsecode));
+                            editor.putString("time", "" + (rx - tx));
+                            editor.apply();
+                            Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
 
 
                         }
                     });
 
 
-                } catch (Exception e) {
-                    Log.v(Tag, "exception happened  get request" + e.toString());
-
-                    e.printStackTrace();
-                    Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
                 }
 
 
-            } else if (method.equals("POST")) {
-                try {
-
-                    Log.v(Tag, "======================POST========================");
-                    OkHttpClient client = new OkHttpClient();
-                    MultipartBody.Builder builder = new MultipartBody.Builder();
-                    RequestBody requestBody = null;
-                    builder.setType(MultipartBody.FORM);
-
-                    ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                    Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                    String[] subvalue = null;
 
 
-                    if (part.size() > 0)
+            } catch (final Exception e) {
 
 
-                    {
-
-                        Log.v(Tag, "====================Adding Builder=========================================");
-
-
-                        for (int i = 0; i < part.size(); i++)
-
-                        {
-
-
-                            try {
-                                subvalue = part.get(i).split("@@");
-
-
-                                Log.v(Tag, "builder" + i + subvalue[0]);
-                                Log.v(Tag, "builder" + i + subvalue[1]);
-                                builder.addFormDataPart(subvalue[1], subvalue[2]);
-
-
-                            } catch (Exception e) {
-                                Log.v(Tag, "exception happened while adding builder in post");
-                                Log.v(Tag, e.toString());
-
-                            }
-
-                        }
-
-                        requestBody = builder.build();
-                        Request request = new Request.Builder()
-                                .url(urlvalue)
-                                .headers(customheader)
-                                .post(requestBody)
-                                .build();
-
-                        client.newCall(request).enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, final IOException e) {
-                                Log.d(Tag, "failure");
-                                Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                                Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, final Response response) throws IOException {
-
-                                String bodyy = response.body().string();
-                                int responsecode = response.code();
-
-                                String Headers = response.headers().toString();
-
-                                long tx = response.sentRequestAtMillis();
-                                long rx = response.receivedResponseAtMillis();
-
-
-                                Log.v(Tag, "======================BODY========================");
-                                Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
-
-
-                                Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
-
-
-                                SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                                editor.putString("response", bodyy);
-                                editor.putString("code", String.valueOf(responsecode));
-                                editor.putString("time", "" + (rx - tx));
-                                editor.apply();
-                                Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-
-
-                            }
-                        });
-
-
-                    }
-
-//                    else
-//
-//                        {
-//
-//                        runOnUiThread(new Runnable()
-//
-//
-//                        {
-//                            @Override
-//                            public void run()
-//
-//                            {
-//                                TabLayout.Tab tab = tabLayout.getTabAt(3);
-//                                tab.select();
-//
-//
-//                                Handler handler = new Handler();
-//                                handler.postDelayed(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//
-//
-//                                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
-//                                                .setTarget(findViewById(R.id.AddBody))
-//                                                .setPrimaryText("POST request must have atleast one part")
-//                                                .setPromptBackground(new CirclePromptBackground())
-//                                                .setPromptFocal(new RectanglePromptFocal())
-//                                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-//                                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-//                                                    @Override
-//                                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-//                                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-//                                                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    }
-//                                                })
-//                                                .show();
-//
-//                                    }
-//                                }, 1000);
-//                            }
-//                        });
-//
-//
-//                    }
-
-
-                } catch (final Exception e) {
-
-
-                    e.printStackTrace();
-
-                }
-
-
-            } else if (method.equals("DELETE")) {
-                try {
-
-
-                    OkHttpClient client = new OkHttpClient();
-
-                    Request request = new Request.Builder()
-                            .url("https://httpbin.org/get")
-                            .get()
-                            .addHeader("cache-control", "no-cache")
-                            .addHeader("postman-token", "46ff633c-bac1-39f0-f8ec-366902d40c72")
-                            .build();
-
-                    Response response = client.newCall(request).execute();
-
-                    Log.v(Tag, response.toString());
-
-                } catch (Exception e) {
-
-
-                    e.printStackTrace();
-                }
-
-
-            } else if (method.equals("PUT")) {
-
-                try {
-
-                    OkHttpClient client = new OkHttpClient();
-
-                    Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .put(null)
-                            .addHeader("cache-control", "no-cache")
-                            .addHeader("postman-android-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
-                            .build();
-
-                    Response response = client.newCall(request).execute();
-
-                } catch (Exception e) {
-
-
-                    e.printStackTrace();
-                }
+                e.printStackTrace();
 
             }
+
+
+        } else if (method.equals("DELETE")) {
             try {
-                Thread.sleep(1000);
+
+
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url("https://httpbin.org/get")
+                        .get()
+                        .addHeader("cache-control", "no-cache")
+                        .addHeader("postman-token", "46ff633c-bac1-39f0-f8ec-366902d40c72")
+                        .build();
+
+                Response response = client.newCall(request).execute();
+
+                Log.v(Tag, response.toString());
 
             } catch (Exception e) {
 
 
+                e.printStackTrace();
             }
-            Log.v(Tag, "======================DOINBACKGROUND END========================");
-            return null;
-        }
 
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.v(Tag, "======================onPostExecute========================");
-            if (dialog != null)
-                dialog.dismiss();
-//            TabLayout.Tab tab = tabLayout.getTabAt(4);
-//            tab.select();
-            Log.v(Tag, "======================onPostExecute END========================");
+        } else if (method.equals("PUT")) {
+
+            try {
+
+                OkHttpClient client = new OkHttpClient();
+
+                Request request = new Request.Builder()
+                        .url(urlvalue)
+                        .put(null)
+                        .addHeader("cache-control", "no-cache")
+                        .addHeader("postman-android-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
+                        .build();
+
+                Response response = client.newCall(request).execute();
+
+            } catch (Exception e) {
+
+
+                e.printStackTrace();
+            }
+
         }
+        try {
+            Thread.sleep(1000);
+
+        } catch (Exception e) {
+
+
+        }
+        Log.v(Tag, "======================DOINBACKGROUND END========================");
+
+
+
+
+
     }
+
+
+
 
     public String getUrlData() {
         String sss = UrlField.getText().toString();
