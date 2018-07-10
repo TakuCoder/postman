@@ -37,6 +37,7 @@ public class ResponseFragment extends Fragment {
     TextView code;
     TextView status,timee,error;
     Typeface roboto;
+    public String Tag = "postman-trace";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,10 +125,12 @@ public class ResponseFragment extends Fragment {
         }
         catch(Exception e)
         {
+
+            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             textView.setVisibility(View.VISIBLE);
             textView.setText(responsetext);
             mRecyclewView.setVisibility(View.GONE);
-
+            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         }
 
@@ -199,7 +202,12 @@ public class ResponseFragment extends Fragment {
                 Log.v("amhere","2"+responsecodevalue);
 
             }
+            else if(responsecodevalue>=400 && responsecodevalue<=499)
+            {
+                code.setTextColor(Color.parseColor("#dc3838"));
+                Log.v("amhere","2"+responsecodevalue);
 
+            }
 
         }
 

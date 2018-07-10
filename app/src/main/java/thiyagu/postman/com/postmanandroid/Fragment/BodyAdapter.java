@@ -56,7 +56,7 @@ public class BodyAdapter extends RecyclerView
             value = itemView.findViewById(R.id.textView2);
             card_view = itemView.findViewById(R.id.card_view);
             assetManager = itemView.getContext().getAssets();
-            roboto=Typeface.createFromAsset(assetManager,"fonts/Roboto-Regular.ttf");
+            roboto=Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
             Log.i(LOG_TAG, "Adding Listener");
             Log.v(LOG_TAG,key.getText().toString());
 

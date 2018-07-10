@@ -6,6 +6,8 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,9 +45,13 @@ public class ParamAdapter extends RecyclerView
         TextView key;
         TextView value;
         CardView card_view;
+        Typeface roboto;
+        AssetManager assetManager;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
+            assetManager = itemView.getContext().getAssets();
+            roboto=Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
             key =  itemView.findViewById(R.id.textView);
             value = itemView.findViewById(R.id.textView2);
             card_view = itemView.findViewById(R.id.card_view);
@@ -81,6 +87,10 @@ public class ParamAdapter extends RecyclerView
 
 
     {
+
+        Typeface typeface = holder.roboto;
+        holder.key.setTypeface(typeface);
+        holder.value.setTypeface(typeface);
 
         holder.key.setText(mDataset.get(position).getmText1());
         holder.value.setText(mDataset.get(position).getmText2());

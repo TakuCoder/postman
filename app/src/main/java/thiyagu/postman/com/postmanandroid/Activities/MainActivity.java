@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.v(Tag, "Diving Into GET");
                         if (isOnline()) {
-                           // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
+                            // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
                             GetRequest("GET", Address, headerBuilder, urlencodedparams);
                         } else {
 
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
                             if (part.size() > 0) {
                                 Log.v(Tag, "======================part size greater than 0========================");
-                               // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+                                // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
                                 GetRequest("POST", Address, headerBuilder, urlencodedparams);
                             } else {
                                 Log.v(Tag, "======================part size lseer or equal to 0========================");
@@ -395,10 +395,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-    public void GetRequest(Object... strings)
-    {
+    public void GetRequest(Object... strings) {
 
         Log.v(Tag, "======================onPreExecute========================");
 
@@ -468,8 +465,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
 
-                client.newCall(request).enqueue(new Callback()
-                {
+                client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -514,15 +510,17 @@ public class MainActivity extends AppCompatActivity {
 //                                        bundle.putString("time", "" + (rx - tx));
 
 
-                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                    Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
                                     SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                                     editor.putString("response", bodyy);
                                     editor.putString("code", String.valueOf(responsecode));
                                     editor.putString("time", "" + (rx - tx));
                                     editor.apply();
-                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>");
                                     if (dialog != null)
                                         dialog.dismiss();
+                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                    tab.select();
 
                                 } catch (Exception e) {
 
@@ -548,7 +546,8 @@ public class MainActivity extends AppCompatActivity {
                 Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        } else if (method.equals("POST")) {
+        } else if (method.equals("POST"))
+        {
             try {
 
                 Log.v(Tag, "======================POST========================");
@@ -602,46 +601,67 @@ public class MainActivity extends AppCompatActivity {
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
+
+                            if (dialog != null)
+                                dialog.dismiss();
                             Log.d(Tag, "failure");
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                         }
 
                         @Override
                         public void onResponse(Call call, final Response response) throws IOException {
 
-                            String bodyy = response.body().string();
-                            int responsecode = response.code();
 
-                            String Headers = response.headers().toString();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
 
-                            long tx = response.sentRequestAtMillis();
-                            long rx = response.receivedResponseAtMillis();
+                                        String bodyy = response.body().string();
+                                        int responsecode = response.code();
 
+                                        String Headers = response.headers().toString();
 
-                            Log.v(Tag, "======================BODY========================");
-                            Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                            Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                            Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                            Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
-
-
-                            Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                        long tx = response.sentRequestAtMillis();
+                                        long rx = response.receivedResponseAtMillis();
 
 
-                            SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                            editor.putString("response", bodyy);
-                            editor.putString("code", String.valueOf(responsecode));
-                            editor.putString("time", "" + (rx - tx));
-                            editor.apply();
-                            Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                        Log.v(Tag, "======================BODY========================");
+                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                        editor.putString("response", bodyy);
+                                        editor.putString("code", String.valueOf(responsecode));
+                                        editor.putString("time", "" + (rx - tx));
+                                        editor.apply();
+                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                        if (dialog != null)
+                                            dialog.dismiss();
+                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                        tab.select();
+
+                                    } catch (Exception e) {
+
+
+                                    }
+
+                                }
+                            });
 
 
                         }
@@ -649,8 +669,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-
-
 
 
             } catch (final Exception e) {
@@ -661,50 +679,282 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-        } else if (method.equals("DELETE")) {
+        } else if (method.equals("DELETE"))
+
+
+        {
             try {
 
-
+                Log.v(Tag, "======================DELETE========================");
                 OkHttpClient client = new OkHttpClient();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                RequestBody requestBody = null;
+                builder.setType(MultipartBody.FORM);
 
-                Request request = new Request.Builder()
-                        .url("https://httpbin.org/get")
-                        .get()
-                        .addHeader("cache-control", "no-cache")
-                        .addHeader("postman-token", "46ff633c-bac1-39f0-f8ec-366902d40c72")
-                        .build();
+                ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                String[] subvalue = null;
 
-                Response response = client.newCall(request).execute();
 
-                Log.v(Tag, response.toString());
+                if (part.size() > 0)
 
-            } catch (Exception e) {
+
+                {
+
+                    Log.v(Tag, "====================Adding Builder=========================================");
+
+
+                    for (int i = 0; i < part.size(); i++)
+
+                    {
+
+
+                        try {
+                            subvalue = part.get(i).split("@@");
+
+
+                            Log.v(Tag, "builder" + i + subvalue[0]);
+                            Log.v(Tag, "builder" + i + subvalue[1]);
+                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                        } catch (Exception e) {
+                            Log.v(Tag, "exception happened while adding builder in post");
+                            Log.v(Tag, e.toString());
+
+                        }
+
+                    }
+
+                    requestBody = builder.build();
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .headers(customheader)
+                            .delete(requestBody)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, final IOException e) {
+
+                            if (dialog != null)
+                                dialog.dismiss();
+                            Log.d(Tag, "failure");
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, final Response response) throws IOException {
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        String bodyy = response.body().string();
+                                        int responsecode = response.code();
+
+                                        String Headers = response.headers().toString();
+
+                                        long tx = response.sentRequestAtMillis();
+                                        long rx = response.receivedResponseAtMillis();
+
+
+                                        Log.v(Tag, "======================BODY========================");
+                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                        editor.putString("response", bodyy);
+                                        editor.putString("code", String.valueOf(responsecode));
+                                        editor.putString("time", "" + (rx - tx));
+                                        editor.apply();
+                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                        if (dialog != null)
+                                            dialog.dismiss();
+                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                        tab.select();
+
+                                    } catch (Exception e) {
+
+
+                                    }
+
+                                }
+                            });
+
+
+                        }
+                    });
+
+
+                }
+
+
+            } catch (final Exception e) {
 
 
                 e.printStackTrace();
+
             }
 
+        } else if (method.equals("PUT"))
+        {
 
-        } else if (method.equals("PUT")) {
+
 
             try {
 
+                Log.v(Tag, "======================PUT========================");
                 OkHttpClient client = new OkHttpClient();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                RequestBody requestBody = null;
+                builder.setType(MultipartBody.FORM);
 
-                Request request = new Request.Builder()
-                        .url(urlvalue)
-                        .put(null)
-                        .addHeader("cache-control", "no-cache")
-                        .addHeader("postman-android-token", "c9593356-684e-ea02-1e47-16ec3a7e3761")
-                        .build();
+                ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                String[] subvalue = null;
 
-                Response response = client.newCall(request).execute();
 
-            } catch (Exception e) {
+                if (part.size() > 0)
+
+
+                {
+
+                    Log.v(Tag, "====================Adding Builder=========================================");
+
+
+                    for (int i = 0; i < part.size(); i++)
+
+                    {
+
+
+                        try {
+                            subvalue = part.get(i).split("@@");
+
+
+                            Log.v(Tag, "builder" + i + subvalue[0]);
+                            Log.v(Tag, "builder" + i + subvalue[1]);
+                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                        } catch (Exception e) {
+                            Log.v(Tag, "exception happened while adding builder in post");
+                            Log.v(Tag, e.toString());
+
+                        }
+
+                    }
+
+                    requestBody = builder.build();
+                    Request request = new Request.Builder()
+                            .url(urlvalue)
+                            .headers(customheader)
+                            .put(requestBody)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, final IOException e) {
+
+                            if (dialog != null)
+                                dialog.dismiss();
+                            Log.d(Tag, "failure");
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, final Response response) throws IOException {
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        String bodyy = response.body().string();
+                                        int responsecode = response.code();
+
+                                        String Headers = response.headers().toString();
+
+                                        long tx = response.sentRequestAtMillis();
+                                        long rx = response.receivedResponseAtMillis();
+
+
+                                        Log.v(Tag, "======================BODY========================");
+                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                        editor.putString("response", bodyy);
+                                        editor.putString("code", String.valueOf(responsecode));
+                                        editor.putString("time", "" + (rx - tx));
+                                        editor.apply();
+                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                        if (dialog != null)
+                                            dialog.dismiss();
+                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                        tab.select();
+
+                                    } catch (Exception e) {
+
+
+                                    }
+
+                                }
+                            });
+
+
+                        }
+                    });
+
+
+                }
+
+
+            } catch (final Exception e) {
 
 
                 e.printStackTrace();
+
             }
+
+
+
+
+
+
+
+
 
         }
         try {
@@ -717,12 +967,7 @@ public class MainActivity extends AppCompatActivity {
         Log.v(Tag, "======================DOINBACKGROUND END========================");
 
 
-
-
-
     }
-
-
 
 
     public String getUrlData() {
