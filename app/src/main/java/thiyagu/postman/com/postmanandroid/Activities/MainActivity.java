@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TabLayout.Tab tab = tabLayout.getTabAt(0);
                 tab.select();
+
                 feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
                 ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                 Headers.Builder headerBuilder = new Headers.Builder();
@@ -173,7 +174,11 @@ public class MainActivity extends AppCompatActivity {
                 try
 
                 {
-
+                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                    editor.putString("response", "");
+                    editor.putString("code", "");
+                    editor.putString("time", "");
+                    editor.apply();
 
                     SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
