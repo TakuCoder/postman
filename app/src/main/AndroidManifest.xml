@@ -28,6 +28,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PopupActivities.ParamPopUp"
+
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
         <activity
             android:name=".PopupActivities.BodyPopUp"

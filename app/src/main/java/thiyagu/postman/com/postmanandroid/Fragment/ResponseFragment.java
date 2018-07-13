@@ -95,14 +95,14 @@ public class ResponseFragment extends Fragment {
         editor.putString("time", "");
         editor.apply();
         //textView.setText(responsetext);
-        Log.v("sdsdsdsd",responsetext);
-        Log.v("sdsdsdsd",timevalue);
-        Log.v("sdsdsdsd",codevalue);
+
 
 
         try
         {
-
+            Log.v("sdsdsdsd",responsetext);
+            Log.v("sdsdsdsd",timevalue);
+            Log.v("sdsdsdsd",codevalue);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
