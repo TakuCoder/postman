@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
 
         dialog = new ProgressDialog(MainActivity.this);
+        dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
         SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -458,6 +459,7 @@ public class MainActivity extends AppCompatActivity {
                 OkHttpClient client1 = new OkHttpClient();
                 OkHttpClient client = client1.newBuilder()
                         .readTimeout(12, TimeUnit.SECONDS)
+                        .writeTimeout(12, TimeUnit.SECONDS)
                         .connectTimeout(12, TimeUnit.SECONDS)
 
                         .build();
