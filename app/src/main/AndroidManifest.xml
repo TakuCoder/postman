@@ -9,7 +9,7 @@
     <application
         android:allowBackup="true"
         android:configChanges="keyboardHidden|orientation"
-        android:icon="@mipmap/postmanicon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="nosensor"
@@ -28,17 +28,21 @@
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:label=""
             android:name=".PopupActivities.ParamPopUp"
 
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+            android:theme="@style/poptheme"/>
         <activity
+            android:label=""
             android:name=".PopupActivities.BodyPopUp"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+            android:theme="@style/poptheme" />
         <activity
+            android:label=""
             android:name=".PopupActivities.HeaderPopUp"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+            android:theme="@style/poptheme" />
         <activity
             android:name=".PopupActivities.DeletePopUp"
+            android:label=""
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
         <activity android:name=".Activities.wizard"></activity>
     </application>

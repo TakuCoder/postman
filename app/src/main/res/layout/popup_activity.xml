@@ -29,31 +29,33 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="0.5"
                 android:gravity="center"
-
-                android:textColorHint="#CFD8DC"
-                android:drawableEnd="@drawable/arrow_white"
-                android:hint="@string/Request_type"
                 app:met_baseColor="@color/orange"
                 app:met_floatingLabel="normal"
                 app:met_floatingLabelTextColor="@color/orange"
                 app:met_textColor="@color/white"
-
+                android:textColorHint="#CFD8DC"
+                android:drawableEnd="@drawable/arrow_white"
+                android:hint="@string/Key_type"
                 />
 
             <EditText
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/orangedim"
                 android:id="@+id/KeyField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
-                android:textColor="@color/white"
+
                 android:hint="@string/Key"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
           />
 
             <EditText
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/orangedim"
+
                 android:id="@+id/ValueField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -67,6 +69,7 @@
          />
 
             <Button
+                android:background="#ff6c37"
                 android:id="@+id/addButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

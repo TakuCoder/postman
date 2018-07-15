@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.NetworkOnMainThreadException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
 
         dialog = new ProgressDialog(MainActivity.this);
+        dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
         SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
@@ -142,221 +145,242 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
+       // UrlField.setText("https://www.httpbin.org/get");
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
         materialBetterSpinner.setTypeface(roboto);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                TabLayout.Tab tab = tabLayout.getTabAt(0);
-                tab.select();
+            public void onClick(View v)
 
-                feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
-                ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
-                Headers.Builder headerBuilder = new Headers.Builder();
-                if (headerlist.size() > 0) {
+            {
 
-                    for (int i = 0; i < headerlist.size(); i++)
-
-                    {
-
-                        String[] subvalue = headerlist.get(i).split("@@");
-
-
-                        Log.v(Tag, "btn_send_selected" + subvalue[0]);
-                        Log.v(Tag, "btn_send_selected" + subvalue[1]);
-                        headerBuilder.add(subvalue[1], subvalue[2]);
-                    }
-                }
-
-
-                try
-
+                if(isValid(UrlField.getText().toString()))
                 {
-                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                    editor.putString("response", "");
-                    editor.putString("code", "");
-                    editor.putString("time", "");
-                    editor.apply();
-
-                    SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
 
-                    String authdata = prefs.getString("Authorization", null);
-                    if (authdata.equals("No auth")) {
-                        Log.v("postman", "auth value neglected");
+                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    tab.select();
 
-                    } else {
+                    feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
+                    ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
+                    Headers.Builder headerBuilder = new Headers.Builder();
+                    if (headerlist.size() > 0) {
 
-                        headerBuilder.add("Authorization", authdata);
-                        Log.v(Tag, "Authorization====================> " + authdata);
+                        for (int i = 0; i < headerlist.size(); i++)
 
+                        {
+
+                            String[] subvalue = headerlist.get(i).split("@@");
+
+
+                            Log.v(Tag, "btn_send_selected" + subvalue[0]);
+                            Log.v(Tag, "btn_send_selected" + subvalue[1]);
+                            headerBuilder.add(subvalue[1], subvalue[2]);
+                        }
                     }
 
 
-                } catch (Exception e) {
-
-                    Log.v(Tag, "Exception while clicking send button" + e.toString());
-                    //Toasty.error(getApplicationContext(),e.toString());
-                }
-
-                ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
-                ArrayList<String> urlencodedparams = new ArrayList<>();
-                if (paramlist.size() > 0) {
-                    Log.v(Tag, "Adding Params====================> ");
-                    for (int i = 0; i < paramlist.size(); i++)
+                    try
 
                     {
+                        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                        editor.putString("response", "");
+                        editor.putString("code", "");
+                        editor.putString("time", "");
+                        editor.apply();
 
-                        String[] subvalue = paramlist.get(i).split("@@");
+                        SharedPreferences prefs = MainActivity.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
 
-                        Log.v(Tag, "param1=========>" + subvalue[0]);
-                        Log.v(Tag, "param1=========>" + subvalue[1]);
-
-                        if (i != paramlist.size() - 1) {
-                            urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
+                        String authdata = prefs.getString("Authorization", null);
+                        if (authdata.equals("No auth")) {
+                            Log.v("postman", "auth value neglected");
 
                         } else {
-                            urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2]);
+
+                            headerBuilder.add("Authorization", authdata);
+                            Log.v(Tag, "Authorization====================> " + authdata);
 
                         }
 
 
+                    } catch (Exception e) {
+
+                        Log.v(Tag, "Exception while clicking send button" + e.toString());
+                        //Toasty.error(getApplicationContext(),e.toString());
                     }
-                }
 
-                Log.v(Tag, "Added Params====================> ");
+                    ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
+                    ArrayList<String> urlencodedparams = new ArrayList<>();
+                    if (paramlist.size() > 0) {
+                        Log.v(Tag, "Adding Params====================> ");
+                        for (int i = 0; i < paramlist.size(); i++)
 
+                        {
 
-                String seletecvalue = materialBetterSpinner.getText().toString();
-                String Address = UrlField.getText().toString();
-                switch (seletecvalue) {
-
-
-                    case "GET":
-
-                        Log.v(Tag, "Diving Into GET");
-                        if (isOnline()) {
-                            // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
-                            GetRequest("GET", Address, headerBuilder, urlencodedparams);
-                        } else {
-
-                            ShowNetError();
-
-                        }
+                            String[] subvalue = paramlist.get(i).split("@@");
 
 
-                        break;
+                            Log.v(Tag, "param1=========>" + subvalue[0]);
+                            Log.v(Tag, "param1=========>" + subvalue[1]);
 
-                    case "POST":
+                            if (i != paramlist.size() - 1) {
+                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
 
-                        Log.v(Tag, "Diving Into POST");
-                        if (isOnline()) {
-
-                            ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                            Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                            if (part.size() > 0) {
-                                Log.v(Tag, "======================part size greater than 0========================");
-                                // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
-                                GetRequest("POST", Address, headerBuilder, urlencodedparams);
                             } else {
-                                Log.v(Tag, "======================part size lseer or equal to 0========================");
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run()
-
-                                    {
-                                        TabLayout.Tab tab = tabLayout.getTabAt(3);
-                                        tab.select();
-
-
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-
-
-                                                new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                                        .setTarget(findViewById(R.id.AddBody))
-                                                        .setPrimaryText("POST request must have atleast one part")
-                                                        .setPromptBackground(new CirclePromptBackground())
-                                                        .setPromptFocal(new RectanglePromptFocal())
-                                                        .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                                        .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                                            @Override
-                                                            public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                                                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                                    //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            }
-                                                        })
-                                                        .show();
-
-                                            }
-                                        }, 1000);
-                                    }
-                                });
-
+                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2]);
 
                             }
 
 
-                        } else {
-
-                            ShowNetError();
-
                         }
-                        break;
+                    }
 
-                    case "DELETE":
+                    Log.v(Tag, "Added Params====================> ");
 
-                        Log.v(Tag, "Diving Into DELETE");
 
-                        if (isOnline()) {
-                            //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                            GetRequest("DELETE", Address, headerBuilder, urlencodedparams);
+                    String seletecvalue = materialBetterSpinner.getText().toString();
+                    String Address = UrlField.getText().toString();
+                    switch (seletecvalue) {
 
-                        } else {
 
-                            ShowNetError();
+                        case "GET":
 
-                        }
-                        break;
+                            Log.v(Tag, "Diving Into GET");
+                            if (isOnline()) {
+                                // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
+                                GetRequest("GET", Address, headerBuilder, urlencodedparams);
+                            } else {
 
-                    case "PUT":
+                                ShowNetError();
 
-                        if (isOnline()) {
+                            }
 
-                            Log.v(Tag, "Diving Into PUT");
-                            //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
-                            GetRequest("PUT", Address, headerBuilder, urlencodedparams);
-                        } else {
-                            ShowNetError();
 
-                        }
-                        break;
-                    default:
-                        Log.v(Tag, "Nothing selected in request");
-                        new MaterialTapTargetPrompt.Builder(MainActivity.this)
-                                .setTarget(findViewById(R.id.req_type_spinner))
-                                .setPrimaryText("Select the type of request")
-                                .setPromptBackground(new CirclePromptBackground())
-                                .setPromptFocal(new RectanglePromptFocal())
-                                .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                    @Override
-                                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                            Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                            break;
+
+                        case "POST":
+
+                            Log.v(Tag, "Diving Into POST");
+                            if (isOnline()) {
+
+                                ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                                if (part.size() > 0) {
+                                    Log.v(Tag, "======================part size greater than 0========================");
+                                    // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
+                                    GetRequest("POST", Address, headerBuilder, urlencodedparams);
+                                } else {
+                                    Log.v(Tag, "======================part size lseer or equal to 0========================");
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run()
+
+                                        {
+                                            TabLayout.Tab tab = tabLayout.getTabAt(3);
+                                            tab.select();
+
+
+                                            Handler handler = new Handler();
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+
+                                                    new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                                            .setTarget(findViewById(R.id.AddBody))
+                                                            .setPrimaryText("POST request must have atleast one part")
+                                                            .setPromptBackground(new CirclePromptBackground())
+                                                            .setPromptFocal(new RectanglePromptFocal())
+                                                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                                                @Override
+                                                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                                                        //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            })
+                                                            .show();
+
+                                                }
+                                            }, 1000);
                                         }
-                                    }
-                                })
-                                .show();
+                                    });
+
+
+                                }
+
+
+                            } else {
+
+                                ShowNetError();
+
+                            }
+                            break;
+
+                        case "DELETE":
+
+                            Log.v(Tag, "Diving Into DELETE");
+
+                            if (isOnline()) {
+                                //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
+                                GetRequest("DELETE", Address, headerBuilder, urlencodedparams);
+
+                            } else {
+
+                                ShowNetError();
+
+                            }
+                            break;
+
+                        case "PUT":
+
+                            if (isOnline()) {
+
+                                Log.v(Tag, "Diving Into PUT");
+                                //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
+                                GetRequest("PUT", Address, headerBuilder, urlencodedparams);
+                            } else {
+                                ShowNetError();
+
+                            }
+                            break;
+                        default:
+                            Log.v(Tag, "Nothing selected in request");
+                            new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                                    .setTarget(findViewById(R.id.req_type_spinner))
+                                    .setPrimaryText("Select the type of request")
+                                    .setPromptBackground(new CirclePromptBackground())
+                                    .setPromptFocal(new RectanglePromptFocal())
+                                    .setBackgroundColour(getResources().getColor(R.color.buttonblue))
+                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                        @Override
+                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                                Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    })
+                                    .show();
+
+
+                    }
 
 
                 }
+
+                else {
+
+
+
+                    Toasty.warning(MainActivity.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
+
+
+                }
+
 
 
             }
@@ -381,7 +405,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    public static boolean isValid(String url)
+    {
+        /* Try creating a valid URL */
+        try {
+            new URL(url).toURI();
+            return true;
+        }
 
+        // If there was an Exception
+        // while creating URL object
+        catch (Exception e) {
+            return false;
+        }
+    }
     private void setupViewPager(ViewPager viewPager) {
 
 
@@ -527,6 +564,11 @@ public class MainActivity extends AppCompatActivity {
                                     TabLayout.Tab tab = tabLayout.getTabAt(4);
                                     tab.select();
 
+                                } catch (NetworkOnMainThreadException exception)
+                                {
+                                    Toasty.warning(MainActivity.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+                                    if (dialog != null)
+                                        dialog.dismiss();
                                 } catch (Exception e) {
 
                                     Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
@@ -962,13 +1004,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
-        try {
-            Thread.sleep(1000);
 
-        } catch (Exception e) {
-
-
-        }
         Log.v(Tag, "======================DOINBACKGROUND END========================");
 
 

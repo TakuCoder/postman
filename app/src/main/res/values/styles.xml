@@ -60,4 +60,12 @@
         <item name="colorAccent">#ffffff</item>
 
     </style>
+
+
+    <style name="poptheme" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+    </style>
 </resources>
