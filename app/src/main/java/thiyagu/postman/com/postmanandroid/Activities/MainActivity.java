@@ -495,6 +495,7 @@ public class MainActivity extends AppCompatActivity {
                 OkHttpClient client1 = new OkHttpClient();
                 OkHttpClient client = client1.newBuilder()
                         .readTimeout(12, TimeUnit.SECONDS)
+                        .writeTimeout(12, TimeUnit.SECONDS)
                         .connectTimeout(12, TimeUnit.SECONDS)
 
                         .build();
