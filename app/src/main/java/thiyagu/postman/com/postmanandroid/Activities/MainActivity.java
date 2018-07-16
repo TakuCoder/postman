@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
 
 
                 if (String.valueOf(i).equals("1")) {
@@ -899,6 +899,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.v(Tag, "builder" + i + subvalue[0]);
                             Log.v(Tag, "builder" + i + subvalue[1]);
                             builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+
 
 
                         } catch (Exception e) {

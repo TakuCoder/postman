@@ -17,7 +17,7 @@ import java.util.Calendar;
 
 public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implements AdapterView.OnItemClickListener {
 
-    private static final int MAX_CLICK_DURATION = 200;
+    private static final int MAX_CLICK_DURATION = 0;
     private long startClickTime;
     private boolean isPopup;
 
