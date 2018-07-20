@@ -22,3 +22,4 @@
 -dontwarn javax.annotation.**
 -dontwarn okhttp3.**
 -dontwarn okio.**
+-keep class cn.pedant.** { *; }

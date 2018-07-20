@@ -1,5 +1,7 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,39 @@ public class DeletePopUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_pop_up);
+
+
+
+//
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getContext());
+//
+//        builder.setTitle("Confirm");
+//        builder.setMessage("Are you sure?");
+//
+//        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int which) {
+//                // Do nothing but close the dialog
+//
+//
+//
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//                // Do nothing
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        AlertDialog alert = builder.create();
+//        alert.show();
         button = findViewById(R.id.delete);
         final Intent intent = getIntent();
         final String sss = intent.getStringExtra("deleteid");

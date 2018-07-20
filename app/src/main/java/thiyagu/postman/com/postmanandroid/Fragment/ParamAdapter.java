@@ -4,9 +4,12 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  * Created by thiyagu on 3/6/2018.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -110,6 +115,17 @@ public class ParamAdapter extends RecyclerView
                 intent.putExtra("whichrecord","param");
                 mcontext.startActivity(intent);
 
+
+
+
+
+
+
+//                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.getContext(), SweetAlertDialog.PROGRESS_TYPE);
+//                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//                pDialog.setTitleText("Loading");
+//                pDialog.setCancelable(false);
+//                pDialog.show();
 
                 // ParamFragment oneFragment = new ParamFragment();
                 //oneFragment.RefereshView();

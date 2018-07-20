@@ -1,24 +1,33 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.format.Formatter;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -27,14 +36,21 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -73,14 +89,18 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
     public static String flag;
-
+    private static MainActivity instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
-
+//    private DrawerLayout mDrawerLayout;
+//    String IPaddress;
+//    Boolean IPValue;
+//    private View mHeaderView;
+//    private TextView mDrawerHeaderTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        instance = MainActivity.this;
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -89,7 +109,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         ActionBar actionBar = getSupportActionBar();
+      //  mDrawerLayout = findViewById(R.id.drawer_layout);
 
+//        NavigationView navigationView = findViewById(R.id.nav_view);
+//        mHeaderView = navigationView.getHeaderView(0);
+//        mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.headertitle);
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                // set item as selected to persist highlight
+//                //menuItem.setChecked(true);
+//                // close drawer when item is tapped
+//                mDrawerLayout.closeDrawers();
+//
+//                // Add code here to update the UI based on the item selected
+//                // For example, swap UI fragments here
+//
+//                return true;
+//            }
+//        });
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
@@ -101,7 +139,11 @@ public class MainActivity extends AppCompatActivity {
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
         viewPager = findViewById(R.id.pager);
-
+//        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+//        pDialog.setTitleText("Loading");
+//        pDialog.setCancelable(false);
+//        pDialog.show();
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -115,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.req_type_spinner);
-
+        NetwordDetect();
         materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -1020,6 +1062,11 @@ public class MainActivity extends AppCompatActivity {
         return sss;
 
     }
+    public static Context getContext()
+    {
+
+        return instance;
+    }
 
     @Override
     public void onPause() {
@@ -1094,4 +1141,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    private void NetwordDetect() {
+
+        boolean WIFI = false;
+
+        boolean MOBILE = false;
+
+        ConnectivityManager CM = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo[] networkInfo = CM.getAllNetworkInfo();
+
+        for (NetworkInfo netInfo : networkInfo) {
+
+            if (netInfo.getTypeName().equalsIgnoreCase("WIFI"))
+
+                if (netInfo.isConnected())
+
+                    WIFI = true;
+
+            if (netInfo.getTypeName().equalsIgnoreCase("MOBILE"))
+
+                if (netInfo.isConnected())
+
+                    MOBILE = true;
+        }
+
+        if(WIFI == true)
+
+        {
+            //IPaddress = GetDeviceipWiFiData();
+           // mDrawerHeaderTitle.setText(IPaddress);
+          // Log.v("asdasdsadad",IPaddress);
+
+
+        }
+
+        if(MOBILE == true)
+        {
+
+            //IPaddress = GetDeviceipMobileData();
+            //Log.v("asdasdsadad",IPaddress);
+            //mDrawerHeaderTitle.setText(IPaddress);
+
+        }
+
+    }
+
+
+    public String GetDeviceipMobileData(){
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+                 en.hasMoreElements();) {
+                NetworkInterface networkinterface = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("Current IP", ex.toString());
+        }
+        return null;
+    }
+
+    public String GetDeviceipWiFiData()
+    {
+
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
+        @SuppressWarnings("deprecation")
+
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+
+        return ip;
+
+    }
 }
