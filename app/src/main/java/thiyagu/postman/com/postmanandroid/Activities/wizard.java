@@ -22,14 +22,14 @@ public class wizard extends AppIntro2 {
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Welcome!");
         sliderPage1.setDescription("Powerful HTTP Client designed for android with ");
-        sliderPage1.setImageDrawable(R.drawable.postmanicon);
+        sliderPage1.setImageDrawable(R.mipmap.ic_launcher);
         sliderPage1.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle("Clean App Intros");
         sliderPage2.setDescription("This library offers developers the ability to add clean app intros at the start of their apps.");
-        sliderPage2.setImageDrawable(R.drawable.postmanicon);
+        sliderPage2.setImageDrawable(R.drawable.getpost);
         sliderPage2.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage2));
 

@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-        ActionBar actionBar = getSupportActionBar();
+       // ActionBar actionBar = getSupportActionBar();
       //  mDrawerLayout = findViewById(R.id.drawer_layout);
 
 //        NavigationView navigationView = findViewById(R.id.nav_view);
@@ -130,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
 //        });
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
-        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
-        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        actionBar.setTitle(SS);
+//        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+//        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
+//        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//        actionBar.setTitle(SS);
 
         AssetManager assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");

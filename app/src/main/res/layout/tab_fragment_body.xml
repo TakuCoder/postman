@@ -5,7 +5,37 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical">
+<LinearLayout
+    android:weightSum="100"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RadioButton
+        android:id="@+id/radio_formdata"
+        android:layout_weight="33.3"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:text="Form-Data"
+        android:onClick="RadioButtonClick"
+        android:layout_height="wrap_content" />
+    <RadioButton
+        android:onClick="RadioButtonClick"
+        android:id="@+id/radio_raw"
+        android:layout_weight="33.3"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:text="RAW"
+        android:layout_height="wrap_content" />
+    <RadioButton
+        android:onClick="RadioButtonClick"
+        android:id="@+id/radio_binary"
+        android:layout_weight="33.3"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:text="Binary"
+        android:layout_height="wrap_content" />
 
+</LinearLayout>
     <Button
 
         android:id="@+id/AddBody"
@@ -25,5 +55,17 @@
         android:layout_below="@+id/fab"
         android:scrollbars="vertical" />
 
+    <EditText
+        android:background="@drawable/edittext_roundborder"
+    android:id="@+id/raw_textfield"
+    android:lines="8"
+        android:padding="20dp"
+    android:minLines="6"
+    android:gravity="top|left"
+    android:maxLines="10"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:scrollbars="vertical"
+    />
 
 </LinearLayout>

@@ -14,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,8 +35,10 @@ public class BodyFragment extends Fragment {
 
     RecyclerView recyclerView;
     Context context;
+    EditText raw_text;
     RecyclerView.Adapter ParamsAdapter;
     RecyclerView.LayoutManager ParamLayoutManager;
+    RadioButton radio_formdata,radio_raw,radio_binary;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,10 +73,55 @@ public class BodyFragment extends Fragment {
         Typeface roboto;
         AssetManager assetManager = context.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
-
+        raw_text = view.findViewById(R.id.raw_textfield);
         recyclerView = view.findViewById(R.id.my_recycler_view);
-
+        radio_formdata= view.findViewById(R.id.radio_formdata);
+        radio_raw= view.findViewById(R.id.radio_raw);
+        radio_binary= view.findViewById(R.id.radio_binary);
         AddBody = view.findViewById(R.id.AddBody);
+radio_formdata.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+
+
+        //radio_formdata.setChecked(true);
+        radio_raw.setChecked(false);
+        radio_binary.setChecked(false);
+
+
+        recyclerView.setVisibility(View.VISIBLE);
+        AddBody.setVisibility(View.VISIBLE);
+
+        raw_text.setVisibility(View.GONE);
+    }
+});
+
+
+
+
+        radio_raw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //radio_formdata.setChecked(true);
+                radio_formdata.setChecked(false);
+                radio_binary.setChecked(false);
+                recyclerView.setVisibility(View.GONE);
+                AddBody.setVisibility(View.GONE);
+                raw_text.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+
+        radio_binary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //radio_formdata.setChecked(true);
+                radio_formdata.setChecked(false);
+                radio_raw.setChecked(false);
+            }
+        });
+
         AddBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,4 +167,7 @@ public class BodyFragment extends Fragment {
 
         return results;
     }
+
+
+
 }
