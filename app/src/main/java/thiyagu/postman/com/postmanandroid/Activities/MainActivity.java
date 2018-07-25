@@ -55,6 +55,7 @@ import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
     private static MainActivity instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
-//    private DrawerLayout mDrawerLayout;
+
+    //    private DrawerLayout mDrawerLayout;
 //    String IPaddress;
 //    Boolean IPValue;
 //    private View mHeaderView;
@@ -108,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-       // ActionBar actionBar = getSupportActionBar();
-      //  mDrawerLayout = findViewById(R.id.drawer_layout);
+        // ActionBar actionBar = getSupportActionBar();
+        //  mDrawerLayout = findViewById(R.id.drawer_layout);
 
 //        NavigationView navigationView = findViewById(R.id.nav_view);
 //        mHeaderView = navigationView.getHeaderView(0);
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               // Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
 
 
                 if (String.valueOf(i).equals("1")) {
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         UrlField = findViewById(R.id.UrlField);
-       // UrlField.setText("https://www.httpbin.org/get");
+        // UrlField.setText("https://www.httpbin.org/get");
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
         materialBetterSpinner.setTypeface(roboto);
@@ -198,8 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
             {
 
-                if(isValid(UrlField.getText().toString()))
-                {
+                if (isValid(UrlField.getText().toString())) {
 
 
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
@@ -309,8 +310,9 @@ public class MainActivity extends AppCompatActivity {
                             if (isOnline()) {
 
                                 ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                                String rawbody = prefs.getString("bodytypeflag", null);
                                 Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                                if (part.size() > 0) {
+                                if (part.size() > 0 || rawbody.length() > 0) {
                                     Log.v(Tag, "======================part size greater than 0========================");
                                     // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
                                     GetRequest("POST", Address, headerBuilder, urlencodedparams);
@@ -412,17 +414,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                }
-
-                else {
-
+                } else {
 
 
                     Toasty.warning(MainActivity.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
 
 
                 }
-
 
 
             }
@@ -447,8 +445,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public static boolean isValid(String url)
-    {
+
+    public static boolean isValid(String url) {
         /* Try creating a valid URL */
         try {
             new URL(url).toURI();
@@ -461,6 +459,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
     private void setupViewPager(ViewPager viewPager) {
 
 
@@ -607,8 +606,7 @@ public class MainActivity extends AppCompatActivity {
                                     TabLayout.Tab tab = tabLayout.getTabAt(4);
                                     tab.select();
 
-                                } catch (NetworkOnMainThreadException exception)
-                                {
+                                } catch (NetworkOnMainThreadException exception) {
                                     Toasty.warning(MainActivity.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
                                     if (dialog != null)
                                         dialog.dismiss();
@@ -636,129 +634,191 @@ public class MainActivity extends AppCompatActivity {
                 Toasty.warning(MainActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        } else if (method.equals("POST"))
-        {
+        } else if (method.equals("POST")) {
             try {
-
+                Request request =null;
                 Log.v(Tag, "======================POST========================");
                 OkHttpClient client = new OkHttpClient();
-                MultipartBody.Builder builder = new MultipartBody.Builder();
-                RequestBody requestBody = null;
-                builder.setType(MultipartBody.FORM);
-
-                ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                String[] subvalue = null;
 
 
-                if (part.size() > 0)
+                String rawbody = prefs.getString("bodytypeflag", null);
+
+                switch (rawbody) {
+
+                    case "1":
 
 
-                {
 
-                    Log.v(Tag, "====================Adding Builder=========================================");
+                        MultipartBody.Builder builder = new MultipartBody.Builder();
+                        RequestBody requestBody;
+                        Log.v("statusofbodytype","=============case 1 detected============");
+                        builder.setType(MultipartBody.FORM);
 
-
-                    for (int i = 0; i < part.size(); i++)
-
-                    {
-
-
-                        try {
-                            subvalue = part.get(i).split("@@");
+                        ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                        String[] subvalue = null;
 
 
-                            Log.v(Tag, "builder" + i + subvalue[0]);
-                            Log.v(Tag, "builder" + i + subvalue[1]);
-                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+                        if (part.size() > 0)
 
 
-                        } catch (Exception e) {
-                            Log.v(Tag, "exception happened while adding builder in post");
-                            Log.v(Tag, e.toString());
+                        {
 
-                        }
-
-                    }
-
-                    requestBody = builder.build();
-                    Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .headers(customheader)
-                            .post(requestBody)
-                            .build();
-
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, final IOException e) {
-
-                            if (dialog != null)
-                                dialog.dismiss();
-                            Log.d(Tag, "failure");
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, final Response response) throws IOException {
+                            Log.v(Tag, "====================Adding Builder=========================================");
 
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
+                            for (int i = 0; i < part.size(); i++)
 
-                                        String bodyy = response.body().string();
-                                        int responsecode = response.code();
-
-                                        String Headers = response.headers().toString();
-
-                                        long tx = response.sentRequestAtMillis();
-                                        long rx = response.receivedResponseAtMillis();
+                            {
 
 
-                                        Log.v(Tag, "======================BODY========================");
-                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+                                try {
+                                    subvalue = part.get(i).split("@@");
 
 
-                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                    Log.v(Tag, "builder" + i + subvalue[0]);
+                                    Log.v(Tag, "builder" + i + subvalue[1]);
+                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
 
 
-                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-                                        editor.putString("response", bodyy);
-                                        editor.putString("code", String.valueOf(responsecode));
-                                        editor.putString("time", "" + (rx - tx));
-                                        editor.apply();
-                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        if (dialog != null)
-                                            dialog.dismiss();
-                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                        tab.select();
-
-                                    } catch (Exception e) {
-
-
-                                    }
+                                } catch (Exception e) {
+                                    Log.v(Tag, "exception happened while adding builder in post");
+                                    Log.v(Tag, e.toString());
 
                                 }
-                            });
+
+                            }
+
+
 
 
                         }
-                    });
+
+
+                        requestBody = builder.build();
+                        request = new Request.Builder()
+                                .url(urlvalue)
+                                .headers(customheader)
+                                .post(requestBody)
+                                .build();
+                        Log.v("statusofbodytype","=============case 1 detected============");
+                        break;
+
+
+                    case "2":
+                        if(rawbody.length()>0)
+                        {
+                            Log.v("statusofbodytype","=============case 2 detected=======rawbody====="+rawbody);
+                            MediaType mediaType = MediaType.parse("application/json");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder()
+                                    .url(urlvalue)
+                                    .post(newbody)
+                                    .build();
+
+
+//                            request = new Request.Builder()
+//                                    .url(urlvalue)
+//                                    .headers(customheader)
+//                                    .post(body)
+//                                    .build();
+
+
+
+                        }
+                        else
+                        {
+
+Log.v("error","error here errorid 112232");
+
+                        }
+                        Log.v("statusofbodytype","=============case 2 detected============");
+                        break;
+
+
+                    case "3":
+                        Log.v("statusofbodytype","=============case 3 detected============");
+                        Log.v("statusofbodytype","=============case 3 detected============");
+                        break;
 
 
                 }
+
+
+
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+
+                        if (dialog != null)
+                            dialog.dismiss();
+                        Log.d(Tag, "failure");
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException
+                    {
+
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+
+                                    String bodyy = response.body().string();
+                                    int responsecode = response.code();
+
+                                    String Headers = response.headers().toString();
+
+                                    long tx = response.sentRequestAtMillis();
+                                    long rx = response.receivedResponseAtMillis();
+
+
+                                    Log.v(Tag, "======================BODY========================");
+                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+
+
+                                    SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                                    editor.putString("response", bodyy);
+                                    editor.putString("code", String.valueOf(responsecode));
+                                    editor.putString("time", "" + (rx - tx));
+                                    editor.apply();
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    if (dialog != null)
+                                        dialog.dismiss();
+                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                    tab.select();
+
+                                } catch (Exception e) {
+
+
+                                }
+
+                            }
+                        });
+
+
+                    }
+                });
+
+
+
 
 
             } catch (final Exception e) {
@@ -903,9 +963,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-        } else if (method.equals("PUT"))
-        {
-
+        } else if (method.equals("PUT")) {
 
 
             try {
@@ -941,9 +999,6 @@ public class MainActivity extends AppCompatActivity {
                             Log.v(Tag, "builder" + i + subvalue[0]);
                             Log.v(Tag, "builder" + i + subvalue[1]);
                             builder.addFormDataPart(subvalue[1], subvalue[2]);
-
-
-
 
 
                         } catch (Exception e) {
@@ -1042,13 +1097,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
-
-
-
-
-
-
         }
 
         Log.v(Tag, "======================DOINBACKGROUND END========================");
@@ -1062,8 +1110,8 @@ public class MainActivity extends AppCompatActivity {
         return sss;
 
     }
-    public static Context getContext()
-    {
+
+    public static Context getContext() {
 
         return instance;
     }
@@ -1141,7 +1189,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void NetwordDetect() {
 
         boolean WIFI = false;
@@ -1167,18 +1214,17 @@ public class MainActivity extends AppCompatActivity {
                     MOBILE = true;
         }
 
-        if(WIFI == true)
+        if (WIFI == true)
 
         {
             //IPaddress = GetDeviceipWiFiData();
-           // mDrawerHeaderTitle.setText(IPaddress);
-          // Log.v("asdasdsadad",IPaddress);
+            // mDrawerHeaderTitle.setText(IPaddress);
+            // Log.v("asdasdsadad",IPaddress);
 
 
         }
 
-        if(MOBILE == true)
-        {
+        if (MOBILE == true) {
 
             //IPaddress = GetDeviceipMobileData();
             //Log.v("asdasdsadad",IPaddress);
@@ -1189,12 +1235,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String GetDeviceipMobileData(){
+    public String GetDeviceipMobileData() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-                 en.hasMoreElements();) {
+                 en.hasMoreElements(); ) {
                 NetworkInterface networkinterface = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         return inetAddress.getHostAddress().toString();
@@ -1207,8 +1253,7 @@ public class MainActivity extends AppCompatActivity {
         return null;
     }
 
-    public String GetDeviceipWiFiData()
-    {
+    public String GetDeviceipWiFiData() {
 
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 

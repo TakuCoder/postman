@@ -68,4 +68,15 @@
     android:scrollbars="vertical"
     />
 
+    <Button
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:text="add raw body"
+        android:background="#ff6c37"
+        android:id="@+id/button_addRawText"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
 </LinearLayout>
