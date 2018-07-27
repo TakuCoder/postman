@@ -101,18 +101,21 @@ public class BodyFragment extends Fragment {
 
                 case "1":
                     radio_formdata.setChecked(true);
+                    radio_formdata.performClick();
                     radio_raw.setChecked(false);
                     radio_binary.setChecked(false);
                     break;
 
                 case "2":
                     radio_raw.setChecked(true);
+                    radio_formdata.performClick();
                     radio_formdata.setChecked(false);
                     radio_binary.setChecked(false);
                     break;
 
                 case "3":
                     radio_binary.setChecked(true);
+                 //   radio_binary.performClick();
                     radio_formdata.setChecked(false);
                     radio_raw.setChecked(false);
 
@@ -222,7 +225,7 @@ public class BodyFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
+        //radio_raw.performClick();
     }
 
     private ArrayList<BodyDataObject> getDataSet()
