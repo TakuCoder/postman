@@ -641,9 +641,9 @@ public class MainActivity extends AppCompatActivity {
                 OkHttpClient client = new OkHttpClient();
 
 
-                String rawbody = prefs.getString("bodytypeflag", null);
-
-                switch (rawbody) {
+                String bodyflag = prefs.getString("bodytypeflag", null);
+                String rawbody = prefs.getString("rawbody", null);
+                switch (bodyflag) {
 
                     case "1":
 

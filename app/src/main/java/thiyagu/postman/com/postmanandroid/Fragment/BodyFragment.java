@@ -28,6 +28,7 @@ import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
 import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
+import thiyagu.postman.com.postmanandroid.JSONUtil;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
@@ -37,8 +38,10 @@ import thiyagu.postman.com.postmanandroid.R;
  */
 
 public class BodyFragment extends Fragment {
+    JSONUtil jsonUtil = new JSONUtil();
     Button AddBody;
-
+    String rawbody;
+    String bodytypeflag;
     RecyclerView recyclerView;
     Context context;
     EditText raw_text;
@@ -92,30 +95,40 @@ public class BodyFragment extends Fragment {
         ButtonAddRawText = view.findViewById(R.id.button_addRawText);
         radio_binary = view.findViewById(R.id.radio_binary);
         AddBody = view.findViewById(R.id.AddBody);
+
+        //radio_formdata.setChecked(true);
+
+        //String rawbody = prefs.getString("bodytypeflag", null);
+
+
         try
         {
+            bodytypeflag = prefs.getString("bodytypeflag", null);
+            rawbody = prefs.getString("rawbody", null);
+            Log.v("rawbody",bodytypeflag);
 
-            String rawbody = prefs.getString("bodytypeflag", null);
-            switch (rawbody)
+
+            switch (bodytypeflag)
             {
 
                 case "1":
                     radio_formdata.setChecked(true);
-                    radio_formdata.performClick();
+                    formData();
                     radio_raw.setChecked(false);
                     radio_binary.setChecked(false);
                     break;
 
                 case "2":
                     radio_raw.setChecked(true);
-                    radio_formdata.performClick();
+
+                    raw();
                     radio_formdata.setChecked(false);
                     radio_binary.setChecked(false);
                     break;
 
                 case "3":
                     radio_binary.setChecked(true);
-                 //   radio_binary.performClick();
+
                     radio_formdata.setChecked(false);
                     radio_raw.setChecked(false);
 
@@ -131,20 +144,7 @@ public class BodyFragment extends Fragment {
         radio_formdata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
-
-
-                //radio_formdata.setChecked(true);
-                radio_raw.setChecked(false);
-                radio_binary.setChecked(false);
-
-
-                recyclerView.setVisibility(View.VISIBLE);
-                AddBody.setVisibility(View.VISIBLE);
-
-                raw_text.setVisibility(View.GONE);
+                formData();
             }
         });
 
@@ -154,13 +154,7 @@ public class BodyFragment extends Fragment {
             public void onClick(View view) {
 
 
-                //radio_formdata.setChecked(true);
-                radio_formdata.setChecked(false);
-                radio_binary.setChecked(false);
-                recyclerView.setVisibility(View.GONE);
-                AddBody.setVisibility(View.GONE);
-                raw_text.setVisibility(View.VISIBLE);
-                ButtonAddRawText.setVisibility(View.VISIBLE);
+           raw();
             }
         });
 
@@ -170,12 +164,14 @@ public class BodyFragment extends Fragment {
 
                 String sss = raw_text.getText().toString();
 
-                String results = StringEscapeUtils.escapeJava(sss);
-                Log.v("asdasdasdsd", results);
+                String escapedString = jsonUtil.escape(sss);
 
+                Log.v("asdasdasdsd", escapedString);
+                Log.v("statusofbodyfragment", "setting bodyflag 2");
                 editor.putString("bodytypeflag", "2");
-                editor.putString("rawbody", results);
+                editor.putString("rawbody", escapedString);
                 editor.putString("rawbodytype", "json");
+                Log.v("statusofbodyfragment", "setting bodyflag 2 success");
                 editor.apply();
 
 
@@ -251,6 +247,40 @@ public class BodyFragment extends Fragment {
 
 
         return results;
+    }
+
+    void raw()
+    {
+
+
+        //radio_formdata.setChecked(true);
+        radio_formdata.setChecked(false);
+        radio_binary.setChecked(false);
+        recyclerView.setVisibility(View.GONE);
+        AddBody.setVisibility(View.GONE);
+        raw_text.setVisibility(View.VISIBLE);
+
+
+        raw_text.setText(jsonUtil.unescape(rawbody));
+        ButtonAddRawText.setVisibility(View.VISIBLE);
+    }
+    void formData()
+    {
+
+
+
+
+
+        //radio_formdata.setChecked(true);
+        radio_raw.setChecked(false);
+        radio_binary.setChecked(false);
+
+
+        recyclerView.setVisibility(View.VISIBLE);
+        AddBody.setVisibility(View.VISIBLE);
+
+        raw_text.setVisibility(View.GONE);
+
     }
 
 
