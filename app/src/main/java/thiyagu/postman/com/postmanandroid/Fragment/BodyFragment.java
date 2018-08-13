@@ -258,11 +258,24 @@ public class BodyFragment extends Fragment {
         radio_binary.setChecked(false);
         recyclerView.setVisibility(View.GONE);
         AddBody.setVisibility(View.GONE);
+
+
         raw_text.setVisibility(View.VISIBLE);
 
 
-        raw_text.setText(jsonUtil.unescape(rawbody));
-        ButtonAddRawText.setVisibility(View.VISIBLE);
+        try
+        {
+            raw_text.setText(jsonUtil.unescape(rawbody));
+            ButtonAddRawText.setVisibility(View.VISIBLE);
+
+        }
+        catch (Exception e)
+        {
+
+
+        }
+
+
     }
     void formData()
     {
