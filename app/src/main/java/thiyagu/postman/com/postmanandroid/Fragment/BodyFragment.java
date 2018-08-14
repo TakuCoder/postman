@@ -97,20 +97,14 @@ public class BodyFragment extends Fragment {
         AddBody = view.findViewById(R.id.AddBody);
 
         //radio_formdata.setChecked(true);
-
         //String rawbody = prefs.getString("bodytypeflag", null);
-
-
         try
         {
             bodytypeflag = prefs.getString("bodytypeflag", null);
             rawbody = prefs.getString("rawbody", null);
             Log.v("rawbody",bodytypeflag);
-
-
             switch (bodytypeflag)
             {
-
                 case "1":
                     radio_formdata.setChecked(true);
                     formData();
@@ -164,12 +158,11 @@ public class BodyFragment extends Fragment {
 
                 String sss = raw_text.getText().toString();
 
-                String escapedString = jsonUtil.escape(sss);
 
-                Log.v("asdasdasdsd", escapedString);
+                Log.v("asdasdasdsd", sss);
                 Log.v("statusofbodyfragment", "setting bodyflag 2");
                 editor.putString("bodytypeflag", "2");
-                editor.putString("rawbody", escapedString);
+                editor.putString("rawbody", sss);
                 editor.putString("rawbodytype", "json");
                 Log.v("statusofbodyfragment", "setting bodyflag 2 success");
                 editor.apply();
@@ -265,7 +258,8 @@ public class BodyFragment extends Fragment {
 
         try
         {
-            raw_text.setText(jsonUtil.unescape(rawbody));
+           // raw_text.setText(jsonUtil.unescape(rawbody));
+           raw_text.setText(rawbody);
             ButtonAddRawText.setVisibility(View.VISIBLE);
 
         }
@@ -275,7 +269,7 @@ public class BodyFragment extends Fragment {
 
         }
 
-
+        ButtonAddRawText.setVisibility(View.VISIBLE);
     }
     void formData()
     {
@@ -284,7 +278,7 @@ public class BodyFragment extends Fragment {
 
 
 
-        //radio_formdata.setChecked(true);
+        //radio_formdata.setChecked(true);//radio_formdata.setChecked(true);
         radio_raw.setChecked(false);
         radio_binary.setChecked(false);
 

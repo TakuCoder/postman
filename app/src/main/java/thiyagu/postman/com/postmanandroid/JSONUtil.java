@@ -20,7 +20,7 @@ public class JSONUtil {
             } else if(ch == '\\') {
                 output.append("\\\\");
             } else if(ch == '"') {
-                output.append("\\\"");
+                output.append("\"");
             } else if(ch == '\b') {
                 output.append("\\b");
             } else if(ch == '\f') {
