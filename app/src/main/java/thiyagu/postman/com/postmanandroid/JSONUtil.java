@@ -37,7 +37,9 @@ public class JSONUtil {
         return output.toString();
     }
 
-    public static String unescape(String input) {
+    public static String unescape(String input)
+
+    {
         StringBuilder builder = new StringBuilder();
 
         int i = 0;
@@ -52,7 +54,7 @@ public class JSONUtil {
                 if(ch == '\\' || ch == '/' || ch == '"' || ch == '\'') {
                     builder.append(ch);
                 }
-                else if(ch == 'n') builder.append('\n');
+                else if(ch == 'n') builder.append("\n");
                 else if(ch == 'r') builder.append('\r');
                 else if(ch == 't') builder.append('\t');
                 else if(ch == 'b') builder.append('\b');

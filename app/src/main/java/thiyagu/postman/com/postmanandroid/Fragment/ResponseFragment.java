@@ -65,7 +65,7 @@ public class ResponseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
+         Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_response, container, false);
         Context context = view.getContext();
         textView = view.findViewById(R.id.textView);

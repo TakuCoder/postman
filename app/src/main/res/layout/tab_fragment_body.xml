@@ -5,37 +5,42 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical">
-<LinearLayout
-    android:weightSum="100"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <RadioButton
-        android:id="@+id/radio_formdata"
-        android:layout_weight="33.3"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:text="Form-Data"
-        android:onClick="RadioButtonClick"
-        android:layout_height="wrap_content" />
-    <RadioButton
-        android:onClick="RadioButtonClick"
-        android:id="@+id/radio_raw"
-        android:layout_weight="33.3"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:text="RAW"
-        android:layout_height="wrap_content" />
-    <RadioButton
-        android:onClick="RadioButtonClick"
-        android:id="@+id/radio_binary"
-        android:layout_weight="33.3"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:text="Binary"
-        android:layout_height="wrap_content" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <RadioButton
+            android:id="@+id/radio_formdata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="33.3"
+            android:onClick="RadioButtonClick"
+            android:text="Form-Data"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/radio_raw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="33.3"
+            android:onClick="RadioButtonClick"
+            android:text="RAW"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/radio_binary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="33.3"
+            android:onClick="RadioButtonClick"
+            android:text="Binary"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
     <Button
 
         android:id="@+id/AddBody"
@@ -48,35 +53,33 @@
         android:textColor="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginTop="10dp"
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/fab"
+        android:layout_marginTop="10dp"
         android:scrollbars="vertical" />
 
     <EditText
-        android:background="@drawable/edittext_roundborder"
-    android:id="@+id/raw_textfield"
-    android:lines="8"
-        android:padding="20dp"
-    android:minLines="6"
-    android:gravity="top|left"
-    android:maxLines="10"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:scrollbars="vertical"
-    />
-
-    <Button
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:text="add raw body"
-        android:background="#ff6c37"
-        android:id="@+id/button_addRawText"
-        android:textColor="@android:color/white"
+        android:id="@+id/raw_textfield"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:background="@drawable/edittext_roundborder"
+        android:gravity="top|left"
+        android:lines="8"
+        android:maxLines="100"
+        android:minLines="10"
+        android:padding="20dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/button_addRawText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#ff6c37"
+        android:text="add raw body"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
 </LinearLayout>

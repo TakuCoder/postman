@@ -50,7 +50,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -61,7 +60,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -200,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
             {
 
-                if (isValid(UrlField.getText().toString())) {
+                if (isValid(UrlField.getText().toString()))
+                {
 
 
                     TabLayout.Tab tab = tabLayout.getTabAt(0);
@@ -412,7 +411,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-
+                    TabLayout.Tab tab1 = tabLayout.getTabAt(4);
+                    tab1.select();
 
                 } else {
 
@@ -603,8 +603,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(Tag, "===============writing data to shared preference done=========================>");
                                     if (dialog != null)
                                         dialog.dismiss();
-                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                    tab.select();
+//                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+//                                    tab.select();
 
                                 } catch (NetworkOnMainThreadException exception) {
                                     Toasty.warning(MainActivity.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
@@ -802,9 +802,13 @@ Log.v("error","error here errorid 112232");
                                     Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
                                     if (dialog != null)
                                         dialog.dismiss();
-                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+                                    TabLayout.Tab tab = tabLayout.getTabAt(0);
                                     tab.select();
 
+                                    TabLayout.Tab tab2 = tabLayout.getTabAt(3);
+                                    tab2.select();
+                                    TabLayout.Tab tab3 = tabLayout.getTabAt(4);
+                                    tab3.select();
                                 } catch (Exception e) {
 
 
