@@ -3,6 +3,7 @@ package thiyagu.postman.com.postmanandroid.Activities;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
@@ -60,6 +61,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-        // ActionBar actionBar = getSupportActionBar();
+         ActionBar actionBar = getSupportActionBar();
         //  mDrawerLayout = findViewById(R.id.drawer_layout);
 
 //        NavigationView navigationView = findViewById(R.id.nav_view);
@@ -130,10 +132,10 @@ public class MainActivity extends AppCompatActivity {
 //        });
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
-//        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-//        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
-//        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-//        actionBar.setTitle(SS);
+        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
+        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        actionBar.setTitle(SS);
 
         AssetManager assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -198,12 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
             {
 
-                if (isValid(UrlField.getText().toString()))
-                {
+                if (isValid(UrlField.getText().toString())) {
 
 
-                    TabLayout.Tab tab = tabLayout.getTabAt(0);
-                    tab.select();
+                    // TabLayout.Tab tab = tabLayout.getTabAt(0);
+                    //tab.select();
 
                     feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
@@ -411,8 +412,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }
-                    TabLayout.Tab tab1 = tabLayout.getTabAt(4);
-                    tab1.select();
+
+
+//                    TabLayout.Tab tab1 = tabLayout.getTabAt(4);
+//                    tab1.select();
+
+
+
 
                 } else {
 
@@ -464,11 +470,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ParamFragment(), "PARAMS");
+        adapter.addFragment(new ParamFragment(), "PARAMETERS");
         adapter.addFragment(new AuthorizationFragment(), "AUTHORIZATION");
         adapter.addFragment(new HeaderFragment(), "HEADER");
         adapter.addFragment(new BodyFragment(), "BODY");
-        adapter.addFragment(new ResponseFragment(), "RESPONSE");
+       // adapter.addFragment(new ResponseFragment(), "RESPONSE");
         viewPager.setAdapter(adapter);
     }
 
@@ -636,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (method.equals("POST")) {
             try {
-                Request request =null;
+                Request request = null;
                 Log.v(Tag, "======================POST========================");
                 OkHttpClient client = new OkHttpClient();
 
@@ -648,10 +654,9 @@ public class MainActivity extends AppCompatActivity {
                     case "1":
 
 
-
                         MultipartBody.Builder builder = new MultipartBody.Builder();
                         RequestBody requestBody;
-                        Log.v("statusofbodytype","=============case 1 detected============");
+                        Log.v("statusofbodytype", "=============case 1 detected============");
                         builder.setType(MultipartBody.FORM);
 
                         ArrayList<String> part = feedReaderDbHelper.getAllBody();
@@ -690,8 +695,6 @@ public class MainActivity extends AppCompatActivity {
                             }
 
 
-
-
                         }
 
 
@@ -701,14 +704,13 @@ public class MainActivity extends AppCompatActivity {
                                 .headers(customheader)
                                 .post(requestBody)
                                 .build();
-                        Log.v("statusofbodytype","=============case 1 detected============");
+                        Log.v("statusofbodytype", "=============case 1 detected============");
                         break;
 
 
                     case "2":
-                        if(rawbody.length()>0)
-                        {
-                            Log.v("statusofbodytype","=============case 2 detected=======rawbody====="+rawbody);
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
                             MediaType mediaType = MediaType.parse("application/json");
 
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
@@ -725,26 +727,22 @@ public class MainActivity extends AppCompatActivity {
 //                                    .build();
 
 
+                        } else {
+
+                            Log.v("error", "error here errorid 112232");
 
                         }
-                        else
-                        {
-
-Log.v("error","error here errorid 112232");
-
-                        }
-                        Log.v("statusofbodytype","=============case 2 detected============");
+                        Log.v("statusofbodytype", "=============case 2 detected============");
                         break;
 
 
                     case "3":
-                        Log.v("statusofbodytype","=============case 3 detected============");
-                        Log.v("statusofbodytype","=============case 3 detected============");
+                        Log.v("statusofbodytype", "=============case 3 detected============");
+                        Log.v("statusofbodytype", "=============case 3 detected============");
                         break;
 
 
                 }
-
 
 
                 client.newCall(request).enqueue(new Callback() {
@@ -766,8 +764,7 @@ Log.v("error","error here errorid 112232");
                     }
 
                     @Override
-                    public void onResponse(Call call, final Response response) throws IOException
-                    {
+                    public void onResponse(Call call, final Response response) throws IOException {
 
 
                         runOnUiThread(new Runnable() {
@@ -802,13 +799,18 @@ Log.v("error","error here errorid 112232");
                                     Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
                                     if (dialog != null)
                                         dialog.dismiss();
-                                    TabLayout.Tab tab = tabLayout.getTabAt(0);
-                                    tab.select();
+//                                    TabLayout.Tab tab = tabLayout.getTabAt(0);
+//                                    tab.select();
+//
+//                                    TabLayout.Tab tab2 = tabLayout.getTabAt(3);
+//                                    tab2.select();
+//                                    TabLayout.Tab tab3 = tabLayout.getTabAt(4);
+//                                    tab3.select();
 
-                                    TabLayout.Tab tab2 = tabLayout.getTabAt(3);
-                                    tab2.select();
-                                    TabLayout.Tab tab3 = tabLayout.getTabAt(4);
-                                    tab3.select();
+                                    //here comes response activity
+
+                                    Intent intent = new Intent(MainActivity.this, ResponseActivity.class);
+                                    startActivity(intent);
                                 } catch (Exception e) {
 
 
@@ -820,9 +822,6 @@ Log.v("error","error here errorid 112232");
 
                     }
                 });
-
-
-
 
 
             } catch (final Exception e) {
