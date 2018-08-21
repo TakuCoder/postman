@@ -612,6 +612,11 @@ public class MainActivity extends AppCompatActivity {
 //                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
 //                                    tab.select();
 
+
+                                    Intent intent = new Intent(MainActivity.this, ResponseActivity.class);
+                                    startActivity(intent);
+
+
                                 } catch (NetworkOnMainThreadException exception) {
                                     Toasty.warning(MainActivity.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
                                     if (dialog != null)
@@ -793,6 +798,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                                     editor.putString("response", bodyy);
+                                    editor.putString("Headers", Headers);
                                     editor.putString("code", String.valueOf(responsecode));
                                     editor.putString("time", "" + (rx - tx));
                                     editor.apply();

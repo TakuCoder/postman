@@ -11,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yuyh.jsonviewer.library.JsonRecyclerView;
+
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ResponseActivity extends Activity {
@@ -19,9 +21,9 @@ public class ResponseActivity extends Activity {
 
     CardView responsedata;
 
-    TextView status, time, size;
-    LinearLayout frameLayout_responsetype, frameLayout_responsedata,main_type;
-
+    TextView status, time, size,data;
+    LinearLayout frameLayout_responsetype, frameLayout_responsedata,main_type,jsonplaceholder;
+    JsonRecyclerView jsonRecyclerView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +33,14 @@ public class ResponseActivity extends Activity {
 
         responsedata = findViewById(R.id.card_view_responsedata);
         frameLayout_responsetype = findViewById(R.id.frame_ResType);
-
+    data=findViewById(R.id.datatext);
         main_type = findViewById(R.id.main_type);
         frameLayout_responsedata = findViewById(R.id.frame_ResData);
+        jsonplaceholder = findViewById(R.id.jsonplaceholder);
         status = findViewById(R.id.status_textview);
         time = findViewById(R.id.time_textview);
         size = findViewById(R.id.size_textview);
-
+        jsonRecyclerView = findViewById(R.id.rv_json);
         SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         final String responsetext = prefs.getString("response", null);
         final String timevalue = prefs.getString("time", null);
@@ -46,33 +49,72 @@ public class ResponseActivity extends Activity {
         time.setText("TIME " + timevalue + " ms");
         Log.v("asdsadasdasdsadasd",codevalue);
         size.setText("630 bytes");
-//        responsetype.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//                if (frameLayout_responsetype.getVisibility() == View.VISIBLE) {
-//                    frameLayout_responsetype.setVisibility(View.GONE);
-//
-//                } else {
-//
-//                    frameLayout_responsetype.setVisibility(View.VISIBLE);
-//
-//                }
-//
-//            }
-//        });
+        //data.setText(responsetext);
+
+        try
+        {
+
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    jsonRecyclerView.setVisibility(View.VISIBLE);
+                    Log.v("responsetext2","=====================================");
+                    Log.v("responsetext2",responsetext);
+                    jsonRecyclerView.bindJson(responsetext);
+                    Log.v("responsetext2","=====================================");
+                    jsonRecyclerView.setKeyColor(getResources().getColor(R.color.lawn_green));
+                    jsonRecyclerView.setValueTextColor(getResources().getColor(R.color.keycolor));
+                    jsonRecyclerView.setValueNumberColor(getResources().getColor(R.color.keycolor));
+                    jsonRecyclerView.setValueUrlColor(getResources().getColor(R.color.keycolor));
+
+                    data.setVisibility(View.GONE);
+                }
+            });
+
+
+
+        }
+        catch(Exception e)
+        {
+
+            Log.d("sadasdasdasd", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            data.setVisibility(View.VISIBLE);
+            data.setText(responsetext);
+            jsonRecyclerView.setVisibility(View.GONE);
+            Log.d("sadasdasdasd", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        }
+
+
+
+
+        responsetype.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if (frameLayout_responsetype.getVisibility() == View.VISIBLE) {
+                    frameLayout_responsetype.setVisibility(View.GONE);
+
+                } else {
+
+                    frameLayout_responsetype.setVisibility(View.VISIBLE);
+
+                }
+
+            }
+        });
 
 
         responsedata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (frameLayout_responsedata.getVisibility() == View.VISIBLE) {
-                    frameLayout_responsedata.setVisibility(View.GONE);
+                if (jsonplaceholder.getVisibility() == View.VISIBLE) {
+                    jsonplaceholder.setVisibility(View.GONE);
 
                 } else {
 
-                    frameLayout_responsedata.setVisibility(View.VISIBLE);
+                    jsonplaceholder.setVisibility(View.VISIBLE);
 
                 }
             }

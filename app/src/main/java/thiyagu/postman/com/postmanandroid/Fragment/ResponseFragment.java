@@ -89,6 +89,7 @@ public class ResponseFragment extends Fragment {
         final String responsetext = prefs.getString("response", null);
         final String timevalue = prefs.getString("time", null);
         final String codevalue = prefs.getString("code", null);
+        final String headers = prefs.getString("Headers", null);
 //        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
 //        editor.putString("response", "");
 //        editor.putString("code", "");

@@ -47,6 +47,5 @@ dependencies {
     implementation 'cn.pedant.sweetalert:library:1.3'
     implementation 'com.github.apl-devs:appintro:v4.2.3'
     implementation files('libs/json-simple-1.1.jar')
-
-
+    implementation files('libs/multiscrollview.jar')
 }

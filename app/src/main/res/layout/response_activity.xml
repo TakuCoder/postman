@@ -3,18 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     android:orientation="vertical"
+    android:weightSum="100"
     android:padding="10dp">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view_responsetype"
+        android:layout_weight="3"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"
-        card_view:cardCornerRadius="4dp">
+
+        card_view:cardCornerRadius="0dp">
 
         <LinearLayout
             android:id="@+id/main_type"
@@ -26,8 +28,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-             >
+                android:layout_height="50dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:text="Response Type"
                     android:textColor="@android:color/white"
-                    android:textSize="25sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -65,7 +66,7 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="status"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -85,7 +86,7 @@
 
 
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -106,7 +107,7 @@
 
 
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -121,33 +122,74 @@
         android:id="@+id/card_view_responsedata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center"
+        android:layout_marginTop="10dp"
         android:visibility="visible"
-        card_view:cardCornerRadius="4dp">
+        android:layout_weight="5"
+        card_view:cardCornerRadius="0dp">
 
         <LinearLayout
+
+            android:id="@+id/main_data"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/black"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="wrap_content"
+                android:background="@android:color/black">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
+                    android:layout_margin="10dp"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="Response Type"
-                    android:textSize="25sp" />
+                    android:text="Response Data"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/jsonplaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/datatext"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="sample"
+                    android:textColor="@color/white" />
+
+
+                <com.yuyh.jsonviewer.library.JsonRecyclerView
+                    android:id="@+id/rv_json"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
             </LinearLayout>
 
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"></FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
+<Button
+
+    android:text="Save"
+    android:layout_weight="2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+
 </LinearLayout>
