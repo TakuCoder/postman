@@ -160,16 +160,18 @@ public class MainActivity extends AppCompatActivity {
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.req_type_spinner);
         NetwordDetect();
-        materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+//        materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//
+//
+//                Log.v(Tag, "selecting material spinner" + "-------------->" + materialBetterSpinner.getText());
+//
+//                return false;
+//            }
+//
+//        });
 
-
-                Log.v(Tag, "selecting material spinner" + "-------------->" + materialBetterSpinner.getText());
-
-                return false;
-            }
-        });
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

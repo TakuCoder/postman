@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -28,7 +29,7 @@ public class ResponseActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.response_activity);
-
+        this.setFinishOnTouchOutside(false);
         responsetype = findViewById(R.id.card_view_responsetype);
 
         responsedata = findViewById(R.id.card_view_responsedata);
@@ -137,4 +138,18 @@ Log.v("asdsadsadsa","amhere");
     protected void onDestroy() {
         super.onDestroy();
     }
-}
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // If we've received a touch notification that the user has touched
+        // outside the app, finish the activity.
+        if (MotionEvent.ACTION_OUTSIDE == event.getAction()) {
+            //finish();
+            return true;
+        }
+
+        // Delegate everything else to Activity.
+        return super.onTouchEvent(event);
+    }
+    }
+

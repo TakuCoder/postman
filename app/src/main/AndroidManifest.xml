@@ -47,7 +47,8 @@
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
         <activity android:name=".Activities.wizard"></activity>
-        <activity android:name=".Activities.ResponseActivity"></activity>
+        <activity android:name=".Activities.ResponseActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" ></activity>
     </application>
 
 </manifest>

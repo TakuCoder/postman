@@ -12,6 +12,7 @@
     <string name="Auth_type">Auth type</string>
     <string name="your_url_here">URL here</string>
     <string name="Send">Send</string>
+    <string name="Save">Save</string>
     <string name="Value">Value</string>
     <string name="null_response">Response will visible here</string>
     <string name="Key">key</string>

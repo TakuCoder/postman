@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
@@ -115,6 +116,16 @@ public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implemen
             right.mutate().setAlpha(66);
         }
         super.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
+    }
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        //doSomething();
+        return true;
+    }
+
+    private void doSomething() {
+        Toast.makeText(getContext(), "did something", Toast.LENGTH_SHORT).show();
     }
 
 }

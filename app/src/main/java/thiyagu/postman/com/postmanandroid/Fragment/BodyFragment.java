@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -29,6 +31,7 @@ import java.util.logging.Level;
 import es.dmoral.toasty.Toasty;
 import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
+import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
@@ -44,12 +47,13 @@ public class BodyFragment extends Fragment {
     String bodytypeflag;
     RecyclerView recyclerView;
     Context context;
+    MaterialBetterSpinner body_spinner;
     EditText raw_text;
     SharedPreferences prefs;
     Button ButtonAddRawText;
     RecyclerView.Adapter ParamsAdapter;
     RecyclerView.LayoutManager ParamLayoutManager;
-    RadioButton radio_formdata, radio_raw, radio_binary;
+    //RadioButton radio_formdata, radio_raw, radio_binary;
     SharedPreferences.Editor editor;
 
     @Override
@@ -90,14 +94,72 @@ public class BodyFragment extends Fragment {
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         raw_text = view.findViewById(R.id.raw_textfield);
         recyclerView = view.findViewById(R.id.my_recycler_view);
-        radio_formdata = view.findViewById(R.id.radio_formdata);
-        radio_raw = view.findViewById(R.id.radio_raw);
+        //radio_formdata = view.findViewById(R.id.radio_formdata);
+        //radio_raw = view.findViewById(R.id.radio_raw);
         ButtonAddRawText = view.findViewById(R.id.button_addRawText);
-        radio_binary = view.findViewById(R.id.radio_binary);
+        //radio_binary = view.findViewById(R.id.radio_binary);
         AddBody = view.findViewById(R.id.AddBody);
-
+        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
+        body_spinner = view.findViewById(R.id.body_spinner);
+        final String[] request = {"MULTIFORM", "JSON", "XML", "BINARY"};
         //radio_formdata.setChecked(true);
         //String rawbody = prefs.getString("bodytypeflag", null);
+        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, request);
+      body_spinner.setAdapter(arrayadapter);
+      body_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+
+              try
+              {
+                  bodytypeflag = prefs.getString("bodytypeflag", null);
+                  rawbody = prefs.getString("rawbody", null);
+                  switch (i)
+                  {
+
+                      case 0:
+
+                          Toast.makeText(context,"MULTIFORM",Toast.LENGTH_LONG).show();
+                          formData();
+
+                          break;
+
+                      case 1:
+                          Toast.makeText(context,"JSON",Toast.LENGTH_LONG).show();
+                         // body_spinner.setText("JSON");
+                          raw();
+                          break;
+
+                      case 2:
+                          Toast.makeText(context,"XML",Toast.LENGTH_LONG).show();
+                          //body_spinner.setText("XML");
+
+                          raw();
+                          break;
+
+                      case 3:
+                          Toast.makeText(context,"BINARY",Toast.LENGTH_LONG).show();
+                         // body_spinner.setText("BINARY");
+                          raw();
+                          break;
+
+
+
+                  }
+
+              }
+
+              catch (Exception e)
+              {
+
+
+              }
+
+
+          }
+      });
         try
         {
             bodytypeflag = prefs.getString("bodytypeflag", null);
@@ -106,25 +168,27 @@ public class BodyFragment extends Fragment {
             switch (bodytypeflag)
             {
                 case "1":
-                    radio_formdata.setChecked(true);
+                    //radio_formdata.setChecked(true);
                     formData();
-                    radio_raw.setChecked(false);
-                    radio_binary.setChecked(false);
+                    body_spinner.setText("MULTIFORM");
+                    //radio_raw.setChecked(false);
+                    //radio_binary.setChecked(false);
                     break;
 
                 case "2":
-                    radio_raw.setChecked(true);
-
+                    //radio_raw.setChecked(true);
+                    body_spinner.setText("JSON");
                     raw();
-                    radio_formdata.setChecked(false);
-                    radio_binary.setChecked(false);
+                   // radio_formdata.setChecked(false);
+                   // radio_binary.setChecked(false);
                     break;
 
                 case "3":
-                    radio_binary.setChecked(true);
+                    body_spinner.setText("XML");
+                    //radio_binary.setChecked(true);
 
-                    radio_formdata.setChecked(false);
-                    radio_raw.setChecked(false);
+                   // radio_formdata.setChecked(false);
+                   // radio_raw.setChecked(false);
 
                     break;
 
@@ -135,22 +199,22 @@ public class BodyFragment extends Fragment {
             Toast.makeText(MainActivity.getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
         }
-        radio_formdata.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                formData();
-            }
-        });
-
-
-        radio_raw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-           raw();
-            }
-        });
+//        radio_formdata.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                formData();
+//            }
+//        });
+//
+//
+//        radio_raw.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//           raw();
+//            }
+//        });
 
         ButtonAddRawText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,24 +235,24 @@ public class BodyFragment extends Fragment {
             }
         });
 
-        radio_binary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //radio_formdata.setChecked(true);
-                radio_formdata.setChecked(false);
-                radio_raw.setChecked(false);
-
-
-
-                String rawbody = prefs.getString("rawbody", null);
-                String rawbodytype = prefs.getString("rawbodytype", null);
-
-                Log.v("sasdasdasddasd", rawbody + "==========>" + rawbodytype);
-
-
-            }
-        });
+//        radio_binary.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                //radio_formdata.setChecked(true);
+//                radio_formdata.setChecked(false);
+//                radio_raw.setChecked(false);
+//
+//
+//
+//                String rawbody = prefs.getString("rawbody", null);
+//                String rawbodytype = prefs.getString("rawbodytype", null);
+//
+//                Log.v("sasdasdasddasd", rawbody + "==========>" + rawbodytype);
+//
+//
+//            }
+//        });
 
 
         AddBody.setOnClickListener(new View.OnClickListener() {
@@ -247,8 +311,8 @@ public class BodyFragment extends Fragment {
 
 
         //radio_formdata.setChecked(true);
-        radio_formdata.setChecked(false);
-        radio_binary.setChecked(false);
+        //radio_formdata.setChecked(false);
+        //radio_binary.setChecked(false);
         recyclerView.setVisibility(View.GONE);
         AddBody.setVisibility(View.GONE);
 
@@ -279,8 +343,8 @@ public class BodyFragment extends Fragment {
 
 
         //radio_formdata.setChecked(true);//radio_formdata.setChecked(true);
-        radio_raw.setChecked(false);
-        radio_binary.setChecked(false);
+        //radio_raw.setChecked(false);
+        //radio_binary.setChecked(false);
 
 
         recyclerView.setVisibility(View.VISIBLE);
