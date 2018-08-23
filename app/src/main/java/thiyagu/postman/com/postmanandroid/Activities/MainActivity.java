@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-         ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         //  mDrawerLayout = findViewById(R.id.drawer_layout);
 
 //        NavigationView navigationView = findViewById(R.id.nav_view);
@@ -141,11 +141,7 @@ public class MainActivity extends AppCompatActivity {
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
         viewPager = findViewById(R.id.pager);
-//        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
-//        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//        pDialog.setTitleText("Loading");
-//        pDialog.setCancelable(false);
-//        pDialog.show();
+
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -160,24 +156,14 @@ public class MainActivity extends AppCompatActivity {
         responsetab = tabLayout.getTabAt(4);
         materialBetterSpinner = findViewById(R.id.req_type_spinner);
         NetwordDetect();
-//        materialBetterSpinner.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//
-//                Log.v(Tag, "selecting material spinner" + "-------------->" + materialBetterSpinner.getText());
-//
-//                return false;
-//            }
-//
-//        });
+
 
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Toast.makeText(getApplicationContext(), String.valueOf(i), Toast.LENGTH_SHORT).show();
+
 
 
                 if (String.valueOf(i).equals("1")) {
@@ -205,8 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isValid(UrlField.getText().toString())) {
 
 
-                    // TabLayout.Tab tab = tabLayout.getTabAt(0);
-                    //tab.select();
+
 
                     feedReaderDbHelper = new FeedReaderDbHelper(MainActivity.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
@@ -420,8 +405,6 @@ public class MainActivity extends AppCompatActivity {
 //                    tab1.select();
 
 
-
-
                 } else {
 
 
@@ -476,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new AuthorizationFragment(), "AUTHORIZATION");
         adapter.addFragment(new HeaderFragment(), "HEADER");
         adapter.addFragment(new BodyFragment(), "BODY");
-       // adapter.addFragment(new ResponseFragment(), "RESPONSE");
+        // adapter.addFragment(new ResponseFragment(), "RESPONSE");
         viewPager.setAdapter(adapter);
     }
 
@@ -709,6 +692,7 @@ public class MainActivity extends AppCompatActivity {
                         request = new Request.Builder()
                                 .url(urlvalue)
                                 .headers(customheader)
+
                                 .post(requestBody)
                                 .build();
                         Log.v("statusofbodytype", "=============case 1 detected============");
@@ -723,6 +707,8 @@ public class MainActivity extends AppCompatActivity {
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
                             request = new Request.Builder()
                                     .url(urlvalue)
+                                    .header("User-Agent", "Postman-Android")
+                                    .header("connection","Keep-Alive")
                                     .post(newbody)
                                     .build();
 
@@ -807,13 +793,6 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
                                     if (dialog != null)
                                         dialog.dismiss();
-//                                    TabLayout.Tab tab = tabLayout.getTabAt(0);
-//                                    tab.select();
-//
-//                                    TabLayout.Tab tab2 = tabLayout.getTabAt(3);
-//                                    tab2.select();
-//                                    TabLayout.Tab tab3 = tabLayout.getTabAt(4);
-//                                    tab3.select();
 
                                     //here comes response activity
 

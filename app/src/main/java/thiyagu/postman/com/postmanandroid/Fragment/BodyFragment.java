@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import es.dmoral.toasty.Toasty;
 import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
+import thiyagu.postman.com.postmanandroid.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
@@ -223,13 +224,55 @@ public class BodyFragment extends Fragment {
                 String sss = raw_text.getText().toString();
 
 
-                Log.v("asdasdasdsd", sss);
-                Log.v("statusofbodyfragment", "setting bodyflag 2");
-                editor.putString("bodytypeflag", "2");
-                editor.putString("rawbody", sss);
-                editor.putString("rawbodytype", "json");
-                Log.v("statusofbodyfragment", "setting bodyflag 2 success");
-                editor.apply();
+
+
+                String bodytype = body_spinner.getText().toString();
+
+                switch (bodytype)
+                {
+
+                    case "MULIFORM":
+
+                        Apply(sss,"1","multiform");
+                        break;
+
+
+                    case "JSON":
+
+                        boolean firstStringValid = JSONUtils.isJSONValid(sss); //true
+                        if(firstStringValid == true)
+                        {
+                            Apply(sss,"2","json");
+                            Log.v("sdsdsdsd","the above string is json");
+
+                        }
+                        else
+                        {
+                            Log.v("sdsdsdsd","the above string is not json");
+                            Toasty.warning(context, "Not a valid json string found", Toast.LENGTH_SHORT, true).show();
+                        }
+                        break;
+
+
+
+                    case "XML":
+                        break;
+
+
+
+                    case "BINARY":
+                        break;
+
+
+
+
+
+                }
+
+
+
+
+
 
 
             }
@@ -261,10 +304,10 @@ public class BodyFragment extends Fragment {
                 Intent intent = new Intent(getContext(), BodyPopUp.class);
 
                 startActivityForResult(intent, 1);
-                Log.v("statusofbodyfragment", "setting bodyflag 1");
-                editor.putString("bodytypeflag", "1");
-                editor.apply();
-                Log.v("statusofbodyfragment", "setting bodyflag 1 success");
+//                Log.v("statusofbodyfragment", "setting bodyflag 1");
+//                editor.putString("bodytypeflag", "1");
+//                editor.apply();
+//                Log.v("statusofbodyfragment", "setting bodyflag 1 success");
             }
         });
         AddBody.setTypeface(roboto);
@@ -274,7 +317,19 @@ public class BodyFragment extends Fragment {
         recyclerView.setAdapter(ParamsAdapter);
         return view;
     }
+public void Apply(String sss,String i,String type)
+{
+    Log.v("asdasdasdsd", sss);
+    Log.v("statusofbodyfragment", "setting bodyflag "+i);
+    editor.putString("bodytypeflag", i);
+    editor.putString("rawbody", sss);
+    editor.putString("rawbodytype", type);
+    Log.v("statusofbodyfragment", "setting bodyflag "+i+" success");
+    editor.apply();
 
+
+
+}
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
