@@ -28,6 +28,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -94,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog dialog;
     SharedPreferences prefs;
 
-    //    private DrawerLayout mDrawerLayout;
-//    String IPaddress;
-//    Boolean IPValue;
-//    private View mHeaderView;
-//    private TextView mDrawerHeaderTitle;
+    private DrawerLayout mDrawerLayout;
+  String IPaddress;
+   Boolean IPValue;
+    private View mHeaderView;
+   private TextView mDrawerHeaderTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,31 +112,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         ActionBar actionBar = getSupportActionBar();
-        //  mDrawerLayout = findViewById(R.id.drawer_layout);
+       mDrawerLayout = findViewById(R.id.drawer_layout);
 
-//        NavigationView navigationView = findViewById(R.id.nav_view);
-//        mHeaderView = navigationView.getHeaderView(0);
-//        mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.headertitle);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                // set item as selected to persist highlight
-//                //menuItem.setChecked(true);
-//                // close drawer when item is tapped
-//                mDrawerLayout.closeDrawers();
-//
-//                // Add code here to update the UI based on the item selected
-//                // For example, swap UI fragments here
-//
-//                return true;
-//            }
-//        });
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        mHeaderView = navigationView.getHeaderView(0);
+        mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.headertitle);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // set item as selected to persist highlight
+                //menuItem.setChecked(true);
+                // close drawer when item is tapped
+                mDrawerLayout.closeDrawers();
+
+                // Add code here to update the UI based on the item selected
+                // For example, swap UI fragments here
+
+                return true;
+            }
+        });
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
         SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        actionBar.setTitle(SS);
+        //actionBar.setTitle(SS);
 
         AssetManager assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -692,7 +693,7 @@ public class MainActivity extends AppCompatActivity {
                         request = new Request.Builder()
                                 .url(urlvalue)
                                 .headers(customheader)
-
+.header("content-type","multipart/form-data")
                                 .post(requestBody)
                                 .build();
                         Log.v("statusofbodytype", "=============case 1 detected============");
@@ -700,7 +701,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     case "2":
-                        if (rawbody.length() > 0) {
+                        if (rawbody.length() > 0)
+                        {
                             Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
                             MediaType mediaType = MediaType.parse("application/json");
 
@@ -713,11 +715,6 @@ public class MainActivity extends AppCompatActivity {
                                     .build();
 
 
-//                            request = new Request.Builder()
-//                                    .url(urlvalue)
-//                                    .headers(customheader)
-//                                    .post(body)
-//                                    .build();
 
 
                         } else {
@@ -730,8 +727,26 @@ public class MainActivity extends AppCompatActivity {
 
 
                     case "3":
-                        Log.v("statusofbodytype", "=============case 3 detected============");
-                        Log.v("statusofbodytype", "=============case 3 detected============");
+                        if (rawbody.length() > 0)
+                        {
+                            Log.v("statusofbodytype", "=============case 3 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/xml");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder()
+                                    .url(urlvalue)
+                                    .header("User-Agent", "Postman-Android")
+                                    .header("connection","Keep-Alive")
+                                    .post(newbody)
+                                    .build();
+
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112234");
+
+                        }
                         break;
 
 
@@ -1207,18 +1222,18 @@ public class MainActivity extends AppCompatActivity {
         if (WIFI == true)
 
         {
-            //IPaddress = GetDeviceipWiFiData();
-            // mDrawerHeaderTitle.setText(IPaddress);
-            // Log.v("asdasdsadad",IPaddress);
+            IPaddress = GetDeviceipWiFiData();
+             mDrawerHeaderTitle.setText(IPaddress);
+             Log.v("asdasdsadad",IPaddress);
 
 
         }
 
         if (MOBILE == true) {
 
-            //IPaddress = GetDeviceipMobileData();
-            //Log.v("asdasdsadad",IPaddress);
-            //mDrawerHeaderTitle.setText(IPaddress);
+            IPaddress = GetDeviceipMobileData();
+            Log.v("asdasdsadad",IPaddress);
+            mDrawerHeaderTitle.setText(IPaddress);
 
         }
 
@@ -1253,5 +1268,20 @@ public class MainActivity extends AppCompatActivity {
 
         return ip;
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.menu_new_content_facebook){
+            // do something
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -102,7 +102,10 @@ public class BodyFragment extends Fragment {
         AddBody = view.findViewById(R.id.AddBody);
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         body_spinner = view.findViewById(R.id.body_spinner);
-        final String[] request = {"MULTIFORM", "JSON", "XML", "BINARY"};
+        //final String[] request = {"MULTIFORM", "JSON", "XML", "BINARY"};
+
+        final String[] request = {"MULTIFORM", "JSON", "XML"};
+
         //radio_formdata.setChecked(true);
         //String rawbody = prefs.getString("bodytypeflag", null);
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, request);
@@ -123,6 +126,16 @@ public class BodyFragment extends Fragment {
                       case 0:
 
                           Toast.makeText(context,"MULTIFORM",Toast.LENGTH_LONG).show();
+
+
+
+                          Log.v("statusofbodyfragment", "setting bodyflag 1");
+                          editor.putString("bodytypeflag", "1");
+
+                          editor.putString("rawbodytype", "MULTIFORM");
+                          Log.v("statusofbodyfragment", "setting bodyflag "+"1"+" success");
+                          editor.apply();
+
                           formData();
 
                           break;
@@ -130,6 +143,13 @@ public class BodyFragment extends Fragment {
                       case 1:
                           Toast.makeText(context,"JSON",Toast.LENGTH_LONG).show();
                          // body_spinner.setText("JSON");
+
+                          Log.v("statusofbodyfragment", "setting bodyflag 2");
+                          editor.putString("bodytypeflag", "2");
+
+                          editor.putString("rawbodytype", "JSON");
+                          Log.v("statusofbodyfragment", "setting bodyflag "+"2"+" success");
+                          editor.apply();
                           raw();
                           break;
 
@@ -138,12 +158,30 @@ public class BodyFragment extends Fragment {
                           //body_spinner.setText("XML");
 
                           raw();
+
+
+
+                          Log.v("statusofbodyfragment", "setting bodyflag 3");
+                          editor.putString("bodytypeflag", "3");
+
+                          editor.putString("rawbodytype", "XML");
+                          Log.v("statusofbodyfragment", "setting bodyflag "+"3"+" success");
+                          editor.apply();
                           break;
 
                       case 3:
                           Toast.makeText(context,"BINARY",Toast.LENGTH_LONG).show();
                          // body_spinner.setText("BINARY");
                           raw();
+
+
+
+                          Log.v("statusofbodyfragment", "setting bodyflag 4");
+                          editor.putString("bodytypeflag", "4");
+
+                          editor.putString("rawbodytype", "BINARY");
+                          Log.v("statusofbodyfragment", "setting bodyflag "+"4"+" success");
+                          editor.apply();
                           break;
 
 
