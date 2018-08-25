@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
        mDrawerLayout = findViewById(R.id.drawer_layout);
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mHeaderView = navigationView.getHeaderView(0);
         mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.headertitle);
@@ -131,6 +134,17 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+
+
+
+
+
+
+
+
+
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
