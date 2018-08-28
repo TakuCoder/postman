@@ -70,6 +70,7 @@ import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ResponseFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
+import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -1293,8 +1294,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.menu_new_content_facebook){
+        if(id == R.id.history){
             // do something
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

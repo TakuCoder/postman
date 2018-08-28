@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Activities.Splash"
+        <activity
+            android:name=".Activities.Splash"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,25 +31,26 @@
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:label=""
             android:name=".PopupActivities.ParamPopUp"
-
-            android:theme="@style/poptheme"/>
-        <activity
             android:label=""
-            android:name=".PopupActivities.BodyPopUp"
             android:theme="@style/poptheme" />
         <activity
+            android:name=".PopupActivities.BodyPopUp"
             android:label=""
+            android:theme="@style/poptheme" />
+        <activity
             android:name=".PopupActivities.HeaderPopUp"
+            android:label=""
             android:theme="@style/poptheme" />
         <activity
             android:name=".PopupActivities.DeletePopUp"
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
-        <activity android:name=".Activities.wizard"></activity>
-        <activity android:name=".Activities.ResponseActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" ></activity>
+        <activity android:name=".Activities.wizard" />
+        <activity
+            android:name=".Activities.ResponseActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+        <activity android:name=".HistoryActivity"></activity>
     </application>
 
 </manifest>
