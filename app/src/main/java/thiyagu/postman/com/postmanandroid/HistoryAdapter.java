@@ -44,13 +44,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         //getting the historyClass of the specified position
         HistoryClass historyClass = historyClassList.get(position);
 
-        //binding the data with the viewholder views
+      //binding the data with the viewholder views
         holder.textViewTitle.setText(historyClass.getTitle());
         holder.textViewShortDesc.setText(historyClass.getShortdesc());
         holder.textViewRating.setText(String.valueOf(historyClass.getRating()));
         holder.textViewPrice.setText(String.valueOf(historyClass.getPrice()));
 
         holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(historyClass.getImage()));
+
 
     }
 

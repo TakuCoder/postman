@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.yuyh.jsonviewer.library.JsonRecyclerView;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ResponseActivity extends Activity {
@@ -30,11 +33,13 @@ public class ResponseActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.response_activity);
         this.setFinishOnTouchOutside(false);
+
+String url = getIntent().getStringExtra("url");
         responsetype = findViewById(R.id.card_view_responsetype);
 
         responsedata = findViewById(R.id.card_view_responsedata);
         frameLayout_responsetype = findViewById(R.id.frame_ResType);
-    data=findViewById(R.id.datatext);
+        data=findViewById(R.id.datatext);
         main_type = findViewById(R.id.main_type);
         frameLayout_responsedata = findViewById(R.id.frame_ResData);
         jsonplaceholder = findViewById(R.id.jsonplaceholder);
@@ -51,7 +56,9 @@ public class ResponseActivity extends Activity {
         Log.v("asdsadasdasdsadasd",codevalue);
         size.setText("630 bytes");
         //data.setText(responsetext);
+        String time = DateFormat.getDateTimeInstance().format(new Date());
 
+        AutoSave(time,timevalue,url,"630bytes",timevalue);
         try
         {
 
@@ -151,5 +158,19 @@ Log.v("asdsadsadsa","amhere");
         // Delegate everything else to Activity.
         return super.onTouchEvent(event);
     }
+
+    public void AutoSave(String time,String code,String url,String size,String duration)
+    {
+
+Log.v("autosave",time+
+        "\n" +code+
+        "\n" +url+
+        "\n" +size+
+        "\n" +duration+
+        "\n");
+
+    }
+
+
     }
 

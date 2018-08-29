@@ -556,6 +556,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
 
+                final String finalUrlvalue = urlvalue;
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
@@ -615,6 +616,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                     Intent intent = new Intent(MainActivity.this, ResponseActivity.class);
+                                    intent.putExtra("url", finalUrlvalue);
                                     startActivity(intent);
 
 
