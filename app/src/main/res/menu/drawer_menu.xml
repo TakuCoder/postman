@@ -6,7 +6,7 @@
             android:icon="@drawable/ic_copyright_black_24dp"
             android:title="Bookmarks" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="History"/>
         <item

@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import thiyagu.postman.com.postmanandroid.HistoryClass;
+
 /**
  * Created by thiyagu on 3/20/2018.
  */
@@ -20,12 +22,21 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME_PARAM = "param";
     private static final String TABLE_NAME_BODY = "body";
     private static final String TABLE_NAME_RESPONSE = "response";
+    private static final String TABLE_NAME_HISTORY = "history";
     private static final String COLUMN_RESPONSE = "columnresponse";
     private static final String TABLE_NAME_HEADER = "header";
     private static final String ID = "id";
     private static final String COLUMN_KEY = "key";
     private static final String COLUMN_FLAG = "flag";
     private static final String COLUMN_VALUE = "value";
+
+
+    private static final String COLUMN_TIME = "time";
+    private static final String COLUMN_CODE = "response_code";
+    private static final String COLUMN_URL = "url";
+    private static final String COLUMN_SIZE = "size";
+    private static final String COLUMN_DURATION = "duration";
+
 
     private static final String SQL_CREATE_TABLE_PARAM =
             "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_PARAM + " (" +
@@ -34,6 +45,17 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     FeedReaderDbHelper.COLUMN_FLAG + " TEXT," +
                     FeedReaderDbHelper.COLUMN_VALUE + " TEXT)";
 
+
+
+
+    private static final String SQL_CREATE_TABLE_HISTORY =
+            "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_HISTORY + " (" +
+                    FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
+                    FeedReaderDbHelper.COLUMN_TIME + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_CODE + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_URL + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_SIZE + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_DURATION + " TEXT)";
 
 
 
@@ -61,7 +83,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_PARAM);
         db.execSQL(SQL_CREATE_TABLE_BODY);
         db.execSQL(SQL_CREATE_TABLE_HEADER);
-
+        db.execSQL(SQL_CREATE_TABLE_HISTORY);
 
     }
 
@@ -70,7 +92,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PARAM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BODY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_HEADER);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_HISTORY);
         onCreate(db);
 
 
@@ -89,6 +111,23 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
 
     }
+
+    public void addEntryHistory(HistoryClass historyClass) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TIME, historyClass.getTime());
+        values.put(COLUMN_CODE, historyClass.getResponse_code());
+        values.put(COLUMN_URL, historyClass.getUrl());
+        values.put(COLUMN_SIZE, historyClass.getSize());
+        values.put(COLUMN_DURATION, historyClass.getTime());
+        db.insert(TABLE_NAME_HISTORY, null, values);
+        PrintAllParam();
+        db.close();
+
+
+    }
+
 
     public void addEntryBody(DataPojoClass dataPojoClass) {
 
@@ -134,6 +173,36 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
 
             array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_KEY)) + "@@" + res.getString(res.getColumnIndex(COLUMN_VALUE)));
+            res.moveToNext();
+        }
+        db.close();
+        return array_list;
+
+    }
+
+
+
+    public ArrayList<String> getAllhistory() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+
+//        values.put(COLUMN_TIME, historyClass.getTime());
+//        values.put(COLUMN_CODE, historyClass.getResponse_code());
+//        values.put(COLUMN_URL, historyClass.getUrl());
+//        values.put(COLUMN_SIZE, historyClass.getSize());
+//        values.put(COLUMN_DURATION, historyClass.getTime());
+//        db.insert(TABLE_NAME_HISTORY, null, values);
+
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HISTORY, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_URL)) + "@@" + res.getString(res.getColumnIndex(COLUMN_TIME)) + "@@" + res.getString(res.getColumnIndex(COLUMN_SIZE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_CODE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_DURATION)));
             res.moveToNext();
         }
         db.close();

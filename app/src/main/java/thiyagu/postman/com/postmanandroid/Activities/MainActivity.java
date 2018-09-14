@@ -204,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
             {
 
-                if (isValid(UrlField.getText().toString())) {
+                if (isValid(UrlField.getText().toString()))
+                {
 
 
 
@@ -417,8 +418,6 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-//                    TabLayout.Tab tab1 = tabLayout.getTabAt(4);
-//                    tab1.select();
 
 
                 } else {
@@ -1298,8 +1297,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.history){
             // do something
+
             Intent intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
+            Toast.makeText(getApplicationContext(),"selected hos",Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }

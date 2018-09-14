@@ -17,6 +17,8 @@ import com.yuyh.jsonviewer.library.JsonRecyclerView;
 import java.text.DateFormat;
 import java.util.Date;
 
+import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ResponseActivity extends Activity {
@@ -161,14 +163,16 @@ Log.v("asdsadsadsa","amhere");
 
     public void AutoSave(String time,String code,String url,String size,String duration)
     {
-
-Log.v("autosave",time+
+        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
+        HistoryClass historyClass = new HistoryClass(url,time,size,code,duration);
+        Log.v("autosave",time+
         "\n" +code+
         "\n" +url+
         "\n" +size+
         "\n" +duration+
         "\n");
 
+feedReaderDbHelper.addEntryHistory(historyClass);
     }
 
 
