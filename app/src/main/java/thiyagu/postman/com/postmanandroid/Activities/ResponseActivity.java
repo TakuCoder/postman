@@ -164,7 +164,7 @@ Log.v("asdsadsadsa","amhere");
     public void AutoSave(String time,String code,String url,String size,String duration)
     {
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-        HistoryClass historyClass = new HistoryClass(url,time,size,code,duration);
+        HistoryClass historyClass = new HistoryClass(url,time,size,code,duration,"GET",1);
         Log.v("autosave",time+
         "\n" +code+
         "\n" +url+

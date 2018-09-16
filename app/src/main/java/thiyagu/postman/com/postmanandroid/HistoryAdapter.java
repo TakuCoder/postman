@@ -18,8 +18,9 @@ import java.util.List;
  * Created by Belal on 10/18/2017.
  */
 
-
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
+import static thiyagu.postman.com.postmanandroid.HistoryClass.DATE_TYPE;
+import static thiyagu.postman.com.postmanandroid.HistoryClass.RESPONSE_TYPE;
+public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     //this context we will use to inflate the layout
@@ -37,26 +38,53 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //inflating and returning our view holder
-        LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.cardview_layout, null);
-        return new HistoryViewHolder(view);
+        View view;
+        LayoutInflater inflater;
+        switch (viewType)
+        {
+
+            case DATE_TYPE:
+
+                inflater   = LayoutInflater.from(mCtx);
+                 view = inflater.inflate(R.layout.date, null);
+                return new HistoryViewHolder(view);
+
+
+            case RESPONSE_TYPE:
+
+               inflater = LayoutInflater.from(mCtx);
+               view = inflater.inflate(R.layout.cardview_layout, null);
+                return new HistoryViewHolder(view);
+
+
+
+
+        }
+
+return null;
     }
 
     @Override
-    public void onBindViewHolder(final HistoryViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         //getting the historyClass of the specified position
         final HistoryClass historyClass = historyClassList.get(position);
 
       //binding the data with the viewholder views
+switch (holder.getItemViewType())
+{
+    case DATE_TYPE:
+        ((DateViewHolder) holder).url.setText(historyClass.getUrl());
+        break;
 
+    case RESPONSE_TYPE:
 
-        holder.url.setText(historyClass.getUrl());
-        holder.duration.setText(historyClass.getDuration());
-        holder.size.setText(String.valueOf(historyClass.getSize()));
-        holder.history_cardview.setTag(historyClass.getTag());
-        holder.response_code.setText(String.valueOf(historyClass.getResponse_code()));
-        holder.imageView.setBackgroundColor(mCtx.getResources().getColor(R.color.green));
-        holder.time.setText(String.valueOf(historyClass.getTime()));
+        ((HistoryViewHolder) holder).url.setText(historyClass.getUrl());
+        ((HistoryViewHolder) holder).duration.setText(historyClass.getDuration());
+        ((HistoryViewHolder) holder).size.setText(String.valueOf(historyClass.getSize()));
+        ((HistoryViewHolder) holder).history_cardview.setTag(historyClass.getTag());
+        ((HistoryViewHolder) holder).response_code.setText(String.valueOf(historyClass.getResponse_code()));
+        ((HistoryViewHolder) holder).imageView.setBackgroundColor(mCtx.getResources().getColor(R.color.green));
+        ((HistoryViewHolder) holder).time.setText(String.valueOf(historyClass.getTime()));
         //holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(historyClass.getResponse_code()));
 //holder.history_cardview.setOnLongClickListener(new View.OnLongClickListener() {
 //    @Override
@@ -74,12 +102,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                 historyClass.getTag()+" tag"+"\n"+
                 historyClass.getUrl()+" url"+"\n"
         );
-        holder.history_cardview.setOnClickListener(new View.OnClickListener() {
+        ((HistoryViewHolder) holder).history_cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mCtx,holder.history_cardview.getTag().toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mCtx,((HistoryViewHolder) holder).history_cardview.getTag().toString(),Toast.LENGTH_LONG).show();
             }
         });
+        break;
+
+
+}
+
+
 
     }
 
@@ -106,5 +140,28 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             response_code = itemView.findViewById(R.id.responsecode);
             imageView = itemView.findViewById(R.id.imageView);
         }
+    }
+
+
+    class DateViewHolder extends RecyclerView.ViewHolder {
+
+        TextView url;
+
+        public DateViewHolder(View itemView) {
+            super(itemView);
+
+            url = itemView.findViewById(R.id.url);
+
+        }
+    }
+    @Override
+    public int getItemViewType(int position) {
+        if (historyClassList != null) {
+         HistoryClass   object = historyClassList.get(position);
+            if (object != null) {
+                return object.getmType();
+            }
+        }
+        return 0;
     }
 }

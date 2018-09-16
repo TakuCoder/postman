@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
@@ -34,14 +35,19 @@ public class HistoryActivity extends AppCompatActivity {
        ArrayList<String> aa= feedReaderDbHelper.getAllhistory();
 
         Log.v("thisistoprintAA",aa.toString());
-
+        HashMap<String,HistoryClass> hashMap = new HashMap<String,HistoryClass>();
 for(int i =0;i<aa.size();i++)
 {
 
 
     String value[] = aa.get(i).split("@@");
+    Object dataa = hashMap.get(value[7]);
+    if(dataa ==null)
+    {
+        hashMap.put(value[7],new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6]));
 
-    historyClassList.add(new HistoryClass(value[1],value[2],value[3],value[4],value[5]));
+    }
+    historyClassList.add(new );
 
 }
         //adding some items to our list

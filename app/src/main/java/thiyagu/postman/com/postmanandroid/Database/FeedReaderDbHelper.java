@@ -36,7 +36,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String COLUMN_URL = "url";
     private static final String COLUMN_SIZE = "size";
     private static final String COLUMN_DURATION = "duration";
-
+    private static final String COLUMN_REQTYPE = "reqtype";
 
     private static final String SQL_CREATE_TABLE_PARAM =
             "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_PARAM + " (" +
@@ -55,6 +55,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     FeedReaderDbHelper.COLUMN_CODE + " TEXT," +
                     FeedReaderDbHelper.COLUMN_URL + " TEXT," +
                     FeedReaderDbHelper.COLUMN_SIZE + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_REQTYPE + " TEXT," +
                     FeedReaderDbHelper.COLUMN_DURATION + " TEXT)";
 
 
@@ -202,7 +203,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         while (res.isAfterLast() == false) {
             //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
 
-            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_URL)) + "@@" + res.getString(res.getColumnIndex(COLUMN_TIME)) + "@@" + res.getString(res.getColumnIndex(COLUMN_SIZE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_CODE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_DURATION)));
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_URL)) + "@@" + res.getString(res.getColumnIndex(COLUMN_TIME)) + "@@" + res.getString(res.getColumnIndex(COLUMN_SIZE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_CODE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_DURATION))+ "@@" + res.getString(res.getColumnIndex(COLUMN_REQTYPE)));
             res.moveToNext();
         }
         db.close();
