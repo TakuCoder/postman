@@ -32,24 +32,43 @@ public class HistoryActivity extends AppCompatActivity {
         historyClassList = new ArrayList<>();
 
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-       ArrayList<String> aa= feedReaderDbHelper.getAllhistory();
+        ArrayList<String> aa = feedReaderDbHelper.getAllhistory();
 
-        Log.v("thisistoprintAA",aa.toString());
-        HashMap<String,HistoryClass> hashMap = new HashMap<String,HistoryClass>();
-for(int i =0;i<aa.size();i++)
-{
+        Log.v("thisistoprintAA", aa.toString());
+       // HashMap<String, HistoryClass> hashMap = new HashMap<String, HistoryClass>();
+ArrayList<String> datelist = new ArrayList<>();
+        for(int i=0;i<aa.size();i++)
+        {
+            String value[] = aa.get(i).split("@@");
+            datelist.add(value[2]);
 
+        }
+        Log.v("sadasdasdsada",datelist.toString());
+        Object[] date = datelist.toArray();
 
-    String value[] = aa.get(i).split("@@");
-    Object dataa = hashMap.get(value[7]);
-    if(dataa ==null)
-    {
-        hashMap.put(value[7],new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6]));
+        for(Object o:date)
+        {
+            if(datelist.indexOf(o)!=datelist.indexOf(o))
+            {
 
-    }
-    historyClassList.add(new );
+                datelist.remove(datelist.indexOf(o));
 
-}
+            }
+        }
+
+Log.v("sadasdasdsada",datelist.toString());
+//        for (int i = 0; i < aa.size(); i++) {
+//
+//
+//            String value[] = aa.get(i).split("@@");
+//            Object dataa = hashMap.get(value[7]);
+//            if (dataa == null) {
+//                hashMap.put(value[7], new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6]));
+//
+//            }
+//            historyClassList.add(new);
+//
+//        }
         //adding some items to our list
 //        historyClassList.add(
 //                new HistoryClass(

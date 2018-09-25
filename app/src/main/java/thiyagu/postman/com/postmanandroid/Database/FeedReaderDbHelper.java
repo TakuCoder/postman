@@ -210,6 +210,38 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         return array_list;
 
     }
+
+
+    public ArrayList<String> getDate() {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+
+//        values.put(COLUMN_TIME, historyClass.getTime());
+//        values.put(COLUMN_CODE, historyClass.getResponse_code());
+//        values.put(COLUMN_URL, historyClass.getUrl());
+//        values.put(COLUMN_SIZE, historyClass.getSize());
+//        values.put(COLUMN_DURATION, historyClass.getTime());
+//        db.insert(TABLE_NAME_HISTORY, null, values);
+
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HISTORY, null);
+        res.moveToFirst();
+
+        while (res.isAfterLast() == false) {
+            //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
+
+            array_list.add(res.getString(res.getColumnIndex(COLUMN_TIME)) );
+            res.moveToNext();
+        }
+        db.close();
+        return array_list;
+
+    }
+
+
+
     public ArrayList<String> getAllResponse() {
         ArrayList<String> array_list = new ArrayList<String>();
 

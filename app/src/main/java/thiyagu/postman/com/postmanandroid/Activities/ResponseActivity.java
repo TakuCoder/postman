@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.yuyh.jsonviewer.library.JsonRecyclerView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
@@ -59,8 +60,19 @@ String url = getIntent().getStringExtra("url");
         size.setText("630 bytes");
         //data.setText(responsetext);
         String time = DateFormat.getDateTimeInstance().format(new Date());
+        ///SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-        AutoSave(time,timevalue,url,"630bytes",timevalue);
+
+
+        SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss.SSS");
+        Log.v("asdadsa",timee.format(new Date()));
+
+
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        Log.v("asdadsa",date.format(new Date()));
+
+        AutoSave(timee.format(new Date()),timevalue,url,"630bytes",date.format(new Date()));
         try
         {
 
