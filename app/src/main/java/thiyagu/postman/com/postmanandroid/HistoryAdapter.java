@@ -85,6 +85,7 @@ switch (holder.getItemViewType())
         ((HistoryViewHolder) holder).response_code.setText(String.valueOf(historyClass.getResponse_code()));
         ((HistoryViewHolder) holder).imageView.setBackgroundColor(mCtx.getResources().getColor(R.color.green));
         ((HistoryViewHolder) holder).time.setText(String.valueOf(historyClass.getTime()));
+
         //holder.imageView.setImageDrawable(mCtx.getResources().getDrawable(historyClass.getResponse_code()));
 //holder.history_cardview.setOnLongClickListener(new View.OnLongClickListener() {
 //    @Override

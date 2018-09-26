@@ -35,28 +35,33 @@ public class HistoryActivity extends AppCompatActivity {
         ArrayList<String> aa = feedReaderDbHelper.getAllhistory();
 
         Log.v("thisistoprintAA", aa.toString());
-       // HashMap<String, HistoryClass> hashMap = new HashMap<String, HistoryClass>();
-ArrayList<String> datelist = new ArrayList<>();
-        for(int i=0;i<aa.size();i++)
-        {
+        // HashMap<String, HistoryClass> hashMap = new HashMap<String, HistoryClass>();
+        ArrayList<String> datelist = new ArrayList<>();
+        for (int i = 0; i < aa.size(); i++) {
             String value[] = aa.get(i).split("@@");
+
+            for(int k=0;k<value.length;k++)
+            {
+
+                Log.v("ggjg",value[k]);
+
+            }
+
             datelist.add(value[2]);
 
         }
-        Log.v("sadasdasdsada",datelist.toString());
+        // Log.v("sadasdasdsada",datelist.toString());
         Object[] date = datelist.toArray();
 
-        for(Object o:date)
-        {
-            if(datelist.indexOf(o)!=datelist.indexOf(o))
-            {
+        for (Object o : date) {
+            if (datelist.indexOf(o) != datelist.indexOf(o)) {
 
                 datelist.remove(datelist.indexOf(o));
 
             }
         }
 
-Log.v("sadasdasdsada",datelist.toString());
+        Log.v("sadasdasdsada", datelist.toString());
 //        for (int i = 0; i < aa.size(); i++) {
 //
 //

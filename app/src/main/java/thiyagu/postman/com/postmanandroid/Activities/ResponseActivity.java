@@ -28,21 +28,22 @@ public class ResponseActivity extends Activity {
 
     CardView responsedata;
 
-    TextView status, time, size,data;
-    LinearLayout frameLayout_responsetype, frameLayout_responsedata,main_type,jsonplaceholder;
+    TextView status, time, size, data;
+    LinearLayout frameLayout_responsetype, frameLayout_responsedata, main_type, jsonplaceholder;
     JsonRecyclerView jsonRecyclerView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.response_activity);
         this.setFinishOnTouchOutside(false);
 
-String url = getIntent().getStringExtra("url");
+        String url = getIntent().getStringExtra("url");
         responsetype = findViewById(R.id.card_view_responsetype);
 
         responsedata = findViewById(R.id.card_view_responsedata);
         frameLayout_responsetype = findViewById(R.id.frame_ResType);
-        data=findViewById(R.id.datatext);
+        data = findViewById(R.id.datatext);
         main_type = findViewById(R.id.main_type);
         frameLayout_responsedata = findViewById(R.id.frame_ResData);
         jsonplaceholder = findViewById(R.id.jsonplaceholder);
@@ -54,36 +55,33 @@ String url = getIntent().getStringExtra("url");
         final String responsetext = prefs.getString("response", null);
         final String timevalue = prefs.getString("time", null);
         final String codevalue = prefs.getString("code", null);
-        status.setText(codevalue+ " OK");
+        status.setText(codevalue + " OK");
         time.setText("TIME " + timevalue + " ms");
-        Log.v("asdsadasdasdsadasd",codevalue);
+        Log.v("asdsadasdasdsadasd", codevalue);
         size.setText("630 bytes");
         //data.setText(responsetext);
         String time = DateFormat.getDateTimeInstance().format(new Date());
         ///SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 
-
         SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss.SSS");
-        Log.v("asdadsa",timee.format(new Date()));
-
+        Log.v("asdadsa", timee.format(new Date()));
 
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        Log.v("asdadsa",date.format(new Date()));
+        Log.v("asdadsa", date.format(new Date()));
 
-        AutoSave(timee.format(new Date()),timevalue,url,"630bytes",date.format(new Date()));
-        try
-        {
+        AutoSave(date.format(new Date()), timevalue, url, "630bytes", date.format(new Date()));
+        try {
 
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     jsonRecyclerView.setVisibility(View.VISIBLE);
-                    Log.v("responsetext2","=====================================");
-                    Log.v("responsetext2",responsetext);
+                    Log.v("responsetext2", "=====================================");
+                    Log.v("responsetext2", responsetext);
                     jsonRecyclerView.bindJson(responsetext);
-                    Log.v("responsetext2","=====================================");
+                    Log.v("responsetext2", "=====================================");
                     jsonRecyclerView.setKeyColor(getResources().getColor(R.color.lawn_green));
                     jsonRecyclerView.setValueTextColor(getResources().getColor(R.color.keycolor));
                     jsonRecyclerView.setValueNumberColor(getResources().getColor(R.color.keycolor));
@@ -94,10 +92,7 @@ String url = getIntent().getStringExtra("url");
             });
 
 
-
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
 
             Log.d("sadasdasdasd", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             data.setVisibility(View.VISIBLE);
@@ -106,8 +101,6 @@ String url = getIntent().getStringExtra("url");
             Log.d("sadasdasdasd", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Exception in ResponseFrag,no valid json found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         }
-
-
 
 
         responsetype.setOnClickListener(new View.OnClickListener() {
@@ -141,12 +134,11 @@ String url = getIntent().getStringExtra("url");
                 }
             }
         });
-        Log.v("codevalue is",codevalue);
-        Log.v("codevalue is","200");
-        if(String.valueOf(codevalue).trim().equals("200"))
-        {
+        Log.v("codevalue is", codevalue);
+        Log.v("codevalue is", "200");
+        if (String.valueOf(codevalue).trim().equals("200")) {
             main_type.setBackgroundColor(getResources().getColor(R.color.yellow_green));
-Log.v("asdsadsadsa","amhere");
+            Log.v("asdsadsadsa", "amhere");
         }
     }
 
@@ -173,20 +165,19 @@ Log.v("asdsadsadsa","amhere");
         return super.onTouchEvent(event);
     }
 
-    public void AutoSave(String time,String code,String url,String size,String duration)
-    {
+    public void AutoSave(String time, String code, String url, String size, String duration) {
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-        HistoryClass historyClass = new HistoryClass(url,time,size,code,duration,"GET",1);
-        Log.v("autosave",time+
-        "\n" +code+
-        "\n" +url+
-        "\n" +size+
-        "\n" +duration+
-        "\n");
+        HistoryClass historyClass = new HistoryClass(url, time, size, code, duration, "GET", 1);
+        Log.v("autosave", time +
+                "\n" + code +
+                "\n" + url +
+                "\n" + size +
+                "\n" + duration +
+                "\n");
 
-feedReaderDbHelper.addEntryHistory(historyClass);
+        feedReaderDbHelper.addEntryHistory(historyClass);
     }
 
 
-    }
+}
 
