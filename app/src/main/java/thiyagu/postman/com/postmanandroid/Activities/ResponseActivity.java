@@ -53,25 +53,27 @@ public class ResponseActivity extends Activity {
         jsonRecyclerView = findViewById(R.id.rv_json);
         SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         final String responsetext = prefs.getString("response", null);
-        final String timevalue = prefs.getString("time", null);
-        final String codevalue = prefs.getString("code", null);
-        status.setText(codevalue + " OK");
-        time.setText("TIME " + timevalue + " ms");
-        Log.v("asdsadasdasdsadasd", codevalue);
+        final String duration = prefs.getString("time", null);
+        final String response_code = prefs.getString("code", null);
+        status.setText(response_code + " OK");
+        time.setText("TIME " + duration + " ms");
+        Log.v("asdsadasdasdsadasd", response_code);
         size.setText("630 bytes");
         //data.setText(responsetext);
         String time = DateFormat.getDateTimeInstance().format(new Date());
         ///SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 
-        SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss.SSS");
+        SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss");
         Log.v("asdadsa", timee.format(new Date()));
 
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         Log.v("asdadsa", date.format(new Date()));
 
-        AutoSave(date.format(new Date()), timevalue, url, "630bytes", date.format(new Date()));
+
+        //String url, String time, String size, String response_code, String Duration,String reqtype,int type
+        AutoSave(url, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, "GET", 1);
         try {
 
             this.runOnUiThread(new Runnable() {
@@ -86,7 +88,6 @@ public class ResponseActivity extends Activity {
                     jsonRecyclerView.setValueTextColor(getResources().getColor(R.color.keycolor));
                     jsonRecyclerView.setValueNumberColor(getResources().getColor(R.color.keycolor));
                     jsonRecyclerView.setValueUrlColor(getResources().getColor(R.color.keycolor));
-
                     data.setVisibility(View.GONE);
                 }
             });
@@ -134,9 +135,9 @@ public class ResponseActivity extends Activity {
                 }
             }
         });
-        Log.v("codevalue is", codevalue);
+        Log.v("codevalue is", response_code);
         Log.v("codevalue is", "200");
-        if (String.valueOf(codevalue).trim().equals("200")) {
+        if (String.valueOf(response_code).trim().equals("200")) {
             main_type.setBackgroundColor(getResources().getColor(R.color.yellow_green));
             Log.v("asdsadsadsa", "amhere");
         }
@@ -165,14 +166,16 @@ public class ResponseActivity extends Activity {
         return super.onTouchEvent(event);
     }
 
-    public void AutoSave(String time, String code, String url, String size, String duration) {
+    public void AutoSave(String url, String date,String time, String size, String response_code, String Duration, String reqtype, int type) {
+
+
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-        HistoryClass historyClass = new HistoryClass(url, time, size, code, duration, "GET", 1);
-        Log.v("autosave", time +
-                "\n" + code +
+        HistoryClass historyClass = new HistoryClass(url, date,time, size, response_code, Duration, reqtype, type);
+        Log.v("autosave", date +
+                "\n" + response_code +
                 "\n" + url +
                 "\n" + size +
-                "\n" + duration +
+                "\n" + Duration +
                 "\n");
 
         feedReaderDbHelper.addEntryHistory(historyClass);

@@ -47,7 +47,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 inflater   = LayoutInflater.from(mCtx);
                  view = inflater.inflate(R.layout.date, null);
-                return new HistoryViewHolder(view);
+                return new DateViewHolder(view);
 
 
             case RESPONSE_TYPE:
@@ -73,11 +73,12 @@ return null;
 switch (holder.getItemViewType())
 {
     case DATE_TYPE:
-        ((DateViewHolder) holder).url.setText(historyClass.getUrl());
+        ((DateViewHolder) holder).titleTextView.setText(historyClass.getUrl());
+        Log.v("whichview","1");
         break;
 
     case RESPONSE_TYPE:
-
+        Log.v("whichview","2");
         ((HistoryViewHolder) holder).url.setText(historyClass.getUrl());
         ((HistoryViewHolder) holder).duration.setText(historyClass.getDuration());
         ((HistoryViewHolder) holder).size.setText(String.valueOf(historyClass.getSize()));
@@ -146,12 +147,12 @@ switch (holder.getItemViewType())
 
     class DateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView url;
+        TextView titleTextView;
 
         public DateViewHolder(View itemView) {
             super(itemView);
 
-            url = itemView.findViewById(R.id.url);
+            titleTextView = itemView.findViewById(R.id.titleTextView);
 
         }
     }

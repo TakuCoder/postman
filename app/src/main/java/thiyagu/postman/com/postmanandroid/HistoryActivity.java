@@ -8,7 +8,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 
@@ -32,48 +35,64 @@ public class HistoryActivity extends AppCompatActivity {
         historyClassList = new ArrayList<>();
 
         FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-        ArrayList<String> aa = feedReaderDbHelper.getAllhistory();
+        ArrayList<String> aa = feedReaderDbHelper.getDate();
 
         Log.v("thisistoprintAA", aa.toString());
-        // HashMap<String, HistoryClass> hashMap = new HashMap<String, HistoryClass>();
-        ArrayList<String> datelist = new ArrayList<>();
-        for (int i = 0; i < aa.size(); i++) {
-            String value[] = aa.get(i).split("@@");
-
-            for(int k=0;k<value.length;k++)
-            {
-
-                Log.v("ggjg",value[k]);
-
-            }
-
-            datelist.add(value[2]);
-
-        }
-        // Log.v("sadasdasdsada",datelist.toString());
-        Object[] date = datelist.toArray();
-
-        for (Object o : date) {
-            if (datelist.indexOf(o) != datelist.indexOf(o)) {
-
-                datelist.remove(datelist.indexOf(o));
-
-            }
-        }
-
-        Log.v("sadasdasdsada", datelist.toString());
-//        for (int i = 0; i < aa.size(); i++) {
-//
-//
+//       // HashMap<String, HistoryClass> hashMap = new HashMap<String, HistoryClass>();
+//ArrayList<String> datelist = new ArrayList<>();
+//        for(int i=0;i<aa.size();i++)
+//        {
 //            String value[] = aa.get(i).split("@@");
-//            Object dataa = hashMap.get(value[7]);
-//            if (dataa == null) {
-//                hashMap.put(value[7], new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6]));
-//
-//            }
-//            historyClassList.add(new);
+//            datelist.add(value[2]);
 //
 //        }
+//
+//
+//        Set<String> non_dup_dates = new LinkedHashSet<>(datelist);
+//
+//        datelist.clear();
+//        datelist.addAll(non_dup_dates);
+//        Log.v("asdasdasdsad",datelist.toString());
+
+
+        for (int k = 0; k < aa.size(); k++) {
+
+//            if(k==0)
+//            {
+//                        historyClassList.add(new HistoryClass("https://www.google.com", "200ms", "680", "200","22.00.00"));
+//
+//            }
+//            else
+//            {
+//
+//
+//
+//            }
+
+            ArrayList<String> data = feedReaderDbHelper.getAllhistory(aa.get(k));
+
+            for (int u = 0; u < data.size(); u++) {
+
+
+                String value[]=data.get(u).split("@@");
+
+
+
+                if (u == 0) {
+                    historyClassList.add(new HistoryClass(value[2],"","","","","","",0));
+                    historyClassList.add(new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6],value[7],1));
+
+                } else {
+                    historyClassList.add(new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6],value[7],1));
+
+                }
+
+            }
+
+
+        }
+
+
         //adding some items to our list
 //        historyClassList.add(
 //                new HistoryClass(

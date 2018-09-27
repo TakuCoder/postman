@@ -37,7 +37,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SIZE = "size";
     private static final String COLUMN_DURATION = "duration";
     private static final String COLUMN_REQTYPE = "reqtype";
-
+    private static final String COLUMN_TYPE = "type";
+    private static final String COLUMN_DATE = "date";
     private static final String SQL_CREATE_TABLE_PARAM =
             "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_PARAM + " (" +
                     FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
@@ -56,6 +57,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     FeedReaderDbHelper.COLUMN_URL + " TEXT," +
                     FeedReaderDbHelper.COLUMN_SIZE + " TEXT," +
                     FeedReaderDbHelper.COLUMN_REQTYPE + " TEXT," +
+                    FeedReaderDbHelper.COLUMN_DATE + " DATE," +
+                    FeedReaderDbHelper.COLUMN_TYPE + " TEXT," +
                     FeedReaderDbHelper.COLUMN_DURATION + " TEXT)";
 
 
@@ -120,8 +123,11 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TIME, historyClass.getTime());
         values.put(COLUMN_CODE, historyClass.getResponse_code());
         values.put(COLUMN_URL, historyClass.getUrl());
+        values.put(COLUMN_DATE,historyClass.getDate());
+        values.put(COLUMN_REQTYPE, historyClass.getReqtype());
+        values.put(COLUMN_TYPE, historyClass.getmType());
         values.put(COLUMN_SIZE, historyClass.getSize());
-        values.put(COLUMN_DURATION, historyClass.getTime());
+        values.put(COLUMN_DURATION, historyClass.getDuration());
         db.insert(TABLE_NAME_HISTORY, null, values);
         PrintAllParam();
         db.close();
@@ -183,10 +189,10 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
 
 
-    public ArrayList<String> getAllhistory() {
+    public ArrayList<String> getAllhistory(String date) {
         ArrayList<String> array_list = new ArrayList<String>();
 
-
+//String url, String date,String time, String size, String response_code, String Duration,String reqtype,int type
 //        values.put(COLUMN_TIME, historyClass.getTime());
 //        values.put(COLUMN_CODE, historyClass.getResponse_code());
 //        values.put(COLUMN_URL, historyClass.getUrl());
@@ -197,25 +203,28 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HISTORY, null);
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HISTORY+" where "+COLUMN_DATE+" = '"+date+"'", null);
+       Log.v("asdasdasd","select * from " + TABLE_NAME_HISTORY+" where "+COLUMN_DATE+" = "+date);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
             //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
 
-            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_URL)) + "@@" + res.getString(res.getColumnIndex(COLUMN_TIME)) + "@@" + res.getString(res.getColumnIndex(COLUMN_SIZE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_CODE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_DURATION))+ "@@" + res.getString(res.getColumnIndex(COLUMN_REQTYPE)));
+            array_list.add(res.getString(res.getColumnIndex(ID)) + "@@" + res.getString(res.getColumnIndex(COLUMN_URL)) + "@@" + res.getString(res.getColumnIndex(COLUMN_DATE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_TIME)) + "@@"+res.getString(res.getColumnIndex(COLUMN_SIZE)) + "@@" + res.getString(res.getColumnIndex(COLUMN_CODE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_DURATION))+ "@@" + res.getString(res.getColumnIndex(COLUMN_REQTYPE))+ "@@" + res.getString(res.getColumnIndex(COLUMN_TYPE)));
             res.moveToNext();
         }
         db.close();
         return array_list;
 
     }
+
+
 
 
     public ArrayList<String> getDate() {
         ArrayList<String> array_list = new ArrayList<String>();
 
-
+//String url, String date,String time, String size, String response_code, String Duration,String reqtype,int type
 //        values.put(COLUMN_TIME, historyClass.getTime());
 //        values.put(COLUMN_CODE, historyClass.getResponse_code());
 //        values.put(COLUMN_URL, historyClass.getUrl());
@@ -226,19 +235,23 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from " + TABLE_NAME_HISTORY, null);
+        Cursor res = db.rawQuery("select DISTINCT "+COLUMN_DATE+" from " + TABLE_NAME_HISTORY, null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {
             //array_list.add(res.getString(res.getColumnIndex(COLUMN_KEY)) +"@@"+res.getString(res.getColumnIndex(COLUMN_VALUE))+"@@"+res.getString(res.getColumnIndex(COLUMN_FLAG)));
 
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_TIME)) );
+            array_list.add(res.getString(res.getColumnIndex(COLUMN_DATE)));
             res.moveToNext();
         }
         db.close();
         return array_list;
 
     }
+
+
+
+
 
 
 
