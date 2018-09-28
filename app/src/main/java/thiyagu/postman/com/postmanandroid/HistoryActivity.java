@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.PopupActivities.DifferentRowAdapter;
 
 public class HistoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -126,7 +127,7 @@ public class HistoryActivity extends AppCompatActivity {
 
 
         //creating recyclerview adapter
-        HistoryAdapter adapter = new HistoryAdapter(this, historyClassList);
+        DifferentRowAdapter adapter = new DifferentRowAdapter(historyClassList);
 
         //setting adapter to recyclerview
         recyclerView.setAdapter(adapter);

@@ -47,7 +47,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 inflater   = LayoutInflater.from(mCtx);
                  view = inflater.inflate(R.layout.date, null);
-                return new DateViewHolder(view);
+                return new HistoryViewHolder(view);
 
 
             case RESPONSE_TYPE:
