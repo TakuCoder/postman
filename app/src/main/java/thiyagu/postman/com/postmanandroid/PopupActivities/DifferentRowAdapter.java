@@ -57,6 +57,8 @@ public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_layout, parent, false);
                 return new DateViewHolder(view);
 
+
+
 //                inflater = LayoutInflater.from(mCtx);
 //                view = inflater.inflate(R.layout.cardview_layout, null);
 //                return new HistoryAdapter.HistoryViewHolder(view);
