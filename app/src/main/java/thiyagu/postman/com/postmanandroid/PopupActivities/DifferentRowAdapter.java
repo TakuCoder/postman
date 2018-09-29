@@ -94,6 +94,8 @@ public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public DateViewHolder(View itemView) {
             super(itemView);
 
+
+
             titleTextView = itemView.findViewById(R.id.titleTextView);
 
         }
