@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headerlist.size() > 0) {
-
+                        Log.v(Tag,"=======================adding headers=========================");
                         for (int i = 0; i < headerlist.size(); i++)
 
                         {
@@ -222,12 +222,13 @@ public class MainActivity extends AppCompatActivity {
                             String[] subvalue = headerlist.get(i).split("@@");
 
 
-                            Log.v(Tag, "btn_send_selected" + subvalue[0]);
-                            Log.v(Tag, "btn_send_selected" + subvalue[1]);
+                          //  Log.v(Tag, "btn_send_selected" + subvalue[0]);
+                          //  Log.v(Tag, "btn_send_selected" + subvalue[1]);
+                            Log.v(Tag,subvalue[1]+subvalue[2]);
                             headerBuilder.add(subvalue[1], subvalue[2]);
                         }
                     }
-
+                    Log.v(Tag,"=======================added headers=========================");
 
                     try
 
