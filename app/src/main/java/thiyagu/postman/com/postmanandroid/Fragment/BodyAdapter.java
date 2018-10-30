@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -106,13 +107,14 @@ public class BodyAdapter extends RecyclerView
                 // Log.v("asdasdasd",String.valueOf(position));
 
                 String sss = holder.card_view.getTag().toString();
-                Intent intent = new Intent(mcontext, DeletePopUp.class);
-                intent.putExtra("deleteid",String.valueOf(sss));
-                intent.putExtra("whichrecord","body");
-                mcontext.startActivity(intent);
+//                Intent intent = new Intent(mcontext, DeletePopUp.class);
+//                intent.putExtra("deleteid",String.valueOf(sss));
+//                intent.putExtra("whichrecord","body");
+//                mcontext.startActivity(intent);
 
-
-
+                FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
+                feedReaderDbHelper.DeleteSingleRecBody(Integer.parseInt(sss));
+                deleteItem(position);
             }
         });
 
