@@ -168,7 +168,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import thiyagu.postman.com.postmanandroid.Activities.CityEvent;
 import thiyagu.postman.com.postmanandroid.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -185,10 +184,10 @@ public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         View view;
         switch (viewType) {
             case CITY_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_city, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_date, parent, false);
                 return new CityViewHolder(view);
             case EVENT_TYPE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_event, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_requests, parent, false);
                 return new EventViewHolder(view);
         }
         return null;

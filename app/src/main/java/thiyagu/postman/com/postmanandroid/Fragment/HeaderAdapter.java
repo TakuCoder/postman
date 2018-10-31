@@ -5,9 +5,12 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  */
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -103,11 +107,40 @@ public class HeaderAdapter extends RecyclerView
                 // feedReaderDbHelper.DeleteSingleRecParam(position);
                 // Log.v("asdasdasd",String.valueOf(position));
 
-                String sss = holder.card_view.getTag().toString();
-                Intent intent = new Intent(mcontext, DeletePopUp.class);
-                intent.putExtra("deleteid",String.valueOf(sss));
-                intent.putExtra("whichrecord","header");
-                mcontext.startActivity(intent);
+
+
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(mcontext, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(mcontext);
+                }
+                builder.setTitle("Delete entry")
+                        .setMessage("Are you sure you want to delete this entry?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String sss = holder.card_view.getTag().toString();
+
+
+
+                                FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
+                                feedReaderDbHelper.DeleteSingleRecHeader(Integer.parseInt(sss));
+
+
+                                deleteItem(position);// continue with delete
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+
+
 
 
                 // ParamFragment oneFragment = new ParamFragment();
