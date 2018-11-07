@@ -255,7 +255,8 @@ public class BodyFragment extends Fragment {
 //            }
 //        });
 
-        ButtonAddRawText.setOnClickListener(new View.OnClickListener() {
+        ButtonAddRawText.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view) {
 

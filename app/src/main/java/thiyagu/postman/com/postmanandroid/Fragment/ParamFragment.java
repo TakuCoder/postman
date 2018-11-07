@@ -24,13 +24,13 @@ import thiyagu.postman.com.postmanandroid.R;
  * Created by thiyagu on 4/6/2018.
  */
 
-public class ParamFragment extends Fragment {
+public class ParamFragment extends Fragment{
 
     Button AddParams;
-    RecyclerView recyclerView;
-    Context context;
-    RecyclerView.Adapter ParamsAdapter;
-    RecyclerView.LayoutManager ParamLayoutManager;
+    static RecyclerView recyclerView;
+    static Context context;
+    static RecyclerView.Adapter ParamsAdapter;
+    static RecyclerView.LayoutManager ParamLayoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -145,4 +145,25 @@ public class ParamFragment extends Fragment {
         return results;
     }
 
+
+    public static void refershView() {
+        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
+        ArrayList<String> dataa = feedReaderDbHelper.getAllParam();
+        Log.v("asdasdsad", dataa.toString());
+        ArrayList<ParamDataObject> results = new ArrayList<>();
+
+        for (int i = 0; i < dataa.size(); i++) {
+
+            String[] splitt = dataa.get(i).split("@@");
+            ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
+            results.add(i, paramDataObject);
+            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
+
+        }
+
+Log.v("asdsdasd","refreshing...");
+        ParamsAdapter = new ParamAdapter(results, context);
+        recyclerView.setAdapter(null);
+        recyclerView.setAdapter(ParamsAdapter);
+    }
 }

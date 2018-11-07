@@ -129,6 +129,9 @@ public class HeaderAdapter extends RecyclerView
 
 
                                 deleteItem(position);// continue with delete
+
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, mDataset.size());
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

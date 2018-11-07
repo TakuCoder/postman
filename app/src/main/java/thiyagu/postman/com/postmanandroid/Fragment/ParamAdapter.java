@@ -105,9 +105,38 @@ public class ParamAdapter extends RecyclerView
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
 
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
 
 
+//                String sss = holder.card_view.getTag().toString();
+//
+//                Log.v("this is position",String.valueOf(position));
+//
+//
+//                FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
+//                feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
+//
+//                //ParamFragment.refershView();
+//
+//                Log.v("deleting this",String.valueOf(position));
+//                mDataset.remove(position);
+//                notifyItemRemoved(position);
+//
+//                notifyItemRangeChanged(position, mDataset.size());
+
+
+
+
+
+
+                Log.v("this is position",String.valueOf(position));
+                for(int h=0;h<mDataset.size();h++)
+                {
+
+                    Log.v("this is data",mDataset.get(h).getmText1()+"=======>"+h);
+
+                }
 
                 android.support.v7.app.AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -117,18 +146,24 @@ public class ParamAdapter extends RecyclerView
                 }
                 builder.setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
+                        {
                             public void onClick(DialogInterface dialog, int which) {
-
                                 String sss = holder.card_view.getTag().toString();
+
+                                Log.v("this is position",String.valueOf(position));
 
 
                                 FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
                                 feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
 
+                                //ParamFragment.refershView();
 
-                                deleteItem(position);// continue with delete
                                 Log.v("deleting this",String.valueOf(position));
+                                mDataset.remove(position);
+                                notifyItemRemoved(position);
+
+                                notifyItemRangeChanged(position, mDataset.size());
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -138,18 +173,18 @@ public class ParamAdapter extends RecyclerView
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-
-
-
-
-//                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.getContext(), SweetAlertDialog.PROGRESS_TYPE);
-//                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-//                pDialog.setTitleText("Loading");
-//                pDialog.setCancelable(false);
-//                pDialog.show();
-
-                // ParamFragment oneFragment = new ParamFragment();
-                //oneFragment.RefereshView();
+//
+//
+//
+//
+////                SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.getContext(), SweetAlertDialog.PROGRESS_TYPE);
+////                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+////                pDialog.setTitleText("Loading");
+////                pDialog.setCancelable(false);
+////                pDialog.show();
+//
+//                // ParamFragment oneFragment = new ParamFragment();
+//                //oneFragment.RefereshView();
 
             }
         });
