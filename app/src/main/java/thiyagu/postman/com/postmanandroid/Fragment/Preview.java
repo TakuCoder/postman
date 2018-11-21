@@ -5,30 +5,41 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 import thiyagu.postman.com.postmanandroid.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class RawFragment extends Fragment {
+public class Preview extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        TextView responsetext_edit;
 
-        View view = inflater.inflate(R.layout.fragment_response,container,false);;
+        View view = inflater.inflate(R.layout.fragment_preview,container,false);;
         Context context = view.getContext();
-        responsetext_edit = view.findViewById(R.id.responsetext);
         SharedPreferences prefs = context.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         final String responsetext = prefs.getString("response", null);
         final String duration = prefs.getString("time", null);
         final String response_code = prefs.getString("code", null);
-        responsetext_edit.setText(responsetext);
+        Spanned htmlAsSpanned = Html.fromHtml(response_code);
+        try {
+    WebView webView = view.findViewById(R.id.webview);
+    webView.loadData(responsetext, "text/html", "utf-8");
+}
+catch (Exception e)
+{
+    Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show();
+
+}
+
 
 
         return view;
