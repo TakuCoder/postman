@@ -4,7 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#efefef"
     tools:context=".Activities.ResultActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ResultActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,7 +34,6 @@
     </android.support.design.widget.AppBarLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
@@ -42,5 +50,6 @@
         android:layout_height="match_parent">
 
     </android.support.v4.view.ViewPager>
-
+</LinearLayout>
+    <include layout="@layout/bottom_sheet" />
 </android.support.design.widget.CoordinatorLayout>

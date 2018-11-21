@@ -1,19 +1,15 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
@@ -30,7 +26,6 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,14 +37,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import es.dmoral.toasty.Toasty;
@@ -64,11 +60,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
-import thiyagu.postman.com.postmanandroid.Fragment.ResponseFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
@@ -115,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
        mDrawerLayout = findViewById(R.id.drawer_layout);
 
+
+        BusProvider.getBus().register(this);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -612,12 +610,14 @@ public class MainActivity extends AppCompatActivity {
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
-
+                                   // produceEvent();
                                     Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
                                     SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                                     editor.putString("response", bodyy);
+                                    editor.putString("headers_full", Headers);
                                     editor.putString("code", String.valueOf(responsecode));
                                     editor.putString("time", "" + (rx - tx));
+
                                     editor.apply();
                                     Log.d(Tag, "===============writing data to shared preference done=========================>");
                                     if (dialog != null)
@@ -1196,6 +1196,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.v(Tag, "destroy");
+        BusProvider.getBus().unregister(this);
     }
 
 
@@ -1300,7 +1301,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -1315,5 +1316,14 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"selected hos",Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Produce
+    public String produceEvent() {
+        return "Starting up";
+    }
+    @Subscribe
+    public void getMessage(String message) {
+        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
