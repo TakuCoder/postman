@@ -47,10 +47,12 @@
             android:label=""
             android:theme="@style/Theme.AppCompat.Dialog.Alert" />
         <activity android:name=".Activities.wizard" />
+        <activity android:name=".Activities.ResponseActivity" />
+        <activity android:name=".HistoryActivity" />
         <activity
-            android:name=".Activities.ResponseActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
-        <activity android:name=".HistoryActivity"></activity>
+            android:name=".Activities.ResultActivity"
+            android:label="@string/title_activity_result"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

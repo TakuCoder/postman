@@ -243,21 +243,32 @@ public class MainActivity extends AppCompatActivity {
 
 
                         String authdata = prefs.getString("Authorization", null);
-                        if (authdata.equals("No auth")) {
-                            Log.v("postman", "auth value neglected");
+                        try {
+                            if (authdata.equals("No auth")) {
+                                Log.v("postman", "auth value neglected");
 
-                        } else {
+                            } else {
 
-                            headerBuilder.add("Authorization", authdata);
-                            Log.v(Tag, "Authorization====================> " + authdata);
+                                headerBuilder.add("Authorization", authdata);
+                                Log.v(Tag, "Authorization====================> " + authdata);
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            editor.putString("Authorization","No auth");
+                            editor.apply();
 
                         }
+
 
 
                     } catch (Exception e) {
 
                         Log.v(Tag, "Exception while clicking send button" + e.toString());
-                        //Toasty.error(getApplicationContext(),e.toString());
+
+                       e.printStackTrace();
+                       //Toasty.error(getApplicationContext(),e.toString());
                     }
 
                     ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
@@ -615,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
 //                                    tab.select();
 
 
-                                    Intent intent = new Intent(MainActivity.this, ResponseActivity.class);
+                                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                                     intent.putExtra("url", finalUrlvalue);
                                     startActivity(intent);
 

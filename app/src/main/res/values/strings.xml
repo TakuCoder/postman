@@ -28,4 +28,5 @@
         <item>Albanian</item>
         <item>Romanian</item>
     </string-array>
+    <string name="title_activity_result">ResultActivity</string>
 </resources>

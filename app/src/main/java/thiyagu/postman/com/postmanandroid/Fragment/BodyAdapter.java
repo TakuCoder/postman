@@ -131,6 +131,9 @@ public class BodyAdapter extends RecyclerView
                                 FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
                                 feedReaderDbHelper.DeleteSingleRecBody(Integer.parseInt(sss));
                                 deleteItem(position);// continue with delete
+
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, mDataset.size());
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
