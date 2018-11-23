@@ -6,7 +6,10 @@
     android:layout_height="wrap_content"
     android:background="#fff"
     android:orientation="vertical"
-    android:padding="50dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
@@ -14,8 +17,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
         android:weightSum="3">
 
         <TextView
@@ -29,34 +32,37 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/response_code"
             android:layout_width="0dp"
-            android:gravity="right"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textStyle="bold"
+            android:gravity="right"
+            android:text="200 OK"
             android:textSize="15sp"
-            android:text="200 OK">
+            android:textStyle="bold">
 
         </TextView>
+
+
     </LinearLayout>
 
-
     <TextView
+        android:id="@+id/url"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
-        android:id="@+id/fullheader"
-        android:text="sampleeeee"
         android:layout_height="wrap_content"
-      />
+        android:text="https://www.fb.com"
+        android:textSize="15sp" />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/fullheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sampleeeee"
+            android:textSize="10sp" />
 
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="#000"
-        android:foreground="?attr/selectableItemBackground"
-        android:text="PROCEED PAYMENT"
-        android:textColor="#fff" />
 
 </LinearLayout>

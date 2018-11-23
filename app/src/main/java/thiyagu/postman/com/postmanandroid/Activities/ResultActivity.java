@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.otto.Subscribe;
+
 
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
@@ -41,14 +41,14 @@ public class ResultActivity extends AppCompatActivity {
     ViewPagerAdapter viewPagerAdapter;
     LinearLayout bottom_sheet;
     Button toggle;
-    TextView fullheader;
+    TextView fullheader,url,response_code_text;
     BottomSheetBehavior sheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        String value = getIntent().getStringExtra("url");
+        String url_value = getIntent().getStringExtra("url");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = findViewById(R.id.pager1);
         tabLayout = findViewById(R.id.tab_layout);
@@ -56,15 +56,17 @@ public class ResultActivity extends AppCompatActivity {
         bottom_sheet = findViewById(R.id.bottom_sheet);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
+        response_code_text = findViewById(R.id.response_code);
         fullheader = findViewById(R.id.fullheader);
-        BusProvider.getBus().register(this);
-
+        url = findViewById(R.id.url);
+        //response_code = findViewById(R.id.response_code);
         SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         final String headers_full = prefs.getString("headers_full", null);
         final String duration = prefs.getString("time", null);
         final String response_code = prefs.getString("code", null);
         fullheader.setText(headers_full);
+        response_code_text.setText(response_code);
+        url.setText("URL : "+url_value);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -132,20 +134,11 @@ public class ResultActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    @Subscribe
-    public void getMessage(String message)
 
-    {
-
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-
-
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        BusProvider.getBus().unregister(this);
+
     }
 }
