@@ -31,6 +31,7 @@ public class MultiScrollView extends RecyclerView implements NestedScrollingPare
         boolean temporarilySkipsInterception = this.nestedScrollTarget != null;
         if (temporarilySkipsInterception) {
             this.skipsTouchInterception = true;
+
         }
 
         boolean handled = super.dispatchTouchEvent(ev);
