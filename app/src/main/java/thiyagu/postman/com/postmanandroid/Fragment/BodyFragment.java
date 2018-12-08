@@ -30,6 +30,7 @@ import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
 import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
+import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
 import thiyagu.postman.com.postmanandroid.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
@@ -83,10 +84,18 @@ public class BodyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        editor = MainActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
-         prefs = MainActivity.getContext().getSharedPreferences("Thiyagu", 0);
-        ParamLayoutManager = new LinearLayoutManager(getContext());
-        Log.v("whichfragment", "BodyFragment");
+        try {
+            editor = MainActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
+            prefs = MainActivity.getContext().getSharedPreferences("Thiyagu", 0);
+            ParamLayoutManager = new LinearLayoutManager(getContext());
+            Log.v("whichfragment", "BodyFragment");
+        }
+        catch (Exception e)
+        {
+
+
+        }
+
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_body, container, false);
         context = view.getContext();
@@ -235,7 +244,7 @@ public class BodyFragment extends Fragment {
         }
         catch (Exception e)
         {
-            Toast.makeText(MainActivity.getContext(),e.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(NavDrawerActivityMain.getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
         }
 //        radio_formdata.setOnClickListener(new View.OnClickListener() {

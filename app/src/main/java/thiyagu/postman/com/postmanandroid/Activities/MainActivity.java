@@ -20,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.format.Formatter;
@@ -35,6 +36,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 
 import com.squareup.otto.Produce;
@@ -108,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-        ActionBar actionBar = getSupportActionBar();
-       mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
 
         BusProvider.getBus().register(this);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger);
+//
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = findViewById(R.id.nav_view);
         mHeaderView = navigationView.getHeaderView(0);
         mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.headertitle);
@@ -139,11 +141,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setCancelable(false);
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
@@ -160,8 +157,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        ////actionBar.setIcon(R.drawable.postmanicon);
-        //actionBar.setDisplayShowHomeEnabled(true);
+
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
         sendButton = findViewById(R.id.sendButton);
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
@@ -1223,7 +1219,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void NetwordDetect() {
+    private void NetwordDetect()
+    {
 
         boolean WIFI = false;
 
