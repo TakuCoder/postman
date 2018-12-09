@@ -1305,6 +1305,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+
+
+        if(id==R.id.home)
+        {
+
+
+            Toast.makeText(this,"sdsad",Toast.LENGTH_LONG).show();
+        }
         if(id == R.id.history){
             // do something
 

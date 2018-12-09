@@ -558,11 +558,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.id_bookmark) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.id_history) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.id_settings) {
 
         } else if (id == R.id.nav_share) {
 
