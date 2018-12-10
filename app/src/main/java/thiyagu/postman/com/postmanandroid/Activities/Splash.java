@@ -28,7 +28,7 @@ try
 
     if(check.equals("passed"))
     {
-        Intent intent = new Intent(Splash.this,MainActivity.class);
+        Intent intent = new Intent(Splash.this,NavDrawerActivityMain.class);
         startActivity(intent);
 
     }

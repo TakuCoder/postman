@@ -21,14 +21,14 @@ public class wizard extends AppIntro2 {
         super.onCreate(savedInstanceState);
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Welcome!");
-        sliderPage1.setDescription("Powerful HTTP Client designed for android with ");
+        sliderPage1.setDescription("Powerful HTTP Client designed for android with \uD83D\uDC9A ");
         sliderPage1.setImageDrawable(R.mipmap.ic_launcher);
         sliderPage1.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 
         SliderPage sliderPage2 = new SliderPage();
-        sliderPage2.setTitle("Clean App Intros");
-        sliderPage2.setDescription("This library offers developers the ability to add clean app intros at the start of their apps.");
+        sliderPage2.setTitle("Built-in Tools");
+        sliderPage2.setDescription("Everything a developer needs to work with APIs.");
         sliderPage2.setImageDrawable(R.drawable.getpost);
         sliderPage2.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage2));
@@ -65,7 +65,7 @@ public class wizard extends AppIntro2 {
 
         finish();
 
-        Intent intent = new Intent(wizard.this,MainActivity.class);
+        Intent intent = new Intent(wizard.this,NavDrawerActivityMain.class);
         startActivity(intent);
     }
 }

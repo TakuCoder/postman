@@ -28,7 +28,7 @@
         <item>Albanian</item>
         <item>Romanian</item>
     </string-array>
-    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_result">Response</string>
     <string name="title_activity_nav_drawer_main">NavDrawerActivityMain</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
