@@ -1,6 +1,5 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,13 +15,9 @@ import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.Database.DataPojoClass;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class ParamPopUp extends AppCompatActivity {
     MaterialBetterSpinner materialBetterSpinner;

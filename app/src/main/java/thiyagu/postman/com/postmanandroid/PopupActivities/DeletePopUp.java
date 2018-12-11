@@ -1,7 +1,5 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
+import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -68,7 +66,7 @@ public class DeletePopUp extends AppCompatActivity {
 
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecBody(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
                     startActivity(intent1);
 
 
@@ -78,14 +76,14 @@ public class DeletePopUp extends AppCompatActivity {
 
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecHeader(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
                     startActivity(intent1);
                 }
                 else if(record.equals("param"))
                 {
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
                     startActivity(intent1);
 
 

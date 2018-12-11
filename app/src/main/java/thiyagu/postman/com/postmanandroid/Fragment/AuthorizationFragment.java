@@ -21,8 +21,6 @@ import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
-
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;

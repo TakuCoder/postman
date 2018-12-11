@@ -56,11 +56,13 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
+import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -83,59 +85,60 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     private static NavDrawerActivityMain instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
-
-    private DrawerLayout mDrawerLayout;
+    private Toolbar toolbar;
     String IPaddress;
-    Boolean IPValue;
+    NavigationView navigationView;
+    DrawerLayout drawer;
     private View mHeaderView;
     private TextView mDrawerHeaderTitle;
+    AssetManager assetManager;
+    ActionBarDrawerToggle toggle;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        intiview();
+
+
+
+
+        prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+        editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
         instance = this;
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
-
-
-        mHeaderView = navigationView.getHeaderView(0);
-        mDrawerHeaderTitle = mHeaderView.findViewById(R.id.headertitle);
-
 
         dialog = new ProgressDialog(NavDrawerActivityMain.this);
         dialog.setCancelable(false);
+
         Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
         SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
         SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
         getSupportActionBar().setTitle(SS);
 
-        AssetManager assetManager = this.getAssets();
+        assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
 
-        viewPager = findViewById(R.id.pager);
 
         setupViewPager(viewPager);
-        tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
 
         final String[] request = {"GET", "POST", "DELETE", "PUT"};
-        sendButton = findViewById(R.id.sendButton);
+
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
 
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
-        materialBetterSpinner = findViewById(R.id.req_type_spinner);
+
         NetwordDetect();
 
 
@@ -146,9 +149,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-
                 if (String.valueOf(i).equals("1")) {
-
 
                     body.select();
 
@@ -157,8 +158,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         });
 
 
-        UrlField = findViewById(R.id.UrlField);
-        // UrlField.setText("https://www.httpbin.org/get");
+
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
         materialBetterSpinner.setTypeface(roboto);
@@ -169,17 +169,22 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
             {
 
+
+                editor.putString("url_value", UrlField.getText().toString());
+                editor.putString("req_value", materialBetterSpinner.getText().toString());
+
+                editor.apply();
+                Log.v(Tag, "am in onpause insatnce");
+
                 if (isValid(UrlField.getText().toString()))
                 {
-
-
 
 
                     feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headerlist.size() > 0) {
-                        Log.v(Tag,"=======================adding headers=========================");
+                        Log.v(Tag, "=======================adding headers=========================");
                         for (int i = 0; i < headerlist.size(); i++)
 
                         {
@@ -189,16 +194,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             //  Log.v(Tag, "btn_send_selected" + subvalue[0]);
                             //  Log.v(Tag, "btn_send_selected" + subvalue[1]);
-                            Log.v(Tag,subvalue[1]+subvalue[2]);
+                            Log.v(Tag, subvalue[1] + subvalue[2]);
                             headerBuilder.add(subvalue[1], subvalue[2]);
                         }
                     }
-                    Log.v(Tag,"=======================added headers=========================");
+                    Log.v(Tag, "=======================added headers=========================");
 
                     try
 
                     {
-                        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+                        editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                         editor.putString("response", "");
                         editor.putString("code", "");
                         editor.putString("time", "");
@@ -218,14 +223,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                 Log.v(Tag, "Authorization====================> " + authdata);
 
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            editor.putString("Authorization","No auth");
+                        } catch (Exception e) {
+                            editor.putString("Authorization", "No auth");
                             editor.apply();
 
                         }
-
 
 
                     } catch (Exception e) {
@@ -314,21 +316,14 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                                 public void run() {
 
 
-                                                    new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this)
-                                                            .setTarget(findViewById(R.id.AddBody))
-                                                            .setPrimaryText("POST request must have atleast one part")
-                                                            .setPromptBackground(new CirclePromptBackground())
-                                                            .setPromptFocal(new RectanglePromptFocal())
-                                                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                                                @Override
-                                                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                                        //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                }
-                                                            })
-                                                            .show();
+                                                    new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(findViewById(R.id.AddBody)).setPrimaryText("POST request must have atleast one part").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                                        @Override
+                                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                                                //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }).show();
 
                                                 }
                                             }, 1000);
@@ -375,26 +370,17 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             break;
                         default:
                             Log.v(Tag, "Nothing selected in request");
-                            new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this)
-                                    .setTarget(findViewById(R.id.req_type_spinner))
-                                    .setPrimaryText("Select the type of request")
-                                    .setPromptBackground(new CirclePromptBackground())
-                                    .setPromptFocal(new RectanglePromptFocal())
-                                    .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                                    .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                        @Override
-                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    })
-                                    .show();
+                            new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(findViewById(R.id.req_type_spinner)).setPrimaryText("Select the type of request").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                                @Override
+                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                        Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }).show();
 
 
                     }
-
-
 
 
                 } else {
@@ -428,8 +414,19 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         }
 
 
+    }
 
-
+    public void intiview() {
+        toolbar = findViewById(R.id.toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        mHeaderView = navigationView.getHeaderView(0);
+        mDrawerHeaderTitle = mHeaderView.findViewById(R.id.headertitle);
+        tabLayout = findViewById(R.id.tab_layout);
+        viewPager = findViewById(R.id.pager);
+        sendButton = findViewById(R.id.sendButton);
+        materialBetterSpinner = findViewById(R.id.req_type_spinner);
+        UrlField = findViewById(R.id.UrlField);
 
     }
 
@@ -462,7 +459,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         {
             IPaddress = GetDeviceipWiFiData();
             mDrawerHeaderTitle.setText(IPaddress);
-            Log.v("asdasdsadad",IPaddress);
+            Log.v("asdasdsadad", IPaddress);
 
 
         }
@@ -470,7 +467,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         if (MOBILE == true) {
 
             IPaddress = GetDeviceipMobileData();
-            Log.v("asdasdsadad",IPaddress);
+            Log.v("asdasdsadad", IPaddress);
             mDrawerHeaderTitle.setText(IPaddress);
 
         }
@@ -485,10 +482,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             super.onBackPressed();
         }
     }
+
     public String GetDeviceipMobileData() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-                 en.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface networkinterface = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
@@ -502,6 +499,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         }
         return null;
     }
+
     public String GetDeviceipWiFiData() {
 
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
@@ -515,8 +513,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     }
 
     public boolean isOnline() {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
@@ -529,6 +526,49 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+
+        Log.v(Tag, "stopppppp");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.v(Tag, "am in restore saved insatnce");
+
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.v(Tag, "restart");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v(Tag, "destroy");
+        BusProvider.getBus().unregister(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("req_type", "thiyagu");
+        Log.v(Tag, "am in on saved insatnce");
+
+
+        ssss = getUrlData();
+
+
+        // etc.
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav_drawer_activity_main, menu);
@@ -537,16 +577,21 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
+        if (id == R.id.home) {
+
+
+            Toast.makeText(this, "sdsad", Toast.LENGTH_LONG).show();
+        }
+        if (id == R.id.history) {
+            // do something
+
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
+            Toast.makeText(getApplicationContext(), "selected hos", Toast.LENGTH_LONG).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -556,17 +601,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.id_bookmark) {
+        if (id == R.id.bookmark) {
 
-        } else if (id == R.id.id_history) {
+        } else if (id == R.id.history) {
 
-        } else if (id == R.id.id_settings) {
+            Intent intent = new Intent(this,HistoryActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.settings) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.about) {
 
         }
 
@@ -586,6 +630,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         // adapter.addFragment(new ResponseFragment(), "RESPONSE");
         viewPager.setAdapter(adapter);
     }
+
     public static boolean isValid(String url) {
         /* Try creating a valid URL */
         try {
@@ -598,6 +643,14 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public void onPause() {
+
+
+        super.onPause();
+        if (dialog != null) dialog.dismiss();
     }
 
     public void GetRequest(Object... strings) {
@@ -656,19 +709,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             try {
 
                 OkHttpClient client1 = new OkHttpClient();
-                OkHttpClient client = client1.newBuilder()
-                        .readTimeout(12, TimeUnit.SECONDS)
-                        .writeTimeout(12, TimeUnit.SECONDS)
-                        .connectTimeout(12, TimeUnit.SECONDS)
+                OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
 
                         .build();
 
-                Request request = new Request.Builder()
-                        .url(urlvalue)
-                        .get()
-                        .headers(customheader)
-                        .header("User-Agent", "Postman-Android")
-                        .build();
+                Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
 
 
                 final String finalUrlvalue = urlvalue;
@@ -686,8 +731,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
 
-                        if (dialog != null)
-                            dialog.dismiss();
+                        if (dialog != null) dialog.dismiss();
                     }
 
                     @Override
@@ -718,7 +762,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                                     // produceEvent();
                                     Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
-                                    SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+
                                     editor.putString("response", bodyy);
                                     editor.putString("headers_full", Headers);
                                     editor.putString("code", String.valueOf(responsecode));
@@ -726,8 +770,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                                     editor.apply();
                                     Log.d(Tag, "===============writing data to shared preference done=========================>");
-                                    if (dialog != null)
-                                        dialog.dismiss();
+                                    if (dialog != null) dialog.dismiss();
 //                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
 //                                    tab.select();
 
@@ -738,9 +781,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                                 } catch (NetworkOnMainThreadException exception) {
-                                    Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
-                                    if (dialog != null)
-                                        dialog.dismiss();
+                                    //Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+                                    if (dialog != null) dialog.dismiss();
                                 } catch (Exception e) {
 
                                     Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
@@ -824,31 +866,18 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                         requestBody = builder.build();
-                        request = new Request.Builder()
-                                .url(urlvalue)
-                                .headers(customheader)
-                                .header("content-type","multipart/form-data")
-                                .post(requestBody)
-                                .build();
+                        request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
                         Log.v("statusofbodytype", "=============case 1 detected============");
                         break;
 
 
                     case "2":
-                        if (rawbody.length() > 0)
-                        {
+                        if (rawbody.length() > 0) {
                             Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
                             MediaType mediaType = MediaType.parse("application/json");
 
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
-                            request = new Request.Builder()
-                                    .url(urlvalue)
-                                    .header("User-Agent", "Postman-Android")
-                                    .header("connection","Keep-Alive")
-                                    .post(newbody)
-                                    .build();
-
-
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
 
 
                         } else {
@@ -861,19 +890,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                     case "3":
-                        if (rawbody.length() > 0)
-                        {
+                        if (rawbody.length() > 0) {
                             Log.v("statusofbodytype", "=============case 3 detected=======rawbody=====" + rawbody);
                             MediaType mediaType = MediaType.parse("application/xml");
 
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
-                            request = new Request.Builder()
-                                    .url(urlvalue)
-                                    .header("User-Agent", "Postman-Android")
-                                    .header("connection","Keep-Alive")
-                                    .post(newbody)
-                                    .build();
-
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
 
 
                         } else {
@@ -891,8 +913,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
-                        if (dialog != null)
-                            dialog.dismiss();
+                        if (dialog != null) dialog.dismiss();
                         Log.d(Tag, "failure");
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {
@@ -933,15 +954,14 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                     Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                    SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+
                                     editor.putString("response", bodyy);
                                     editor.putString("Headers", Headers);
                                     editor.putString("code", String.valueOf(responsecode));
                                     editor.putString("time", "" + (rx - tx));
                                     editor.apply();
                                     Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                    if (dialog != null)
-                                        dialog.dismiss();
+                                    if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
 
@@ -1016,18 +1036,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     }
 
                     requestBody = builder.build();
-                    Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .headers(customheader)
-                            .delete(requestBody)
-                            .build();
+                    Request request = new Request.Builder().url(urlvalue).headers(customheader).delete(requestBody).build();
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
 
-                            if (dialog != null)
-                                dialog.dismiss();
+                            if (dialog != null) dialog.dismiss();
                             Log.d(Tag, "failure");
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
@@ -1068,14 +1083,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                         Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+
                                         editor.putString("response", bodyy);
                                         editor.putString("code", String.valueOf(responsecode));
                                         editor.putString("time", "" + (rx - tx));
                                         editor.apply();
                                         Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        if (dialog != null)
-                                            dialog.dismiss();
+                                        if (dialog != null) dialog.dismiss();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
 
@@ -1149,18 +1163,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     }
 
                     requestBody = builder.build();
-                    Request request = new Request.Builder()
-                            .url(urlvalue)
-                            .headers(customheader)
-                            .put(requestBody)
-                            .build();
+                    Request request = new Request.Builder().url(urlvalue).headers(customheader).put(requestBody).build();
 
                     client.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
 
-                            if (dialog != null)
-                                dialog.dismiss();
+                            if (dialog != null) dialog.dismiss();
                             Log.d(Tag, "failure");
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
@@ -1202,14 +1211,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                         Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                        SharedPreferences.Editor editor = getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
+
                                         editor.putString("response", bodyy);
                                         editor.putString("code", String.valueOf(responsecode));
                                         editor.putString("time", "" + (rx - tx));
                                         editor.apply();
                                         Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        if (dialog != null)
-                                            dialog.dismiss();
+                                        if (dialog != null) dialog.dismiss();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
 
@@ -1243,11 +1251,17 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
     }
-    public static Context getContext()
-    {
+
+    public static Context getContext() {
 
 
         return instance;
+
+    }
+
+    public String getUrlData() {
+        String sss = UrlField.getText().toString();
+        return sss;
 
     }
 }

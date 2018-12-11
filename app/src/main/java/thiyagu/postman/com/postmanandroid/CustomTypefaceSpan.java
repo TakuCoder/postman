@@ -24,7 +24,8 @@ public class CustomTypefaceSpan extends TypefaceSpan {
         applyCustomTypeFace(paint, newType);
     }
 
-    private static void applyCustomTypeFace(Paint paint, Typeface tf) {
+    private static void applyCustomTypeFace(Paint paint, Typeface tf)
+    {
         int oldStyle;
         Typeface old = paint.getTypeface();
         if (old == null) {
@@ -39,7 +40,7 @@ public class CustomTypefaceSpan extends TypefaceSpan {
         }
 
         if ((fake & Typeface.ITALIC) != 0) {
-            paint.setTextSkewX(-0.25f);
+            paint.setTextSkewX(0.15f);
         }
 
         paint.setTypeface(tf);

@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
+
 import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyAdapter extends RecyclerView

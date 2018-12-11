@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_copyright_black_24dp"
+            android:id="@+id/bookmark"
+            android:icon="@drawable/ic_bookmark_black_24dp"
             android:title="Bookmarks" />
         <item
             android:id="@+id/history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="History"/>
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_copyright_black_24dp"
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_applications_black_24dp"
             android:title="Settings" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_copyright_black_24dp"
+            android:id="@+id/about"
+            android:icon="@drawable/ic_info_black_24dp"
             android:title="About us" />
     </group>
 </menu>

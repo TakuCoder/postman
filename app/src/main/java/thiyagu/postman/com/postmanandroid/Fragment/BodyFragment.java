@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
+
 import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
 import thiyagu.postman.com.postmanandroid.JSONUtils;
@@ -85,8 +85,8 @@ public class BodyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         try {
-            editor = MainActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
-            prefs = MainActivity.getContext().getSharedPreferences("Thiyagu", 0);
+            editor = NavDrawerActivityMain.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
+            prefs = NavDrawerActivityMain.getContext().getSharedPreferences("Thiyagu", 0);
             ParamLayoutManager = new LinearLayoutManager(getContext());
             Log.v("whichfragment", "BodyFragment");
         }

@@ -17,7 +17,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
+import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.PopupActivities.HeaderPopUp;
 import thiyagu.postman.com.postmanandroid.R;
@@ -73,7 +73,7 @@ public class HeaderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HeaderPopUp.class);
-                intent.putExtra("urldata", ((MainActivity) getActivity()).getUrlData());
+                intent.putExtra("urldata", ((NavDrawerActivityMain) getActivity()).getUrlData());
                 startActivityForResult(intent, 1);
 
             }

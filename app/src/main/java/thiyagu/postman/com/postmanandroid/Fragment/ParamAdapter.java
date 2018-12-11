@@ -4,12 +4,9 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  * Created by thiyagu on 3/6/2018.
  */
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.CardView;
@@ -22,10 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import thiyagu.postman.com.postmanandroid.Activities.MainActivity;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.PopupActivities.DeletePopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ParamAdapter extends RecyclerView

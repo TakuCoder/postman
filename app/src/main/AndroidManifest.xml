@@ -29,9 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".PopupActivities.ParamPopUp"
             android:label=""
             android:theme="@style/poptheme" />
@@ -43,10 +40,7 @@
             android:name=".PopupActivities.HeaderPopUp"
             android:label=""
             android:theme="@style/poptheme" />
-        <activity
-            android:name=".PopupActivities.DeletePopUp"
-            android:label=""
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+
         <activity android:name=".Activities.wizard" />
         <activity android:name=".Activities.ResponseActivity" />
         <activity android:name=".HistoryActivity" />
