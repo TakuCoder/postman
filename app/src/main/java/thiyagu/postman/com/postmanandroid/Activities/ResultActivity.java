@@ -3,6 +3,7 @@ package thiyagu.postman.com.postmanandroid.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +12,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+
+import okhttp3.Headers;
+import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -32,17 +38,22 @@ import thiyagu.postman.com.postmanandroid.Fragment.RawFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.R;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class ResultActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabLayout tabLayout;
 
-    ViewPagerAdapter viewPagerAdapter;
     LinearLayout bottom_sheet;
-    Button toggle;
-    TextView fullheader, url, response_code_text, tx_view_response_code;
-
+    TextView fullheader, url,tx_view_response_code;
+    SharedPreferences prefs;
     BottomSheetBehavior sheetBehavior;
+    FeedReaderDbHelper feedReaderDbHelper;
+    private String Tag="onCreate";
+    String method,url_value;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +61,40 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         String url_value = getIntent().getStringExtra("url");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        feedReaderDbHelper =  new FeedReaderDbHelper(this);
+        fullheader = findViewById(R.id.fullheader);
+        tx_view_response_code = findViewById(R.id.tx_view_response_code);
         viewPager = findViewById(R.id.pager1);
         tabLayout = findViewById(R.id.tab_layout);
-        setSupportActionBar(toolbar);
+        prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         bottom_sheet = findViewById(R.id.bottom_sheet);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
-        fullheader = findViewById(R.id.fullheader);
-        tx_view_response_code = findViewById(R.id.tx_view_response_code);
         url = findViewById(R.id.url);
-        //response_code = findViewById(R.id.response_code);
-        SharedPreferences prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+
+
+
+
         final String headers_full = prefs.getString("headers_full", null);
         final String duration = prefs.getString("time", null);
         final String response_code = prefs.getString("code", null);
         int responsecode = Integer.valueOf(response_code);
 
-        switch (responsecode) {
+
+
+
+
+
+
+
+
+
+
+
+
+        switch (responsecode)
+        {
 
             case 200:
                 //200 (OK)
@@ -185,21 +212,22 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         fullheader.setText(headers_full);
-        //response_code_text.setText(response_code);
         url.setText("URL : " + url_value);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
-        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
+        {
+
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        //btnBottomSheet.setText("Close Sheet");
+
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-                        // btnBottomSheet.setText("Expand Sheet");
+
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -249,7 +277,6 @@ public class ResultActivity extends AppCompatActivity {
         adapter.addFragment(new RawFragment(), "RAW");
         adapter.addFragment(new JsonFragment(), "JSON");
         adapter.addFragment(new Preview(), "PREVIEW");
-        // adapter.addFragment(new ResponseFragment(), "RESPONSE");
         viewPager.setAdapter(adapter);
     }
 

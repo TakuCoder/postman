@@ -9,11 +9,10 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableStringBuilder;
@@ -37,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
@@ -103,8 +103,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         intiview();
 
 
-
-
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
@@ -158,7 +156,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         });
 
 
-
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
         materialBetterSpinner.setTypeface(roboto);
@@ -172,12 +169,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 editor.putString("url_value", UrlField.getText().toString());
                 editor.putString("req_value", materialBetterSpinner.getText().toString());
-
                 editor.apply();
-                Log.v(Tag, "am in onpause insatnce");
 
-                if (isValid(UrlField.getText().toString()))
-                {
+
+                if (isValid(UrlField.getText().toString())) {
 
 
                     feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
@@ -190,10 +185,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         {
 
                             String[] subvalue = headerlist.get(i).split("@@");
-
-
-                            //  Log.v(Tag, "btn_send_selected" + subvalue[0]);
-                            //  Log.v(Tag, "btn_send_selected" + subvalue[1]);
                             Log.v(Tag, subvalue[1] + subvalue[2]);
                             headerBuilder.add(subvalue[1], subvalue[2]);
                         }
@@ -208,8 +199,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         editor.putString("code", "");
                         editor.putString("time", "");
                         editor.apply();
-
-                        SharedPreferences prefs = NavDrawerActivityMain.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
 
 
                         String authdata = prefs.getString("Authorization", null);
@@ -605,7 +594,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         } else if (id == R.id.history) {
 
-            Intent intent = new Intent(this,HistoryActivity.class);
+            Intent intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.settings) {
@@ -650,15 +639,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
         super.onPause();
-        if (dialog != null) dialog.dismiss();
+        //if (dialog != null) dialog.dismiss();
     }
 
     public void GetRequest(Object... strings) {
 
         Log.v(Tag, "======================onPreExecute========================");
-
-        dialog.setMessage("Activating hyperdrive, please wait.");
-        dialog.show();
         Log.v(Tag, "======================onPreExecute done========================");
         Log.v(Tag, "======================DOINBACKGROUND========================");
         String method = (String) strings[0];
@@ -705,99 +691,107 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
         if (method.equals("GET")) {
+
+
             Log.v(Tag, "======================GET========================");
             try {
 
-                OkHttpClient client1 = new OkHttpClient();
-                OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
 
-                        .build();
-
-                Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
-
-
-                final String finalUrlvalue = urlvalue;
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, final IOException e) {
-                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        NavDrawerActivityMain.flag = "failure";
-                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
-
-
-                        if (dialog != null) dialog.dismiss();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run()
-
-                            {
-                                try {
-                                    String bodyy = response.body().string();
-                                    int responsecode = response.code();
-                                    String Headers = response.headers().toString();
-                                    long tx = response.sentRequestAtMillis();
-                                    long rx = response.receivedResponseAtMillis();
-
-                                    Log.v(Tag, "======================BODY========================");
-                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
-
-                                    NavDrawerActivityMain.flag = "success";
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putString("time", "" + (rx - tx));
-
-                                    // produceEvent();
-                                    Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
-
-                                    editor.putString("response", bodyy);
-                                    editor.putString("headers_full", Headers);
-                                    editor.putString("code", String.valueOf(responsecode));
-                                    editor.putString("time", "" + (rx - tx));
-
-                                    editor.apply();
-                                    Log.d(Tag, "===============writing data to shared preference done=========================>");
-                                    if (dialog != null) dialog.dismiss();
-//                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
-//                                    tab.select();
-
-
-                                    Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
-                                    intent.putExtra("url", finalUrlvalue);
-                                    startActivity(intent);
-
-
-                                } catch (NetworkOnMainThreadException exception) {
-                                    //Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
-                                    if (dialog != null) dialog.dismiss();
-                                } catch (Exception e) {
-
-                                    Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
-
-                                    Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
-
-                                }
-                            }
-
-
-                        });
-
-
-                    }
-                });
+                new GetAsync().execute(urlvalue, customheader);
+//
+//                OkHttpClient client1 = new OkHttpClient();
+//                OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+//
+//                        .build();
+//
+//                Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
+//
+//
+//                final String finalUrlvalue = urlvalue;
+//                client.newCall(request).enqueue(new Callback() {
+//
+//                    @Override
+//                    public void onFailure(Call call, final IOException e) {
+//                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+//                        NavDrawerActivityMain.flag = "failure";
+//                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
+//
+//
+//                        // if (dialog != null) dialog.dismiss();
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Call call, final Response response) throws IOException {
+//                        NavDrawerActivityMain.this.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                dialog.setMessage("Activating hyperdrive, please wait.");
+//                                dialog.show();
+//                            }
+//                        });
+//
+//
+//                        try {
+//                            String bodyy = response.body().string();
+//                            int responsecode = response.code();
+//                            String Headers = response.headers().toString();
+//                            long tx = response.sentRequestAtMillis();
+//                            long rx = response.receivedResponseAtMillis();
+//
+//                            Log.v(Tag, "======================BODY========================");
+//                            Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+//                            Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+//                            Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+//                            Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+//
+//                            NavDrawerActivityMain.flag = "success";
+////                                        Bundle bundle = new Bundle();
+////                                        bundle.putString("time", "" + (rx - tx));
+//
+//                            // produceEvent();
+//                            Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
+//
+//                            editor.putString("response", bodyy);
+//                            editor.putString("headers_full", Headers);
+//                            editor.putString("code", String.valueOf(responsecode));
+//                            editor.putString("time", "" + (rx - tx));
+//
+//                            editor.apply();
+//                            Log.d(Tag, "===============writing data to shared preference done=========================>");
+//
+////                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+////                                    tab.select();
+//
+//
+//                            Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+//                            intent.putExtra("url", finalUrlvalue);
+//
+//                            startActivity(intent);
+//                            // Log.v("amover","amover");
+//
+//
+//                        } catch (NetworkOnMainThreadException exception) {
+//
+//                            exception.printStackTrace();
+//                            Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+//                            //  if (dialog != null) dialog.dismiss();
+//                        } catch (Exception e) {
+//
+//                            Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
+//
+//                            Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+//
+//                        }
+//
+//
+//                    }
+//                });
 
 
             } catch (Exception e) {
@@ -913,7 +907,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
-                        if (dialog != null) dialog.dismiss();
+                        //  if (dialog != null) dialog.dismiss();
                         Log.d(Tag, "failure");
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {
@@ -954,14 +948,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                     Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-
                                     editor.putString("response", bodyy);
                                     editor.putString("Headers", Headers);
                                     editor.putString("code", String.valueOf(responsecode));
                                     editor.putString("time", "" + (rx - tx));
                                     editor.apply();
                                     Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                    if (dialog != null) dialog.dismiss();
+                                    //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
 
@@ -1042,7 +1035,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         @Override
                         public void onFailure(Call call, final IOException e) {
 
-                            if (dialog != null) dialog.dismiss();
+                            // if (dialog != null) dialog.dismiss();
                             Log.d(Tag, "failure");
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
@@ -1083,13 +1076,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                         Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-
                                         editor.putString("response", bodyy);
                                         editor.putString("code", String.valueOf(responsecode));
                                         editor.putString("time", "" + (rx - tx));
                                         editor.apply();
                                         Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        if (dialog != null) dialog.dismiss();
+                                        //     if (dialog != null) dialog.dismiss();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
 
@@ -1162,6 +1154,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                     }
 
+
                     requestBody = builder.build();
                     Request request = new Request.Builder().url(urlvalue).headers(customheader).put(requestBody).build();
 
@@ -1169,7 +1162,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         @Override
                         public void onFailure(Call call, final IOException e) {
 
-                            if (dialog != null) dialog.dismiss();
+                            // if (dialog != null) dialog.dismiss();
                             Log.d(Tag, "failure");
                             Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                             runOnUiThread(new Runnable() {
@@ -1211,13 +1204,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                         Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-
                                         editor.putString("response", bodyy);
                                         editor.putString("code", String.valueOf(responsecode));
                                         editor.putString("time", "" + (rx - tx));
                                         editor.apply();
                                         Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        if (dialog != null) dialog.dismiss();
+                                        //     if (dialog != null) dialog.dismiss();
                                         TabLayout.Tab tab = tabLayout.getTabAt(4);
                                         tab.select();
 
@@ -1264,4 +1256,206 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         return sss;
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        if (dialog != null) dialog.dismiss();
+    }
+
+    class GetAsync extends AsyncTask<Object, Long, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog.setMessage("Activating hyperdrive, please wait.");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+
+        dialog.cancel();
+        }
+
+        @Override
+        protected Boolean doInBackground(final Object... voids)
+        {
+
+
+            OkHttpClient client1 = new OkHttpClient();
+            OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+
+                    .build();
+
+            Request request = new Request.Builder().url((String) voids[0]).get().headers((Headers) voids[1]).header("User-Agent", "Postman-Android").build();
+            Call call = client.newCall(request);
+
+try {
+
+    Response response = call.execute();
+    if (response.code() == 200)
+    {
+
+
+
+
+                    try
+                    {
+                        String bodyy = response.body().string();
+                        long target = response.body().contentLength();
+
+
+                        int responsecode = response.code();
+                        String Headers = response.headers().toString();
+                        long tx = response.sentRequestAtMillis();
+                        long rx = response.receivedResponseAtMillis();
+
+                        Log.v(Tag, "======================BODY========================");
+                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+                        NavDrawerActivityMain.flag = "success";
+//                                        Bundle bundle = new Bundle();
+//                                        bundle.putString("time", "" + (rx - tx));
+
+                        // produceEvent();
+                        Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
+
+                        editor.putString("response", bodyy);
+                        editor.putString("headers_full", Headers);
+                        editor.putString("code", String.valueOf(responsecode));
+                        editor.putString("time", "" + (rx - tx));
+
+                        editor.apply();
+                        Log.d(Tag, "===============writing data to shared preference done=========================>");
+
+//                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+//                                    tab.select();
+
+
+//                        Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+//                        intent.putExtra("url", (String) voids[0]);
+//
+//                        startActivity(intent);
+                        // Log.v("amover","amover");
+                        return true;
+
+                    }
+                    catch (Exception e)
+                    {
+
+                        return false;
+                    }
+
+    }
+
+
 }
+catch (Exception e)
+{
+    return false;
+}
+
+
+
+//            client.newCall(request).enqueue(new Callback()
+//            {
+//
+//                @Override
+//                public void onFailure(Call call, final IOException e) {
+//                    Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // Toast.makeText(NavDrawerActivityMain, e.toString(), Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//                    NavDrawerActivityMain.flag = "failure";
+//                    Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
+//
+//
+//                    // if (dialog != null) dialog.dismiss();
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, final Response response) throws IOException
+//                {
+//
+//                    //dialog.setMessage("Activating hyperdrive, please wait.");
+//                    // dialog.show();
+//
+//
+//                    try {
+//                        String bodyy = response.body().string();
+//                        long target = response.body().contentLength();
+//
+//
+//                        int responsecode = response.code();
+//                        String Headers = response.headers().toString();
+//                        long tx = response.sentRequestAtMillis();
+//                        long rx = response.receivedResponseAtMillis();
+//
+//                        Log.v(Tag, "======================BODY========================");
+//                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+//                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+//                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+//                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+//
+//                        NavDrawerActivityMain.flag = "success";
+////                                        Bundle bundle = new Bundle();
+////                                        bundle.putString("time", "" + (rx - tx));
+//
+//                        // produceEvent();
+//                        Log.d(Tag, "===============writing data to shared preference==============this is body data===========>" + bodyy);
+//
+//                        editor.putString("response", bodyy);
+//                        editor.putString("headers_full", Headers);
+//                        editor.putString("code", String.valueOf(responsecode));
+//                        editor.putString("time", "" + (rx - tx));
+//
+//                        editor.apply();
+//                        Log.d(Tag, "===============writing data to shared preference done=========================>");
+//
+////                                    TabLayout.Tab tab = tabLayout.getTabAt(4);
+////                                    tab.select();
+//
+//
+////                        Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+////                        intent.putExtra("url", (String) voids[0]);
+////
+////                        startActivity(intent);
+//                        // Log.v("amover","amover");
+//
+//
+//                    } catch (NetworkOnMainThreadException exception) {
+//
+//                        exception.printStackTrace();
+//                        Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+//                        //  if (dialog != null) dialog.dismiss();
+//                    } catch (Exception e) {
+//
+//                        Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
+//
+//                        Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+//
+//                    }
+//
+//
+//                }
+//
+//            });
+
+            return false;
+        }
+    }
+
+}
+
+
+
