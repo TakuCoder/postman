@@ -21,7 +21,6 @@
         <activity
             android:name=".Activities.Splash"
             android:noHistory="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +39,6 @@
             android:name=".PopupActivities.HeaderPopUp"
             android:label=""
             android:theme="@style/poptheme" />
-
         <activity android:name=".Activities.wizard" />
         <activity android:name=".Activities.ResponseActivity" />
         <activity android:name=".HistoryActivity" />
@@ -51,11 +49,11 @@
         <activity
             android:name=".Activities.NavDrawerActivityMain"
             android:label="@string/title_activity_nav_drawer_main"
-            android:theme="@style/AppTheme.NoActionBar">
-
-
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".Activities.MyPreferencesActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="response"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Enter time in milliseconds"
+        android:title="Change Timeout" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_1"
+        android:title="Use Custom Certificate" />
+    <Preference
+        android:key="filePicker"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Import SelfSigned Certificate"
+        android:title="Import SelfSigned Certificate" />
+    <EditTextPreference
+        android:defaultValue="Default value"
+        android:key="edit_text_preference_1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Current Certificate Location" />
+
+
+</PreferenceScreen>
