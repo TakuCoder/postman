@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,6 +66,8 @@ import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
+import thiyagu.postman.com.postmanandroid.MyApplication;
+import thiyagu.postman.com.postmanandroid.MyDatabaseReference;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.SettingsActivity;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -96,12 +100,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     ActionBarDrawerToggle toggle;
     SharedPreferences.Editor editor;
 
+    @Inject
+    MyDatabaseReference myDatabaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer_main);
 
         intiview();
+        ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
+
 
 
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);

@@ -15,11 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
-
-import java.io.File;
-import java.util.regex.Pattern;
 
 import thiyagu.postman.com.postmanandroid.R;
 
