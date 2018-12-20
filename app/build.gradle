@@ -2,14 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    defaultConfig {
-        applicationId "thiyagu.postman.com.postmanandroid"
-        minSdkVersion 21
-        targetSdkVersion 26
-        versionCode 4
-        versionName "1.0.3"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
+    defaultConfig
+            {
+                applicationId "thiyagu.postman.com.postmanandroid"
+                minSdkVersion 21
+                targetSdkVersion 26
+                versionCode 4
+                versionName "1.0.3"
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            }
 
     buildTypes {
         release {
@@ -26,7 +27,7 @@ android {
 }
 repositories {
     maven {
-        url  "http://dl.bintray.com/lukaville/maven"
+        url "http://dl.bintray.com/lukaville/maven"
     }
 }
 dependencies {
@@ -56,5 +57,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup:otto:1.3.8'
     implementation 'com.nbsp:library:1.8'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 
 }

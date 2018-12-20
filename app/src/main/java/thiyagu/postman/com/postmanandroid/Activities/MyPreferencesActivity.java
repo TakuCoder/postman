@@ -19,6 +19,9 @@ import android.widget.Toast;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+
 import thiyagu.postman.com.postmanandroid.R;
 
 public class MyPreferencesActivity extends PreferenceActivity {
@@ -32,14 +35,59 @@ public class MyPreferencesActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment {
+    public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
       static  Preference filePicker;
+      Preference holder;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
             filePicker = findPreference("filePicker");
+
+            holder = findPreference("switch_preference_1");
+
+            holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference)
+                {
+
+
+
+
+                    if(filePicker.isEnabled())
+                    {
+                        Log.v("dsfsdfdsf","enabled");
+                        String s = filePicker.getSummary().toString();
+                        Log.v("dsfsdfdsf",s);
+
+                    }
+                    else
+                    {
+                        Log.v("dsfsdfdsf","disabled");
+                       // Log.v("dsfsdfdsf",filePicker.getSummary().toString());
+                    }
+
+                    return false;
+                }
+            });
+//            holder.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object o) {
+//
+//                        filePicker.setEnabled(true);
+//                    return false;
+//                }
+//            });
+//
+//
+//            holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    filePicker.setEnabled(true);
+//                    return false;
+//                }
+//            });
             filePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -92,6 +140,12 @@ public class MyPreferencesActivity extends PreferenceActivity {
         }
 
 
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object o) {
+
+
+            return false;
+        }
     }
 
     @Override

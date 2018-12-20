@@ -8,13 +8,15 @@
         android:summary="Enter time in milliseconds"
         android:title="Change Timeout" />
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="switch_preference_1"
         android:title="Use Custom Certificate" />
     <Preference
+        android:dependency="switch_preference_1"
         android:key="filePicker"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:defaultValue="false"
         android:summary="Import SelfSigned Certificate"
         android:title="Import SelfSigned Certificate" />
     <EditTextPreference

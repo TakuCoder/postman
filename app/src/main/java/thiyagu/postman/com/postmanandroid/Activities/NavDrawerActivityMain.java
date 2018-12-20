@@ -108,9 +108,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         setContentView(R.layout.activity_nav_drawer_main);
 
         intiview();
-        ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
+       // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
+        feedReaderDbHelper = new FeedReaderDbHelper(this);
 
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
@@ -184,7 +185,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                 if (isValid(UrlField.getText().toString())) {
 
 
-                    feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
+                   // feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headerlist.size() > 0) {

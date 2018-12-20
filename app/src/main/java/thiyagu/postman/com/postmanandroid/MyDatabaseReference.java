@@ -14,5 +14,7 @@ public class MyDatabaseReference {
 
     }
 
-
+    public FeedReaderDbHelper getFeedReaderDbHelper() {
+        return feedReaderDbHelper;
+    }
 }
