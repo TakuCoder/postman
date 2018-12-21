@@ -102,6 +102,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     @Inject
     MyDatabaseReference myDatabaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         intiview();
 
-       // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
+        // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
         feedReaderDbHelper = new FeedReaderDbHelper(this);
 
@@ -177,6 +178,24 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             {
 
 
+
+
+
+                SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
+                String status = sharedPreferences.getString("CertPicker", "");
+                Log.v("status",status);
+                if(status=="DEFAULT")
+                {
+
+                    Log.v("status","loading default cert");
+                }
+                else
+                {
+                    Log.v("status","loading user cert");
+
+                }
+
+                Log.v("mypreference", status);
                 editor.putString("url_value", UrlField.getText().toString());
                 editor.putString("req_value", materialBetterSpinner.getText().toString());
                 editor.apply();
@@ -185,7 +204,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                 if (isValid(UrlField.getText().toString())) {
 
 
-                   // feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
+                    // feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headerlist.size() > 0) {
@@ -708,7 +727,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
             Log.v(Tag, "======================GET========================");
             try {
-
 
 
                 OkHttpClient client1 = new OkHttpClient();
@@ -1308,8 +1326,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             try {
 
                 Response response = call.execute();
-                if (response.code() == 200)
-                {
+                if (response.code() == 200) {
 
 
                     try {

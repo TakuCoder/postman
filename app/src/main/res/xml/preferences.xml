@@ -9,22 +9,22 @@
         android:title="Change Timeout" />
     <SwitchPreference
         android:defaultValue="true"
-        android:key="switch_preference_1"
+        android:key="switch_preference_certificate"
         android:title="Use Custom Certificate" />
     <Preference
-        android:dependency="switch_preference_1"
-        android:key="filePicker"
+        android:dependency="switch_preference_certificate"
+        android:key="CertPicker"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:defaultValue="false"
         android:summary="Import SelfSigned Certificate"
         android:title="Import SelfSigned Certificate" />
-    <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Current Certificate Location" />
+    <!--<EditTextPreference-->
+        <!--android:defaultValue="Default value"-->
+        <!--android:key="edit_text_preference_1"-->
+        <!--android:selectAllOnFocus="true"-->
+        <!--android:singleLine="true"-->
+        <!--android:title="Current Certificate Location" />-->
 
 
 </PreferenceScreen>

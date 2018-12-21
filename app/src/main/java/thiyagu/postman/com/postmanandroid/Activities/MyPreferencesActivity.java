@@ -27,25 +27,32 @@ import thiyagu.postman.com.postmanandroid.R;
 public class MyPreferencesActivity extends PreferenceActivity {
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
+    static SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+        editor = this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences",0).edit();
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
+    public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener
+    {
       static  Preference filePicker;
       Preference holder;
 
         @Override
-        public void onCreate(final Bundle savedInstanceState) {
+        public void onCreate(final Bundle savedInstanceState)
+        {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
-            filePicker = findPreference("filePicker");
 
-            holder = findPreference("switch_preference_1");
+            filePicker = findPreference("CertPicker");
+
+            holder = findPreference("switch_preference_certificate");
 
             holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -66,11 +73,19 @@ public class MyPreferencesActivity extends PreferenceActivity {
                     {
                         Log.v("dsfsdfdsf","disabled");
                        // Log.v("dsfsdfdsf",filePicker.getSummary().toString());
+
+
+                        editor.putString("CertPicker","DEFAULT");
+                        editor.apply();
+                        editor.commit();
                     }
 
                     return false;
                 }
             });
+
+
+
 //            holder.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 //                @Override
 //                public boolean onPreferenceChange(Preference preference, Object o) {
@@ -142,7 +157,7 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object o) {
-
+Log.v("asdasd","changing");
 
             return false;
         }
@@ -154,10 +169,20 @@ public class MyPreferencesActivity extends PreferenceActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK)
+        {
             String path = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             Log.v("dsdsd", path);
             MyPreferenceFragment.filePicker.setSummary(path);
+            MyPreferenceFragment.filePicker.setDefaultValue(path);
+            editor.putString("CertPicker",path);
+            editor.apply();
+            editor.commit();
+
+
+
+
+
 
         }
     }
