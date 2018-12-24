@@ -5,8 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="32dp"
-    android:paddingBottom="12dp">
+    android:background="#49526c"
+    android:layout_margin="12dp"
+   >
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +19,7 @@
         android:layout_marginBottom="4dp"
         android:textSize="24sp"/>
     <TextView
+        android:textColor="@color/white"
         android:id="@+id/method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

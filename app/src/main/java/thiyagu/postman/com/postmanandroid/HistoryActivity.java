@@ -34,7 +34,6 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
 
-
 //
 //        recyclerView = findViewById(R.id.my_recycler_view);
 //        recyclerView.setHasFixedSize(true);
@@ -66,34 +65,29 @@ public class HistoryActivity extends AppCompatActivity {
 
         for (int k = 0; k < aa.size(); k++) {
 
-            if(k==0)
-            {
-                       // historyClassList.add(new HistoryClass("https://www.google.com", "200ms", "680", "200","22.00.00"));
+            if (k == 0) {
+                // historyClassList.add(new HistoryClass("https://www.google.com", "200ms", "680", "200","22.00.00"));
 
-            }
-            else
-            {
-
+            } else {
 
 
             }
 
             ArrayList<String> data = feedReaderDbHelper.getAllhistory(aa.get(k));
 
-            for (int u = 0; u < data.size(); u++)
-            {
+            for (int u = 0; u < data.size(); u++) {
 
 
-                String value[]=data.get(u).split("@@");
+                String value[] = data.get(u).split("@@");
 
-Log.v("sdasdsasa",data.get(u));
+                Log.v("sdasdsasa", data.get(u));
 
                 if (u == 0) {
-                    historyClassList.add(new HistoryClass("",value[2],"","","","","", CityEvent.CITY_TYPE));
-                    historyClassList.add(new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6],value[7], CityEvent.EVENT_TYPE));
+                    historyClassList.add(new HistoryClass("", value[2], "", "", "", "", "", CityEvent.CITY_TYPE));
+                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], CityEvent.EVENT_TYPE));
 
                 } else {
-                    historyClassList.add(new HistoryClass(value[1],value[2],value[3],value[4],value[5],value[6],value[7],CityEvent.EVENT_TYPE));
+                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], CityEvent.EVENT_TYPE));
 
                 }
 
@@ -136,27 +130,26 @@ Log.v("sdasdsasa",data.get(u));
 
 
         //creating recyclerview adapter
-       // DifferentRowAdapter adapter = new DifferentRowAdapter(getData());
+        // DifferentRowAdapter adapter = new DifferentRowAdapter(getData());
 
         //setting adapter to recyclerview
-       // recyclerView.setAdapter(adapter);
+        // recyclerView.setAdapter(adapter);
 
 
     }
 
 
-
-        public static List<HistoryClass> getData() {
-            List<HistoryClass> list = new ArrayList<>();
-            list.add(new HistoryClass("London", "","","","","","", CityEvent.CITY_TYPE));
-            list.add(new HistoryClass("London", "","","","","","", CityEvent.EVENT_TYPE));
-            list.add(new HistoryClass("London", "","","","","","", CityEvent.EVENT_TYPE));
-            list.add(new HistoryClass("London", "","","","","","",  CityEvent.CITY_TYPE));
-            list.add(new HistoryClass("London", "","","","","","",  CityEvent.EVENT_TYPE));
-            list.add(new HistoryClass("London", "","","","","","",  CityEvent.CITY_TYPE));
-            list.add(new HistoryClass("London", "","","","","","",  CityEvent.EVENT_TYPE));
-            return list;
-        }
+    public static List<HistoryClass> getData() {
+        List<HistoryClass> list = new ArrayList<>();
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
+        return list;
+    }
 
 
 }

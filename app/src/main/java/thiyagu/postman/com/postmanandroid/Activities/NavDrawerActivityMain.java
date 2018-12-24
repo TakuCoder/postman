@@ -35,6 +35,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -75,6 +77,7 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptB
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class NavDrawerActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "TAG";
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
     EditText UrlField;
@@ -149,6 +152,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         responsetab = tabLayout.getTabAt(4);
 
         NetwordDetect();
+
+//
+
+
+
 
 
         materialBetterSpinner.setAdapter(arrayadapter);
@@ -253,6 +261,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         Log.v(Tag, "Exception while clicking send button" + e.toString());
 
                         e.printStackTrace();
+
+                       // Crashlytics.log(Log.ERROR, TAG, "NPE caught!");
+                       // Crashlytics.logException(ex);
                         //Toasty.error(getApplicationContext(),e.toString());
                     }
 
@@ -428,6 +439,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             Log.v(Tag, "==============================================");
         } catch (Exception e) {
             Log.v(Tag, e.toString());
+
+            FirebaseCrash.logcat(Log.ERROR, TAG, "NPE caught");
+            FirebaseCrash.report(e);
 
         }
 

@@ -22,7 +22,7 @@ public class wizard extends AppIntro2 {
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle("Welcome!");
         sliderPage1.setDescription("Powerful HTTP Client designed for android with \uD83D\uDC9A ");
-        sliderPage1.setImageDrawable(R.mipmap.ic_launcher);
+        sliderPage1.setImageDrawable(R.drawable.postmanicon);
         sliderPage1.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 
@@ -34,9 +34,9 @@ public class wizard extends AppIntro2 {
         addSlide(AppIntroFragment.newInstance(sliderPage2));
 
         SliderPage sliderPage3 = new SliderPage();
-        sliderPage3.setTitle("Simple, yet Customizable");
-        sliderPage3.setDescription("The library offers a lot of customization, while keeping it simple for those that like simple.");
-        sliderPage3.setImageDrawable(R.drawable.postmanicon);
+        sliderPage3.setTitle("Import Your Certificate!");
+        sliderPage3.setDescription("Using self-signed SSL certificates with Postman-Android");
+        sliderPage3.setImageDrawable(R.drawable.certificate);
         sliderPage3.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage3));
 

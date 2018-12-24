@@ -23,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import okhttp3.Headers;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
@@ -37,6 +39,7 @@ import thiyagu.postman.com.postmanandroid.Fragment.Preview;
 import thiyagu.postman.com.postmanandroid.Fragment.RawFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
+import thiyagu.postman.com.postmanandroid.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
@@ -211,6 +214,13 @@ public class ResultActivity extends AppCompatActivity {
 
         }
 
+        SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss");
+        Log.v("asdadsa", timee.format(new Date()));
+
+
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        Log.v("asdadsa", date.format(new Date()));
+        AutoSave(url_value, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, "GET", 1);
         fullheader.setText(headers_full);
         url.setText("URL : " + url_value);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
@@ -285,5 +295,19 @@ public class ResultActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+    }
+    public void AutoSave(String url, String date,String time, String size, String response_code, String Duration, String reqtype, int type) {
+
+
+        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
+        HistoryClass historyClass = new HistoryClass(url, date,time, size, response_code, Duration, reqtype, type);
+        Log.v("autosave", date +
+                "\n" + response_code +
+                "\n" + url +
+                "\n" + size +
+                "\n" + Duration +
+                "\n");
+
+        feedReaderDbHelper.addEntryHistory(historyClass);
     }
 }
