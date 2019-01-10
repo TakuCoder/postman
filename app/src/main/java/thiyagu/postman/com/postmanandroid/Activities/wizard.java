@@ -35,14 +35,14 @@ public class wizard extends AppIntro2 {
 
         SliderPage sliderPage3 = new SliderPage();
         sliderPage3.setTitle("Import Your Certificate!");
-        sliderPage3.setDescription("Using self-signed SSL certificates with Postman-Android");
+        sliderPage3.setDescription("Test with self-signed SSL certificates with Postman-Android");
         sliderPage3.setImageDrawable(R.drawable.certificate);
         sliderPage3.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage3));
 
         SliderPage sliderPage4 = new SliderPage();
-        sliderPage4.setTitle("Explore");
-        sliderPage4.setDescription("Feel free to explore the rest of the library demo!");
+        sliderPage4.setTitle("Testing");
+        sliderPage4.setDescription("Make TestCases in one click");
         sliderPage4.setImageDrawable(R.drawable.postmanicon);
         sliderPage4.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage4));
