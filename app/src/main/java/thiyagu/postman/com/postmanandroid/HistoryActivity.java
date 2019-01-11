@@ -9,18 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-import thiyagu.postman.com.postmanandroid.Activities.CityEvent;
+import thiyagu.postman.com.postmanandroid.Activities.ViewType;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DifferentRowAdapter;
-
-import static thiyagu.postman.com.postmanandroid.HistoryClass.DATE_TYPE;
-import static thiyagu.postman.com.postmanandroid.HistoryClass.RESPONSE_TYPE;
 
 public class HistoryActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -83,11 +76,11 @@ public class HistoryActivity extends AppCompatActivity {
                 Log.v("sdasdsasa", data.get(u));
 
                 if (u == 0) {
-                    historyClassList.add(new HistoryClass("", value[2], "", "", "", "", "", CityEvent.CITY_TYPE));
-                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], CityEvent.EVENT_TYPE));
+                    historyClassList.add(new HistoryClass("", value[2], "", "", "", "", "", ViewType.CITY_TYPE));
+                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], ViewType.EVENT_TYPE));
 
                 } else {
-                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], CityEvent.EVENT_TYPE));
+                    historyClassList.add(new HistoryClass(value[1], value[2], value[3], value[4], value[5], value[6], value[7], ViewType.EVENT_TYPE));
 
                 }
 
@@ -141,13 +134,13 @@ public class HistoryActivity extends AppCompatActivity {
 
     public static List<HistoryClass> getData() {
         List<HistoryClass> list = new ArrayList<>();
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.CITY_TYPE));
-        list.add(new HistoryClass("London", "", "", "", "", "", "", CityEvent.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.EVENT_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.CITY_TYPE));
+        list.add(new HistoryClass("London", "", "", "", "", "", "", ViewType.EVENT_TYPE));
         return list;
     }
 

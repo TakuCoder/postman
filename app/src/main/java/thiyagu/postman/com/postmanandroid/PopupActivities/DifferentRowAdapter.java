@@ -171,8 +171,8 @@ import java.util.List;
 import thiyagu.postman.com.postmanandroid.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
-import static thiyagu.postman.com.postmanandroid.Activities.CityEvent.CITY_TYPE;
-import static thiyagu.postman.com.postmanandroid.Activities.CityEvent.EVENT_TYPE;
+import static thiyagu.postman.com.postmanandroid.Activities.ViewType.CITY_TYPE;
+import static thiyagu.postman.com.postmanandroid.Activities.ViewType.EVENT_TYPE;
 
 public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<HistoryClass> mList;

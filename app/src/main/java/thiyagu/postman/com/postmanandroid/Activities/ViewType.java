@@ -1,12 +1,12 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
-public class CityEvent {
+public class ViewType {
     public static final int CITY_TYPE = 0;
     public static final int EVENT_TYPE = 1;
     private String mName;
     private String mDescription;
     private int mType;
-    public CityEvent(String name, String description, int type) {
+    public ViewType(String name, String description, int type) {
         this.mName = name;
         this.mDescription = description;
         this.mType = type;
