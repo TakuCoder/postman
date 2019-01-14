@@ -387,7 +387,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                         case "PUT":
 
-                            if (isOnline()) {
+                            if (isOnline())
+                            {
 
                                 Log.v(Tag, "Diving Into PUT");
                                 //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);

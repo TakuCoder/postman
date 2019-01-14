@@ -51,7 +51,7 @@ public class AuthorizationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        Log.v("whichfragment","AuthFragment");
+        Log.v("whichfragment", "AuthFragment");
         Button updateauthrequest;
         final EditText username, password;
 
@@ -83,21 +83,14 @@ public class AuthorizationFragment extends Fragment {
 
 
                     Log.v("asdasdasdsa", "nulllllll");
-                    new MaterialTapTargetPrompt.Builder(getActivity())
-                            .setTarget(view.findViewById(R.id.material_spinnerauth))
-                            .setPrimaryText("Select the auth type")
-                            .setPromptBackground(new CirclePromptBackground())
-                            .setPromptFocal(new RectanglePromptFocal())
-                            .setBackgroundColour(getResources().getColor(R.color.buttonblue))
-                            .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                @Override
-                                public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                        Toast.makeText(context, "presseddddd", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            })
-                            .show();
+                    new MaterialTapTargetPrompt.Builder(getActivity()).setTarget(view.findViewById(R.id.material_spinnerauth)).setPrimaryText("Select the auth type").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                        @Override
+                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                                Toast.makeText(context, "presseddddd", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).show();
 
 
                 } else if (materialBetterSpinner.getHint().toString().equals("Auth Type")) {
@@ -109,7 +102,6 @@ public class AuthorizationFragment extends Fragment {
                         Log.v("qqqqwwww", String.valueOf(username_length) + String.valueOf(password_length));
 
                         if (username_length > 0 && password_length > 0) {
-
 
 
                             String Credentials = username.getText().toString() + ":" + password.getText().toString();
@@ -131,7 +123,7 @@ public class AuthorizationFragment extends Fragment {
                     } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
 
 
-                        String Credentials = "No auth";
+                        //String Credentials = "No auth";
                         String authdata = "No auth";
 
                         SharedPreferences.Editor editor = view.getContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
