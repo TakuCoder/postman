@@ -102,6 +102,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     AssetManager assetManager;
     ActionBarDrawerToggle toggle;
     SharedPreferences.Editor editor;
+    public long timeout;
 
     @Inject
     MyDatabaseReference myDatabaseReference;

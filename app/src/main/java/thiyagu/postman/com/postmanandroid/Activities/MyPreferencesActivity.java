@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
+import java.util.Map;
 import java.util.prefs.PreferenceChangeEvent;
 import java.util.prefs.PreferenceChangeListener;
 
@@ -38,18 +40,32 @@ public class MyPreferencesActivity extends PreferenceActivity {
         editor = this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", 0).edit();
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+    public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
         static Preference filePicker;
         Preference holder;
-
+        EditTextPreference response;
+        SharedPreferences sharedPreferences;
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
+            sharedPreferences = getPreferenceManager().getSharedPreferences();
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+           // response = findPreference("response");
+
+
             filePicker = findPreference("CertPicker");
 
             holder = findPreference("switch_preference_certificate");
+//            response.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//
+//                    response.setSummary(response.getText());
+//                    return false;
+//                }
+//            });
 
             holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -152,6 +168,18 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
             return false;
         }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+            Map<String, ?> preferencesMap = sharedPreferences.getAll();
+
+            // get the preference that has been changed
+            Object changedPreference = preferencesMap.get(s);
+            // and if it's an instance of EditTextPreference class, update its summary
+            if (preferencesMap.get(s) instanceof EditTextPreference) {
+                updateSummary((EditTextPreference) changedPreference);
+            }
+        }
     }
 
     @Override
@@ -170,5 +198,9 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
 
         }
+    }
+    private static void updateSummary(EditTextPreference preference) {
+        // set the EditTextPreference's summary value to its current text
+        preference.setSummary(preference.getText());
     }
 }
