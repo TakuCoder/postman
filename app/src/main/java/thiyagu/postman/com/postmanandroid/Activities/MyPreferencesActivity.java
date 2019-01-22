@@ -7,10 +7,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -26,7 +29,7 @@ import java.util.prefs.PreferenceChangeListener;
 
 import thiyagu.postman.com.postmanandroid.R;
 
-public class MyPreferencesActivity extends PreferenceActivity {
+public class MyPreferencesActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
     static SharedPreferences.Editor editor;
@@ -40,38 +43,48 @@ public class MyPreferencesActivity extends PreferenceActivity {
         editor = this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", 0).edit();
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object o) {
+        return false;
+    }
+
     public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
         static Preference filePicker;
         Preference holder;
         EditTextPreference response;
         SharedPreferences sharedPreferences;
+
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
             sharedPreferences = getPreferenceManager().getSharedPreferences();
+            PreferenceScreen prefScreen = getPreferenceScreen();
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-           // response = findPreference("response");
 
+            int count = prefScreen.getPreferenceCount();
+            for (int i = 0; i < count; i++) {
+
+                Preference p = prefScreen.getPreference(i);
+                if ((p instanceof EditTextPreference)) {
+                    String value = sharedPreferences.getString(p.getKey(), "");
+                    setPreferenceSummary(p, value);
+                }
+            }
 
             filePicker = findPreference("CertPicker");
 
             holder = findPreference("switch_preference_certificate");
-//            response.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//
-//                    response.setSummary(response.getText());
-//                    return false;
-//                }
-//            });
 
             holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
-
                     if (filePicker.isEnabled()) {
                         Log.v("dsfsdfdsf", "enabled");
                         String s = filePicker.getSummary().toString();
@@ -79,9 +92,6 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
                     } else {
                         Log.v("dsfsdfdsf", "disabled");
-                        // Log.v("dsfsdfdsf",filePicker.getSummary().toString());
-
-
                         editor.putString("CertPicker", "DEFAULT");
                         editor.apply();
                         editor.commit();
@@ -92,23 +102,6 @@ public class MyPreferencesActivity extends PreferenceActivity {
             });
 
 
-//            holder.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object o) {
-//
-//                        filePicker.setEnabled(true);
-//                    return false;
-//                }
-//            });
-//
-//
-//            holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    filePicker.setEnabled(true);
-//                    return false;
-//                }
-//            });
             filePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -142,23 +135,12 @@ public class MyPreferencesActivity extends PreferenceActivity {
         }
 
         private void openFilePicker() {
-            new MaterialFilePicker()
-                    .withActivity(
-                            getActivity()
-                    )
-                    .withRequestCode(FILE_PICKER_REQUEST_CODE)
-                    .withHiddenFiles(true)
-                    .withTitle("Sample title")
-                    .start();
+            new MaterialFilePicker().withActivity(getActivity()).withRequestCode(FILE_PICKER_REQUEST_CODE).withHiddenFiles(true).withTitle("Sample title").start();
         }
 
         private void showError() {
 
             Toast.makeText(getActivity(), "Allow external storage reading", Toast.LENGTH_SHORT).show();
-        }
-
-        public Preference getMyPref() {
-            return filePicker;
         }
 
 
@@ -171,14 +153,18 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-            Map<String, ?> preferencesMap = sharedPreferences.getAll();
 
-            // get the preference that has been changed
-            Object changedPreference = preferencesMap.get(s);
-            // and if it's an instance of EditTextPreference class, update its summary
-            if (preferencesMap.get(s) instanceof EditTextPreference) {
-                updateSummary((EditTextPreference) changedPreference);
+
+            Preference preference = findPreference(s);
+            if (null != preference) {
+                if ((preference instanceof EditTextPreference)) {
+
+                    String val = sharedPreferences.getString(preference.getKey(), "");
+                    setPreferenceSummary(preference, val);
+                }
+
             }
+
         }
     }
 
@@ -199,8 +185,22 @@ public class MyPreferencesActivity extends PreferenceActivity {
 
         }
     }
-    private static void updateSummary(EditTextPreference preference) {
-        // set the EditTextPreference's summary value to its current text
-        preference.setSummary(preference.getText());
+
+
+    private static void setPreferenceSummary(Preference preference, String value) {
+        if (preference instanceof ListPreference) {
+            // For list preferences, figure out the label of the selected value
+            ListPreference listPreference = (ListPreference) preference;
+            int prefIndex = listPreference.findIndexOfValue(value);
+            if (prefIndex >= 0) {
+                // Set the summary to that label
+                listPreference.setSummary(listPreference.getEntries()[prefIndex]);
+            }
+        } else if (preference instanceof EditTextPreference) {
+            Log.v("sdasdsadassd", value);
+            // For EditTextPreferences, set the summary to the value's simple string representation.
+            preference.setSummary(value);
+            // setPreferenceSummary(preference, value);
+        }
     }
 }

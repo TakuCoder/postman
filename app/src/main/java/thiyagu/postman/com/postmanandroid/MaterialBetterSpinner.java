@@ -18,7 +18,7 @@ import java.util.Calendar;
 
 public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implements AdapterView.OnItemClickListener {
 
-    private static final int MAX_CLICK_DURATION = 0;
+    private static final int MAX_CLICK_DURATION = 50;
     private long startClickTime;
     private boolean isPopup;
 
@@ -58,8 +58,8 @@ public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implemen
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
+    public boolean onTouchEvent(MotionEvent event)
+    {
 //        switch (event.getAction())
 //        {
 //            case MotionEvent.ACTION_DOWN: {

@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableStringBuilder;
@@ -76,7 +77,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-public class NavDrawerActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class NavDrawerActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "TAG";
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
@@ -113,6 +114,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         setContentView(R.layout.activity_nav_drawer_main);
 
         intiview();
+        setupSharedPreferences();
 
         // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
@@ -157,21 +159,32 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 //
 
 
-
-
-
         materialBetterSpinner.setAdapter(arrayadapter);
         materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                switch (i) {
 
-                if (String.valueOf(i).equals("1")) {
 
-                    body.select();
+                    case 0:
+
+//                        editor.putString("bodytypeflag", "0");
+//                        editor.apply();
+
+
+                        break;
+
+                    case 1:
+                        body.select();
+//                        editor.putString("bodytypeflag", "1");
+//                        editor.apply();
+                        break;
+
 
                 }
+
             }
         });
 
@@ -187,20 +200,14 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             {
 
 
-
-
-
                 SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
-                Log.v("status",status);
-                if(status=="DEFAULT")
-                {
+                Log.v("status", status);
+                if (status == "DEFAULT") {
 
-                    Log.v("status","loading default cert");
-                }
-                else
-                {
-                    Log.v("status","loading user cert");
+                    Log.v("status", "loading default cert");
+                } else {
+                    Log.v("status", "loading user cert");
 
                 }
 
@@ -263,8 +270,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                         e.printStackTrace();
 
-                       // Crashlytics.log(Log.ERROR, TAG, "NPE caught!");
-                       // Crashlytics.logException(ex);
+                        // Crashlytics.log(Log.ERROR, TAG, "NPE caught!");
+                        // Crashlytics.logException(ex);
                         //Toasty.error(getApplicationContext(),e.toString());
                     }
 
@@ -323,9 +330,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             if (isOnline()) {
 
                                 ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                                String rawbody = prefs.getString("bodytypeflag", null);
+                                final String rawbody = prefs.getString("rawbody", null);
                                 Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                                if (part.size() > 0 || rawbody.length() > 0) {
+                                if (part.size() > 0) {
                                     Log.v(Tag, "======================part size greater than 0========================");
                                     // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
                                     GetRequest("POST", Address, headerBuilder, urlencodedparams);
@@ -339,24 +346,33 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                             TabLayout.Tab tab = tabLayout.getTabAt(3);
                                             tab.select();
 
+                                            String rawbodytype = prefs.getString("rawbodytype", "");
 
-                                            Handler handler = new Handler();
-                                            handler.postDelayed(new Runnable() {
-                                                @Override
-                                                public void run() {
+                                            switch (rawbodytype) {
 
 
-                                                    new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(findViewById(R.id.AddBody)).setPrimaryText("POST request must have atleast one part").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                                                        @Override
-                                                        public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                                                            if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                                                                //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    }).show();
+                                                case "MULTIFORM":
+                                                    HighLightButton(R.id.AddBody,"POST request must have atleast one part");
+                                                    break;
 
-                                                }
-                                            }, 1000);
+                                                case "JSON":
+                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
+                                                    break;
+
+                                                case "XML":
+                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
+                                                    break;
+                                                    default:
+
+                                                        //body_spinner.setSelection(0);
+
+                                                        HighLightButton(R.id.body_spinner,"Please select the type of part");
+                                                        Log.v("sdasdsd","this"+rawbodytype);
+                                                        break;
+
+
+                                            }
+
                                         }
                                     });
 
@@ -388,8 +404,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                         case "PUT":
 
-                            if (isOnline())
-                            {
+                            if (isOnline()) {
 
                                 Log.v(Tag, "Diving Into PUT");
                                 //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
@@ -448,6 +463,43 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         }
 
 
+    }
+
+    private void HighLightButton(final int resource,final String message) {
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+
+
+            {
+
+
+
+
+
+                new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(resource).setPrimaryText(message).setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    @Override
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
+                            //toreg
+                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
+                            Toasty.warning(NavDrawerActivityMain.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
+
+                        }
+                    }
+                }).show();
+
+            }
+        }, 1000);
+    }
+
+    private void setupSharedPreferences() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public void intiview() {
@@ -586,6 +638,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         super.onDestroy();
         Log.v(Tag, "destroy");
         BusProvider.getBus().unregister(this);
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -636,6 +689,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         int id = item.getItemId();
 
         if (id == R.id.bookmark) {
+            Toasty.info(this,"Coming soon!");
 
         } else if (id == R.id.history) {
 
@@ -817,7 +871,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
                             intent.putExtra("url", finalUrlvalue);
-
+                            intent.putExtra("reqtype", "GET");
                             startActivity(intent);
                             // Log.v("amover","amover");
 
@@ -856,7 +910,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 String bodyflag = prefs.getString("bodytypeflag", null);
                 String rawbody = prefs.getString("rawbody", null);
-                switch (bodyflag) {
+                switch (bodyflag)
+                {
 
                     case "1":
 
@@ -949,6 +1004,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                 }
 
 
+                final String finalUrlvalue1 = urlvalue;
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
@@ -1003,8 +1059,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                     //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
+                                    // Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+                                    // intent.putExtra("url", finalUrlvalue);
 
-                                    Intent intent = new Intent(NavDrawerActivityMain.this, ResponseActivity.class);
+                                    // startActivity(intent);
+                                    Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+                                    intent.putExtra("url", finalUrlvalue1);
+                                    intent.putExtra("reqtype", "POST");
                                     startActivity(intent);
                                 } catch (Exception e) {
 
@@ -1311,6 +1372,19 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         if (dialog != null) dialog.dismiss();
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+
+        Log.v("sadasdsadsad", s);
+
+        if (s.equals("response")) {
+            loadTimeoutFromPreference(sharedPreferences);
+
+        }
+
+    }
+
     class GetAsync extends AsyncTask<Object, Long, Boolean> {
         @Override
         protected void onPreExecute() {
@@ -1489,6 +1563,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
             return false;
         }
+    }
+
+
+    private void changeResponseTimeoutTime(int i) {
+        Log.v("changedTimeOut", String.valueOf(i));
+    }
+
+    private void loadTimeoutFromPreference(SharedPreferences sharedPreferences) {
+        int response_time = Integer.parseInt(sharedPreferences.getString("response", ""));
+        changeResponseTimeoutTime(response_time);
     }
 
 }

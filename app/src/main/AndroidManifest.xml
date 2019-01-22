@@ -41,7 +41,8 @@
             android:theme="@style/poptheme" />
         <activity android:name=".Activities.wizard" />
         <activity android:name=".Activities.ResponseActivity" />
-        <activity android:name=".HistoryActivity" />
+        <activity android:name=".HistoryActivity"
+            android:label="history"/>
         <activity
             android:name=".Activities.ResultActivity"
             android:label="@string/title_activity_result"

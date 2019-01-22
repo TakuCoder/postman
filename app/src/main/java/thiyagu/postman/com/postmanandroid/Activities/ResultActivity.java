@@ -63,6 +63,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         String url_value = getIntent().getStringExtra("url");
+        String req_type = getIntent().getStringExtra("reqtype");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         feedReaderDbHelper =  new FeedReaderDbHelper(this);
@@ -220,7 +221,7 @@ public class ResultActivity extends AppCompatActivity {
 
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         Log.v("asdadsa", date.format(new Date()));
-        AutoSave(url_value, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, "GET", 1);
+        AutoSave(url_value, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, req_type+" "+response_code, 1);
         fullheader.setText(headers_full);
         url.setText("URL : " + url_value);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);

@@ -3,9 +3,7 @@
 
     <EditTextPreference
         android:key="response"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:summary="Enter time in milliseconds"
+        android:defaultValue="8000"
         android:title="Change Timeout" />
     <SwitchPreference
         android:defaultValue="false"
@@ -19,12 +17,5 @@
         android:defaultValue="false"
         android:summary="Import SelfSigned Certificate"
         android:title="Import SelfSigned Certificate" />
-    <!--<EditTextPreference-->
-        <!--android:defaultValue="Default value"-->
-        <!--android:key="edit_text_preference_1"-->
-        <!--android:selectAllOnFocus="true"-->
-        <!--android:singleLine="true"-->
-        <!--android:title="Current Certificate Location" />-->
-
 
 </PreferenceScreen>
