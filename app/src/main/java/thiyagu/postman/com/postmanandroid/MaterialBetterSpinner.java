@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,7 +19,7 @@ import java.util.Calendar;
 
 public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implements AdapterView.OnItemClickListener {
 
-    private static final int MAX_CLICK_DURATION = 50;
+    private static final int MAX_CLICK_DURATION = 300;
     private long startClickTime;
     private boolean isPopup;
 
@@ -58,53 +59,46 @@ public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implemen
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-//        switch (event.getAction())
-//        {
-//            case MotionEvent.ACTION_DOWN: {
-//                startClickTime = Calendar.getInstance().getTimeInMillis();
-//                break;
-//            }
-//            case MotionEvent.ACTION_UP: {
-//                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-//                if (clickDuration < MAX_CLICK_DURATION) {
-//                    if (isPopup) {
-//                        dismissDropDown();
-//                        isPopup = false;
-//                    } else {
-//                        requestFocus();
-//                        showDropDown();
-//                        isPopup = true;
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//
-// if (isPopup) {
-//            dismissDropDown();
-//            isPopup = false;
-//        } else {
-//            requestFocus();
-//            showDropDown();
-//            isPopup = true;
-//        }
-//        return super.onTouchEvent(event);
-        if (isPopup) {
-            dismissDropDown();
-            isPopup = false;
-        } else {
-            requestFocus();
-            showDropDown();
-            isPopup = true;
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled())
+            return false;
+
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                {
+                    Log.v("whereisclick","here");
+                startClickTime = Calendar.getInstance().getTimeInMillis();
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+                {
+                    Log.v("whereisclick","here1");
+                long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                if (clickDuration < MAX_CLICK_DURATION) {
+                    if (isPopup) {
+                        Log.v("whereisclick","here2");
+                        dismissDropDown();
+                        isPopup = false;
+                        requestFocus();
+                        showDropDown();
+                        isPopup = true;
+                    } else {
+                        Log.v("whereisclick","here3");
+                        requestFocus();
+                        showDropDown();
+                        isPopup = true;
+                    }
+                }
+            }
         }
+
         return super.onTouchEvent(event);
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
         isPopup = false;
     }
 

@@ -13,8 +13,10 @@
     <color name="cardview_initial_background">#71C3DE</color>
     <color name="white">#ffffff</color>
 
+    <color name="colorTextPrimary">#FFF</color>
+    <color name="colorTextSecondary">#B2FFFFFF</color>
 
-
+    <color name="colorDivider">#1FFFFFFF</color>
 
 <color name="neon">#a4c639</color>
     <color name="keycolor">#F0E68C</color>

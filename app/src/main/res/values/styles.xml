@@ -28,7 +28,15 @@
         <item name="colorControlNormal">@color/colorAccent</item>
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
     <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:paddingStart">0dp</item>
@@ -37,6 +45,10 @@
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:backgroundTint">@android:color/white</item>
         <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AppTheme.TextAppearanceLarge">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="popupspinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
@@ -51,6 +63,10 @@
         <item name="colorAccent">@android:color/white</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
+    </style>
+    <style name="AppTheme.TextAppearanceNormal">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <!-- Base application theme. -->
@@ -69,5 +85,9 @@
         <item name="colorAccent">@color/colorAccent</item>
 
 
+    </style>
+    <style name="AppTheme.TextAppearanceSmall">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 </resources>

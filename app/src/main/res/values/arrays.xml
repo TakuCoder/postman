@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="licenses">
+        <item>OkHttp</item>
+        <item>An HTTP &amp; HTTP/2 client for Android and Java applications. (APACHE 2.0)</item>
+        <item>https://github.com/square/okhttp</item>
+
+        <item>FastAdapter</item>
+        <item>The bullet proof, fast and easy to use adapter library. (APACHE 2.0)</item>
+        <item>https://github.com/mikepenz/FastAdapter</item>
+
+        <item>greenDAO</item>
+        <item>greenDAO is a light &amp; fast ORM solution for Android that maps objects to SQLite databases. (APACHE 2.0)</item>
+        <item>https://github.com/greenrobot/greenDAO</item>
+
+        <item>AutoFitTextView</item>
+        <item>A TextView that automatically resizes text to fit perfectly within its bounds. (APACHE 2.0)</item>
+        <item>https://github.com/grantland/android-autofittextview</item>
+
+        <item>LeakCanary</item>
+        <item>A memory leak detection library for Android and Java. (APACHE 2.0)</item>
+        <item>https://github.com/square/leakcanary</item>
+
+        <item>Material Design Icons</item>
+        <item>materialdesignicons.com (SIL Open Font License 1.1)</item>
+        <item>https://github.com/Templarian/MaterialDesign</item>
+
+        <item>Material Design Iconic Font</item>
+        <item>zavoloklom.github.io/material-design-iconic-font/ (SIL Open Font License 1.1)</item>
+        <item>https://github.com/zavoloklom/material-design-iconic-font</item>
+
+        <item>Special Icon Family</item>
+        <item>Designed by Freepik from Flaticon (Free for commercial use WITH ATTRIBUTION license)</item>
+        <item>http://www.flaticon.com/family/special/lineal</item>
+    </string-array>
+</resources>

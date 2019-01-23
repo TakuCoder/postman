@@ -41,8 +41,9 @@
             android:theme="@style/poptheme" />
         <activity android:name=".Activities.wizard" />
         <activity android:name=".Activities.ResponseActivity" />
-        <activity android:name=".HistoryActivity"
-            android:label="history"/>
+        <activity
+            android:name=".HistoryActivity"
+            android:label="history" />
         <activity
             android:name=".Activities.ResultActivity"
             android:label="@string/title_activity_result"
@@ -54,7 +55,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".Activities.MyPreferencesActivity"></activity>
+        <activity android:name=".Activities.MyPreferencesActivity" />
+        <activity android:name=".Activities.AboutusActivity" />
     </application>
 
 </manifest>

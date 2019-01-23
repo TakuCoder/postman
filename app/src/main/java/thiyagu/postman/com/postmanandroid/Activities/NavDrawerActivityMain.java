@@ -39,7 +39,6 @@ import android.widget.Toast;
 import com.google.firebase.crash.FirebaseCrash;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
@@ -69,10 +68,8 @@ import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
-import thiyagu.postman.com.postmanandroid.MyApplication;
 import thiyagu.postman.com.postmanandroid.MyDatabaseReference;
 import thiyagu.postman.com.postmanandroid.R;
-import thiyagu.postman.com.postmanandroid.SettingsActivity;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
@@ -689,7 +686,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         int id = item.getItemId();
 
         if (id == R.id.bookmark) {
-            Toasty.info(this,"Coming soon!");
+//ABC123456789
+            Toast.makeText(getContext(),"Coming Soon!",Toast.LENGTH_LONG).show();
 
         } else if (id == R.id.history) {
 
@@ -702,7 +700,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             startActivity(intent);
 
         } else if (id == R.id.about) {
-
+            Intent intent = new Intent(this, AboutusActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
