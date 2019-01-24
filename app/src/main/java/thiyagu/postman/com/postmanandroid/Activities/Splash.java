@@ -6,8 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 import thiyagu.postman.com.postmanandroid.R;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class Splash extends Activity{
     @Override
@@ -28,8 +33,12 @@ try
 
     if(check.equals("passed"))
     {
+
+
+
         Intent intent = new Intent(Splash.this,NavDrawerActivityMain.class);
         startActivity(intent);
+
 
     }
 

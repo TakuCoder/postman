@@ -43,7 +43,7 @@ public class wizard extends AppIntro2 {
         SliderPage sliderPage4 = new SliderPage();
         sliderPage4.setTitle("Testing");
         sliderPage4.setDescription("Make TestCases in one click");
-        sliderPage4.setImageDrawable(R.drawable.postmanicon);
+        sliderPage4.setImageDrawable(R.drawable.testing);
         sliderPage4.setBgColor(Color.TRANSPARENT);
         addSlide(AppIntroFragment.newInstance(sliderPage4));
 

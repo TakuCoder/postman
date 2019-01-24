@@ -244,7 +244,7 @@ public class BodyFragment extends Fragment {
         }
         catch (Exception e)
         {
-            Toast.makeText(NavDrawerActivityMain.getContext(),e.toString(),Toast.LENGTH_LONG).show();
+           // Toast.makeText(NavDrawerActivityMain.getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
         }
 //        radio_formdata.setOnClickListener(new View.OnClickListener() {

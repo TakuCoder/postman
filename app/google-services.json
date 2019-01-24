@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "59352227000-ivet17ooe200scq7t4k2dcm20ha8i6j3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "thiyagu.postman.com.postmanandroid",
+            "certificate_hash": "6d850c3982f2bf306ed3d31421632bdf5db97013"
+          }
+        },
+        {
           "client_id": "59352227000-sd7qsg88umo6dolrm3mo599ssq1qqlnq.apps.googleusercontent.com",
           "client_type": 3
         }

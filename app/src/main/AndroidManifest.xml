@@ -43,7 +43,7 @@
         <activity android:name=".Activities.ResponseActivity" />
         <activity
             android:name=".HistoryActivity"
-            android:label="history" />
+            android:label="History" />
         <activity
             android:name=".Activities.ResultActivity"
             android:label="@string/title_activity_result"
