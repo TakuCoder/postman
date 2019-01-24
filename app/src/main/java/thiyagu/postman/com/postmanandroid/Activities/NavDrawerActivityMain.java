@@ -687,8 +687,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         if (id == R.id.bookmark) {
 //ABC123456789
-            Toast.makeText(getContext(),"Coming Soon!",Toast.LENGTH_LONG).show();
 
+            Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
             Intent intent = new Intent(this, HistoryActivity.class);
@@ -702,6 +702,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         } else if (id == R.id.about) {
             Intent intent = new Intent(this, AboutusActivity.class);
             startActivity(intent);
+        }
+        else if (id == R.id.test) {
+            Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

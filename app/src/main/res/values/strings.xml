@@ -110,7 +110,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
-
+    <string name="dark_theme">Dark Theme</string>
+    <string name="light_theme">Light Theme</string>
+    <string name="custom_theme">Custom Theme</string>
     <string name="about_view_us">MuShare Group</string>
     <string name="about_view_licenses">Licenses</string>
     <string name="about_view_link">Visit our Homepage</string>
@@ -118,4 +120,6 @@
     <string name="about_view_store">Rate on Play Store</string>
     <string name="about_view_copy_right">Copyright © 2017</string>
     <string name="about_view_description">App for developers to test REST API.\nTest anywhere and anytime without desktops.</string>
+    <string name="copy_right" translatable="false">Copyrights © %1$d</string>
+
 </resources>
