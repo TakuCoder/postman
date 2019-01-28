@@ -261,7 +261,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         }
 
 
-                    } catch (Exception e) {
+                    } catch (Exception e)
+                    {
 
                         Log.v(Tag, "Exception while clicking send button" + e.toString());
 

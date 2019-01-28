@@ -113,7 +113,7 @@ public class BodyFragment extends Fragment {
         body_spinner = view.findViewById(R.id.body_spinner);
         //final String[] request = {"MULTIFORM", "JSON", "XML", "BINARY"};
 
-        final String[] request = {"MULTIFORM", "JSON", "XML"};
+        final String[] request = {"MULTIFORM", "JSON", "XML","NONE"};
 
         //radio_formdata.setChecked(true);
         //String rawbody = prefs.getString("bodytypeflag", null);
@@ -178,24 +178,27 @@ public class BodyFragment extends Fragment {
                           editor.apply();
                           break;
 
+
+
                       case 3:
-                          Toast.makeText(context,"BINARY",Toast.LENGTH_LONG).show();
-                         // body_spinner.setText("BINARY");
-                          raw();
+                          Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
+                          // body_spinner.setText("BINARY");
+                          none();
 
 
 
                           Log.v("statusofbodyfragment", "setting bodyflag 4");
                           editor.putString("bodytypeflag", "4");
 
-                          editor.putString("rawbodytype", "BINARY");
+                          editor.putString("rawbodytype", "NONE");
                           Log.v("statusofbodyfragment", "setting bodyflag "+"4"+" success");
                           editor.apply();
                           break;
 
 
-
                   }
+
+
 
               }
 
@@ -237,6 +240,15 @@ public class BodyFragment extends Fragment {
 
                    // radio_formdata.setChecked(false);
                    // radio_raw.setChecked(false);
+
+                    break;
+
+                case "4":
+                    body_spinner.setText("NONE");
+                    //radio_binary.setChecked(true);
+
+                    // radio_formdata.setChecked(false);
+                    // radio_raw.setChecked(false);
 
                     break;
 
@@ -308,7 +320,8 @@ public class BodyFragment extends Fragment {
 
 
 
-                    case "BINARY":
+                    case "NONE":
+
                         break;
 
 
@@ -456,6 +469,13 @@ public void Apply(String sss,String i,String type)
         raw_text.setVisibility(View.GONE);
 
     }
+void none()
+{
 
+    recyclerView.setVisibility(View.VISIBLE);
+    AddBody.setVisibility(View.GONE);
+    ButtonAddRawText.setVisibility(View.GONE);
+    raw_text.setVisibility(View.GONE);
+}
 
 }
