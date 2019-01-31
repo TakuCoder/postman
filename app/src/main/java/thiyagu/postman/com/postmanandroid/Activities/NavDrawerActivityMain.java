@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -79,6 +81,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
     EditText UrlField;
+    AlertDialog.Builder alert;
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
     public String ssss;
@@ -87,7 +90,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
-    public static String flag;
+    //public static String flag;
     private static NavDrawerActivityMain instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
@@ -116,7 +119,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
         feedReaderDbHelper = new FeedReaderDbHelper(this);
-
+        alert = new AlertDialog.Builder(NavDrawerActivityMain.this);
+        alert.setPo
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
@@ -748,7 +752,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     }
 
     public void GetRequest(Object... strings) {
-
+        dialog.setMessage("Activating hyperdrive, please wait.");
+        dialog.show();
         Log.v(Tag, "======================onPreExecute========================");
         Log.v(Tag, "======================onPreExecute done========================");
         Log.v(Tag, "======================DOINBACKGROUND========================");
@@ -815,14 +820,22 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                     @Override
                     public void onFailure(Call call, final IOException e) {
+
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                new Handler().post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                        dialog.cancel();
+                                    }
+                                });
+
                             }
                         });
-                        NavDrawerActivityMain.flag = "failure";
+                       // NavDrawerActivityMain.flag = "failure";
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
 
@@ -834,8 +847,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         NavDrawerActivityMain.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                dialog.setMessage("Activating hyperdrive, please wait.");
-                                dialog.show();
+                                dialog.cancel();
                             }
                         });
 
@@ -853,7 +865,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                             Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                            NavDrawerActivityMain.flag = "success";
+                           // NavDrawerActivityMain.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
@@ -882,7 +894,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         } catch (NetworkOnMainThreadException exception) {
 
                             exception.printStackTrace();
-                            Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+                            Toasty.warning(NavDrawerActivityMain.this, exception.toString(), Toast.LENGTH_SHORT, true).show();
                             //  if (dialog != null) dialog.dismiss();
                         } catch (Exception e) {
 
@@ -1438,7 +1450,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                         Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                        NavDrawerActivityMain.flag = "success";
+                    //    NavDrawerActivityMain.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
