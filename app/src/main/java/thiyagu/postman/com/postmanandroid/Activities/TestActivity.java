@@ -71,6 +71,7 @@ new server().execute();
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
                 tmf.init(keyStore);
 
+
 // Create an SSLContext that uses our TrustManager
                 SSLContext context = SSLContext.getInstance("TLS");
                 context.init(null, tmf.getTrustManagers(), null);
