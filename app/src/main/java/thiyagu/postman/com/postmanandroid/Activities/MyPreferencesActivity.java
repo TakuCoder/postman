@@ -54,9 +54,10 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
-        static Preference filePicker;
-        Preference holder;
-        EditTextPreference response;
+        static Preference timeout;
+        static Preference toggle;
+        static Preference CertPicker;
+
         SharedPreferences sharedPreferences;
 
         @Override
@@ -69,25 +70,30 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
             int count = prefScreen.getPreferenceCount();
-            for (int i = 0; i < count; i++) {
 
-                Preference p = prefScreen.getPreference(i);
-                if ((p instanceof EditTextPreference)) {
-                    String value = sharedPreferences.getString(p.getKey(), "");
-                    setPreferenceSummary(p, value);
-                }
-            }
 
-            filePicker = findPreference("CertPicker");
+            Preference p1 = prefScreen.getPreference(0);
+            Preference p2 = prefScreen.getPreference(1);
+            Preference p3 = prefScreen.getPreference(2);
 
-            holder = findPreference("switch_preference_certificate");
+            String value = sharedPreferences.getString(p1.getKey(), "");
+            Log.v("starting", p1.getKey() + value);
+            setPreferenceSummary(p1, value);
+            String value1 = sharedPreferences.getString(p3.getKey(), "");
+            Log.v("starting", p3.getKey() + value1);
+            setPreferenceSummary(p3, value1);
 
-            holder.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            timeout = findPreference("timeout");
+            toggle = findPreference("toggle");
+            CertPicker = findPreference("CertPicker");
+
+
+            toggle.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (filePicker.isEnabled()) {
+                    if (CertPicker.isEnabled()) {
                         Log.v("dsfsdfdsf", "enabled");
-                        String s = filePicker.getSummary().toString();
+                        String s = CertPicker.getSummary().toString();
                         Log.v("dsfsdfdsf", s);
 
                     } else {
@@ -102,7 +108,7 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
             });
 
 
-            filePicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            CertPicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
 //                    Intent intent = new Intent();
@@ -160,6 +166,7 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
                 if ((preference instanceof EditTextPreference)) {
 
                     String val = sharedPreferences.getString(preference.getKey(), "");
+                    Log.v("onchanged", s);
                     setPreferenceSummary(preference, val);
                 }
 
@@ -176,8 +183,8 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
         if (requestCode == FILE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             String path = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             Log.v("dsdsd", path);
-            MyPreferenceFragment.filePicker.setSummary(path);
-            MyPreferenceFragment.filePicker.setDefaultValue(path);
+            MyPreferenceFragment.CertPicker.setSummary(path);
+            MyPreferenceFragment.CertPicker.setDefaultValue(path);
             editor.putString("CertPicker", path);
             editor.apply();
             editor.commit();
@@ -201,6 +208,11 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
             // For EditTextPreferences, set the summary to the value's simple string representation.
             preference.setSummary(value);
             // setPreferenceSummary(preference, value);
+        } else {
+            Log.v("sdasdsadassd", value);
+            // For EditTextPreferences, set the summary to the value's simple string representation.
+            preference.setSummary(value);
+
         }
     }
 }

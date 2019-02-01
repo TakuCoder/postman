@@ -31,10 +31,10 @@ repositories {
 
     }
 
-maven{
+    maven {
 
-    url "https://jitpack.io"
-}
+        url "https://jitpack.io"
+    }
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

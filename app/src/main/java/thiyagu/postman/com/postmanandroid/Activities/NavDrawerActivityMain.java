@@ -38,17 +38,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.otto.ThreadEnforcer;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -81,6 +92,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
     EditText UrlField;
+    static String certFinalLocation;
     AlertDialog.Builder alert;
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
@@ -104,7 +116,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     ActionBarDrawerToggle toggle;
     SharedPreferences.Editor editor;
     public long timeout;
-
+//public static Bus bus;
     @Inject
     MyDatabaseReference myDatabaseReference;
 
@@ -120,7 +132,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         alert = new AlertDialog.Builder(NavDrawerActivityMain.this);
-        alert.setPo
+
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
@@ -200,17 +212,18 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
             {
 
-
+                Boolean cert_status;
                 SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
                 Log.v("status", status);
                 if (status == "DEFAULT") {
 
                     Log.v("status", "loading default cert");
+                    cert_status=false;
                 } else {
                     Log.v("status", "loading user cert");
 
-                }
+                }cert_status =true;
 
                 Log.v("mypreference", status);
                 editor.putString("url_value", UrlField.getText().toString());
@@ -265,8 +278,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         }
 
 
-                    } catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                         Log.v(Tag, "Exception while clicking send button" + e.toString());
 
@@ -316,7 +328,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             Log.v(Tag, "Diving Into GET");
                             if (isOnline()) {
                                 // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
-                                GetRequest("GET", Address, headerBuilder, urlencodedparams);
+                                GetRequest("GET", Address, headerBuilder, urlencodedparams,cert_status);
                             } else {
 
                                 ShowNetError();
@@ -337,7 +349,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                 if (part.size() > 0) {
                                     Log.v(Tag, "======================part size greater than 0========================");
                                     // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
-                                    GetRequest("POST", Address, headerBuilder, urlencodedparams);
+                                    GetRequest("POST", Address, headerBuilder, urlencodedparams,cert_status);
                                 } else {
                                     Log.v(Tag, "======================part size lseer or equal to 0========================");
                                     runOnUiThread(new Runnable() {
@@ -354,23 +366,23 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                                                 case "MULTIFORM":
-                                                    HighLightButton(R.id.AddBody,"POST request must have atleast one part");
+                                                    HighLightButton(R.id.AddBody, "POST request must have atleast one part");
                                                     break;
 
                                                 case "JSON":
-                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
+                                                    HighLightButton(R.id.button_addRawText, "POST request must have atleast one part");
                                                     break;
 
                                                 case "XML":
-                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
+                                                    HighLightButton(R.id.button_addRawText, "POST request must have atleast one part");
                                                     break;
-                                                    default:
+                                                default:
 
-                                                        //body_spinner.setSelection(0);
+                                                    //body_spinner.setSelection(0);
 
-                                                        HighLightButton(R.id.body_spinner,"Please select the type of part");
-                                                        Log.v("sdasdsd","this"+rawbodytype);
-                                                        break;
+                                                    HighLightButton(R.id.body_spinner, "Please select the type of part");
+                                                    Log.v("sdasdsd", "this" + rawbodytype);
+                                                    break;
 
 
                                             }
@@ -395,7 +407,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             if (isOnline()) {
                                 //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                                GetRequest("DELETE", Address, headerBuilder, urlencodedparams);
+                                GetRequest("DELETE", Address, headerBuilder, urlencodedparams,cert_status);
 
                             } else {
 
@@ -410,7 +422,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                                 Log.v(Tag, "Diving Into PUT");
                                 //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
-                                GetRequest("PUT", Address, headerBuilder, urlencodedparams);
+                                GetRequest("PUT", Address, headerBuilder, urlencodedparams,cert_status);
                             } else {
                                 ShowNetError();
 
@@ -467,20 +479,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     }
 
-    private void HighLightButton(final int resource,final String message) {
+    private void HighLightButton(final int resource, final String message) {
 
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run()
 
 
             {
-
-
-
 
 
                 new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(resource).setPrimaryText(message).setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -503,7 +511,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
-
+    @Subscribe
+    public void getMessage(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
     public void intiview() {
         toolbar = findViewById(R.id.toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -707,8 +718,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         } else if (id == R.id.about) {
             Intent intent = new Intent(this, AboutusActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.test) {
+        } else if (id == R.id.test) {
             Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         }
 
@@ -761,6 +771,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         String urlvalue = (String) strings[1];
         Headers.Builder headerbuilder = (Headers.Builder) strings[2];
         ArrayList<String> paramlist = (ArrayList<String>) strings[3];
+        Boolean cert_status = (Boolean) strings[4];
+        Log.v("cert_status",String.valueOf(cert_status));
         Headers customheader = headerbuilder.build();
 
         Log.v(Tag, "======================URL CHECK========================");
@@ -802,15 +814,31 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         if (method.equals("GET")) {
 
-
+            OkHttpClient client1 = new OkHttpClient();
+            OkHttpClient client;
             Log.v(Tag, "======================GET========================");
             try {
 
+if(urlvalue.contains("https") && cert_status)
+{
 
-                OkHttpClient client1 = new OkHttpClient();
-                OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+//Log.v("tempstatus","https");
+    client = client1.newBuilder().sslSocketFactory(getTrustManager("182.168.0.110","/storage/emulated/0/1921681110.crt").getSocketFactory()).readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
 
-                        .build();
+            .build();
+}
+else
+{
+
+    client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+
+            .build();
+
+}
+
+//                client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+//
+//                        .build();
 
                 Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
 
@@ -820,7 +848,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                     @Override
                     public void onFailure(Call call, final IOException e) {
+                        if (e.toString().contains("Trust anchor for certification path not found")) {
 
+                            Log.v(Tag, "need cert!!!!!!!!!!!!!!");
+                        }
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {
                             @Override
@@ -835,7 +866,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             }
                         });
-                       // NavDrawerActivityMain.flag = "failure";
+                        // NavDrawerActivityMain.flag = "failure";
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
 
@@ -865,7 +896,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                             Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                           // NavDrawerActivityMain.flag = "success";
+                            // NavDrawerActivityMain.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
@@ -895,11 +926,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             exception.printStackTrace();
                             Toasty.warning(NavDrawerActivityMain.this, exception.toString(), Toast.LENGTH_SHORT, true).show();
+                            dialog.cancel();
                             //  if (dialog != null) dialog.dismiss();
                         } catch (Exception e) {
 
                             Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
-
+                            dialog.cancel();
                             Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
 
                         }
@@ -914,6 +946,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 e.printStackTrace();
                 Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+                dialog.cancel();
             }
 
         } else if (method.equals("POST")) {
@@ -925,8 +958,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 String bodyflag = prefs.getString("bodytypeflag", null);
                 String rawbody = prefs.getString("rawbody", null);
-                switch (bodyflag)
-                {
+                switch (bodyflag) {
 
                     case "1":
 
@@ -1366,6 +1398,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     }
 
+    private String CertLocation() {
+
+
+    return certFinalLocation;
+    }
+
+
     public static Context getContext() {
 
 
@@ -1393,12 +1432,18 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         Log.v("sadasdsadsad", s);
 
-        if (s.equals("response")) {
+        if (s.equals("timeout")) {
             loadTimeoutFromPreference(sharedPreferences);
 
         }
 
+        if (s.equals("CertPicker")) {
+            loadCertificateFromPreference(sharedPreferences);
+
+        }
+
     }
+
 
     class GetAsync extends AsyncTask<Object, Long, Boolean> {
         @Override
@@ -1450,7 +1495,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                         Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                    //    NavDrawerActivityMain.flag = "success";
+                        //    NavDrawerActivityMain.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
@@ -1583,6 +1628,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     private void changeResponseTimeoutTime(int i) {
         Log.v("changedTimeOut", String.valueOf(i));
+
+    }
+
+    private void changeCertLocation(String s) {
+                certFinalLocation = s;
+                Log.v("changedLocation", s);
     }
 
     private void loadTimeoutFromPreference(SharedPreferences sharedPreferences) {
@@ -1590,6 +1641,40 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         changeResponseTimeoutTime(response_time);
     }
 
+    private void loadCertificateFromPreference(SharedPreferences sharedPreferences) {
+
+        String certlocation = sharedPreferences.getString("CertPicker", "");
+        changeCertLocation(certlocation);
+    }
+
+
+
+    public SSLContext getTrustManager(String url, String Path) {
+
+
+        SSLContext sslContext;
+        TrustManager[] trustManagers;
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            InputStream certInputStream = getAssets().open(Path);
+            BufferedInputStream bis = new BufferedInputStream(certInputStream);
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            while (bis.available() > 0) {
+                Certificate cert = certificateFactory.generateCertificate(bis);
+                keyStore.setCertificateEntry(url, cert);
+            }
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+            trustManagers = trustManagerFactory.getTrustManagers();
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustManagers, null);
+        } catch (Exception e) {
+            e.printStackTrace(); //TODO replace with real exception handling tailored to your needs
+            return null;
+        }
+        return sslContext;
+    }
 }
 
 
