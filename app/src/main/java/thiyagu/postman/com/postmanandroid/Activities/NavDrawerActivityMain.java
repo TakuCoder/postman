@@ -43,6 +43,8 @@ import com.squareup.otto.Subscribe;
 import com.squareup.otto.ThreadEnforcer;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -60,6 +62,7 @@ import javax.inject.Inject;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -71,6 +74,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import thiyagu.postman.com.postmanandroid.Builder.SelfSigningClientBuilder;
 import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
@@ -813,32 +817,74 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
         if (method.equals("GET")) {
+            String filename = "/storage/emulated/0/1921681110.crt";
 
-            OkHttpClient client1 = new OkHttpClient();
-            OkHttpClient client;
             Log.v(Tag, "======================GET========================");
             try {
 
-if(urlvalue.contains("https") && cert_status)
-{
-
+//if(urlvalue.contains("https") && cert_status)
+//{
+//
 //Log.v("tempstatus","https");
-    client = client1.newBuilder().sslSocketFactory(getTrustManager("182.168.0.110","/storage/emulated/0/1921681110.crt").getSocketFactory()).readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
-
-            .build();
-}
-else
-{
-
-    client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
-
-            .build();
-
-}
+//    OkHttpClient client1 = SelfSigningClientBuilder.createClient(this,filename);
+//    OkHttpClient client;
+//  //  "//storage/emulated/0/1921681110.crt"
+//    client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+//
+//            .build();
+//}
+//else
+//{
+//    OkHttpClient client1 = SelfSigningClientBuilder.createClient(this,filename);
+//    OkHttpClient client;
+//    client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+//
+//            .build();
+//
+//}
 
 //                client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
 //
 //                        .build();
+                SSLContext sslContext;
+                TrustManager[] trustManagers;
+                try {
+                    //String filename = "//storage/emulated/0/1921681110.crt";
+
+
+                    File file = new File(filename);
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                    keyStore.load(null, null);
+
+                    BufferedInputStream bis = new BufferedInputStream(fileInputStream);
+                    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+                    while (bis.available() > 0) {
+                        Certificate cert = certificateFactory.generateCertificate(bis);
+                        keyStore.setCertificateEntry("https://182.168.0.110:3000", cert);
+                    }
+                    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                    trustManagerFactory.init(keyStore);
+                    trustManagers = trustManagerFactory.getTrustManagers();
+                    sslContext = SSLContext.getInstance("TLS");
+                    sslContext.init(null, trustManagers, null);
+                } catch (Exception e) {
+                    e.printStackTrace(); //TODO replace with real exception handling tailored to your needs
+                    return;
+                }
+
+
+                Log.v("tempstatus","https");
+    OkHttpClient client1 = new OkHttpClient();
+    OkHttpClient client;
+  //  "//storage/emulated/0/1921681110.crt"
+    client = client1.newBuilder()
+            .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
+            .readTimeout(12, TimeUnit.SECONDS)
+            .writeTimeout(12, TimeUnit.SECONDS)
+            .connectTimeout(12, TimeUnit.SECONDS)
+
+            .build();
 
                 Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
 
@@ -850,7 +896,7 @@ else
                     public void onFailure(Call call, final IOException e) {
                         if (e.toString().contains("Trust anchor for certification path not found")) {
 
-                            Log.v(Tag, "need cert!!!!!!!!!!!!!!");
+                            Log.v(Tag, "need cert!!!!!!!!!!!!!!");//doubt
                         }
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {

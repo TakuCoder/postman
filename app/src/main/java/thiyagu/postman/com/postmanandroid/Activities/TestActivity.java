@@ -23,18 +23,18 @@ import thiyagu.postman.com.postmanandroid.R;
 
 public class TestActivity extends AppCompatActivity {
     String response;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-new server().execute();
+        new server().execute();
 
 
     }
 
-    public class server extends AsyncTask<Void,Void,Void>
-    {
+    public class server extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -49,9 +49,7 @@ new server().execute();
                 FileInputStream fileInputStream = new FileInputStream(file);
 
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
-//            InputStream caInput = getResources().openRawResource(
-//                    getResources().getIdentifier("certificate",
-//                            "raw", getPackageName()));
+
                 java.security.cert.Certificate ca;
                 try {
                     ca = cf.generateCertificate(fileInputStream);
@@ -60,40 +58,35 @@ new server().execute();
                     fileInputStream.close();
                 }
 
-// Create a KeyStore containing our trusted CAs
+
                 String keyStoreType = KeyStore.getDefaultType();
                 KeyStore keyStore = KeyStore.getInstance(keyStoreType);
                 keyStore.load(null, null);
                 keyStore.setCertificateEntry("ca", ca);
 
-// Create a TrustManager that trusts the CAs in our KeyStore
+
                 String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
                 tmf.init(keyStore);
 
-
-// Create an SSLContext that uses our TrustManager
                 SSLContext context = SSLContext.getInstance("TLS");
                 context.init(null, tmf.getTrustManagers(), null);
 
-// Tell the URLConnection to use a SocketFactory from our SSLContext
-                //String ssss="RRA_WEB_SERVICE/loginCheck/loginCheck?userid="+uname1+"&macId="+macAddress+"&password="+pass;
+//
+
                 URL url = new URL("https://182.168.0.110:3000");
-                Log.v("dsfdsfdsfsdf",url.toString());
-                HttpsURLConnection urlConnection =
-                        (HttpsURLConnection) url.openConnection();
+                Log.v("dsfdsfdsfsdf", url.toString());
+                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
                 urlConnection.setConnectTimeout(5000);
                 urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
                 urlConnection.setSSLSocketFactory(context.getSocketFactory());
                 // InputStream in = urlConnection.getInputStream();
                 BufferedReader bf = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                response= bf.readLine();
-                Log.d("jghklghljhdg",response);
+                response = bf.readLine();
+                Log.d("jghklghljhdg", response);
                 // return response;
-            }
-            catch (Exception e)
-            {
-                Log.d("jghklghljhdg",e.toString());
+            } catch (Exception e) {
+                Log.d("jghklghljhdg", e.toString());
                 //return  e.toString();
             }
 
