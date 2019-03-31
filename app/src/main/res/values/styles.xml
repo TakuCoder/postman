@@ -83,7 +83,8 @@
     <style name="poptheme" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
 
     </style>
     <style name="AppTheme.TextAppearanceSmall">

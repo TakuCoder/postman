@@ -235,7 +235,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select DISTINCT "+COLUMN_DATE+" from " + TABLE_NAME_HISTORY, null);
+        Cursor res = db.rawQuery("select DISTINCT "+COLUMN_DATE+" from " + TABLE_NAME_HISTORY+" ORDER BY "+COLUMN_DATE+" DESC", null);
         res.moveToFirst();
 
         while (res.isAfterLast() == false) {

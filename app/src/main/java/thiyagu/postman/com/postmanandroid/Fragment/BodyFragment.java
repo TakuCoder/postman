@@ -178,27 +178,24 @@ public class BodyFragment extends Fragment {
                           editor.apply();
                           break;
 
-
-
                       case 3:
                           Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
-                          // body_spinner.setText("BINARY");
-                          none();
+                         // body_spinner.setText("BINARY");
+                          raw();
 
 
 
                           Log.v("statusofbodyfragment", "setting bodyflag 4");
                           editor.putString("bodytypeflag", "4");
 
-                          editor.putString("rawbodytype", "NONE");
+                          editor.putString("rawbodytype", "BINARY");
                           Log.v("statusofbodyfragment", "setting bodyflag "+"4"+" success");
                           editor.apply();
                           break;
 
 
+
                   }
-
-
 
               }
 
@@ -240,15 +237,6 @@ public class BodyFragment extends Fragment {
 
                    // radio_formdata.setChecked(false);
                    // radio_raw.setChecked(false);
-
-                    break;
-
-                case "4":
-                    body_spinner.setText("NONE");
-                    //radio_binary.setChecked(true);
-
-                    // radio_formdata.setChecked(false);
-                    // radio_raw.setChecked(false);
 
                     break;
 
@@ -320,8 +308,7 @@ public class BodyFragment extends Fragment {
 
 
 
-                    case "NONE":
-
+                    case "BINARY":
                         break;
 
 
@@ -469,13 +456,6 @@ public void Apply(String sss,String i,String type)
         raw_text.setVisibility(View.GONE);
 
     }
-void none()
-{
 
-    recyclerView.setVisibility(View.VISIBLE);
-    AddBody.setVisibility(View.GONE);
-    ButtonAddRawText.setVisibility(View.GONE);
-    raw_text.setVisibility(View.GONE);
-}
 
 }

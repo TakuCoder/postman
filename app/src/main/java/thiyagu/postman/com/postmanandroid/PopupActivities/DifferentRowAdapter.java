@@ -160,7 +160,9 @@ package thiyagu.postman.com.postmanandroid.PopupActivities;//package thiyagu.pos
 //}
 
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -203,6 +205,17 @@ public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case EVENT_TYPE:
                     ((EventViewHolder) holder).url.setText(object.getUrl());
                     ((EventViewHolder) holder).method.setText(object.getReqtype());
+                    Log.v("asdsad", object.getReqtype());
+                    if(object.getReqtype().contains("GET"))
+                    {
+                        ((EventViewHolder) holder).method.setTextColor(Color.parseColor("#64dd17"));
+
+                    }
+                    if(object.getReqtype().contains("POST"))
+                    {
+                        ((EventViewHolder) holder).method.setTextColor(Color.parseColor("#ffa000"));
+
+                    }
                     break;
             }
         }

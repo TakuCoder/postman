@@ -12,7 +12,7 @@
     <color name="buttonblue">#097bed</color>
     <color name="cardview_initial_background">#71C3DE</color>
     <color name="white">#ffffff</color>
-
+<color name="histotydate">#303030</color>
     <color name="colorTextPrimary">#FFF</color>
     <color name="colorTextSecondary">#B2FFFFFF</color>
 
