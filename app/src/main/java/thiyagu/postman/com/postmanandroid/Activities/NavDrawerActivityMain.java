@@ -818,6 +818,7 @@ Log.v("asdsadsadasdas",String.valueOf(timeout));
                 OkHttpClient client1 = new OkHttpClient();
                 OkHttpClient client = client1.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
+
                         .build();
 
                 Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
