@@ -131,10 +131,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         dialog = new ProgressDialog(NavDrawerActivityMain.this);
         dialog.setCancelable(false);
 
-        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
-        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-        getSupportActionBar().setTitle(SS);
+//        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
+//        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
+//        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//        getSupportActionBar().setTitle(SS);
 
         assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -205,6 +205,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
+                timeout = Long.valueOf(sharedPreferences.getString("timeout",""));
                 Log.v("status", status);
                 if (status == "DEFAULT") {
 
@@ -813,9 +814,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             Log.v(Tag, "======================GET========================");
             try {
 
-
+Log.v("asdsadsadasdas",String.valueOf(timeout));
                 OkHttpClient client1 = new OkHttpClient();
-                OkHttpClient client = client1.newBuilder().readTimeout(12, TimeUnit.SECONDS).writeTimeout(12, TimeUnit.SECONDS).connectTimeout(12, TimeUnit.SECONDS)
+                OkHttpClient client = client1.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
                         .build();
 
@@ -1404,7 +1405,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         Log.v("sadasdsadsad", s);
 
-        if (s.equals("response")) {
+        if (s.equals("timeout")) {
             loadTimeoutFromPreference(sharedPreferences);
 
         }
@@ -1419,7 +1420,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     }
 
     private void loadTimeoutFromPreference(SharedPreferences sharedPreferences) {
-        int response_time = Integer.parseInt(sharedPreferences.getString("response", ""));
+        int response_time = Integer.parseInt(sharedPreferences.getString("timeout", ""));
+        Log.v("timeout",String.valueOf(response_time));
+        timeout = response_time;
         changeResponseTimeoutTime(response_time);
     }
 
