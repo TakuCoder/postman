@@ -205,7 +205,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
-                timeout = Long.valueOf(sharedPreferences.getString("timeout",""));
+                timeout = Long.valueOf(sharedPreferences.getString("timeout", ""));
                 Log.v("status", status);
                 if (status == "DEFAULT") {
 
@@ -331,8 +331,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                         case "POST":
 
                             Log.v(Tag, "Diving Into POST");
-                            if (isOnline())
-                            {
+                            if (isOnline()) {
 
                                 ArrayList<String> part = feedReaderDbHelper.getAllBody();
                                 final String rawbody = prefs.getString("rawbody", null);
@@ -475,20 +474,16 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     }
 
-    private void HighLightButton(final int resource,final String message) {
+    private void HighLightButton(final int resource, final String message) {
 
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable()
-        {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run()
 
 
             {
-
-
-
 
 
                 new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(resource).setPrimaryText(message).setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
@@ -715,8 +710,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         } else if (id == R.id.about) {
             Intent intent = new Intent(this, AboutusActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.test) {
+        } else if (id == R.id.test) {
             Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         }
 
@@ -807,14 +801,13 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         Log.v(Tag, "======================AFTER DETECTION========================");
 
 
-        if (method.equals("GET"))
-        {
+        if (method.equals("GET")) {
 
 
             Log.v(Tag, "======================GET========================");
             try {
 
-Log.v("asdsadsadasdas",String.valueOf(timeout));
+                Log.v("asdsadsadasdas", String.valueOf(timeout));
                 OkHttpClient client1 = new OkHttpClient();
                 OkHttpClient client = client1.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
@@ -923,14 +916,12 @@ Log.v("asdsadsadasdas",String.valueOf(timeout));
                 String bodyflag = prefs.getString("bodytypeflag", null);
                 String rawbody = prefs.getString("rawbody", null);
 
-                if(bodyflag==null)
-                {
+                if (bodyflag == null) {
 
-                    bodyflag="4";
+                    bodyflag = "4";
 
                 }
-                switch (bodyflag)
-                {
+                switch (bodyflag) {
 
                     case "1":
 
@@ -1019,14 +1010,14 @@ Log.v("asdsadsadasdas",String.valueOf(timeout));
                         }
                         break;
 
-                        case"4":
+                    case "4":
 
-                         //   Log.v("statusofbodytype", "=============case 4 detected=======rawbody=====" + rawbody);
-                          //MediaType mediaType = MediaType.parse("application/xml");
+                        //   Log.v("statusofbodytype", "=============case 4 detected=======rawbody=====" + rawbody);
+                        //MediaType mediaType = MediaType.parse("application/xml");
 
-                           RequestBody newbody = RequestBody.create(null, "");
-                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
-                            break;
+                        RequestBody newbody = RequestBody.create(null, "");
+                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
+                        break;
 
                 }
 
@@ -1414,15 +1405,13 @@ Log.v("asdsadsadasdas",String.valueOf(timeout));
     }
 
 
-
-
     private void changeResponseTimeoutTime(int i) {
         Log.v("changedTimeOut", String.valueOf(i));
     }
 
     private void loadTimeoutFromPreference(SharedPreferences sharedPreferences) {
         int response_time = Integer.parseInt(sharedPreferences.getString("timeout", ""));
-        Log.v("timeout",String.valueOf(response_time));
+        Log.v("timeout", String.valueOf(response_time));
         timeout = response_time;
         changeResponseTimeoutTime(response_time);
     }

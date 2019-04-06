@@ -72,19 +72,35 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/UrlField"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="0dp"
-                    android:layout_weight="0.5"
-                    android:alpha="10"
-                    android:ems="10"
-                    android:hint="@string/your_url_here"
-                    android:imeOptions="actionDone"
-                    android:inputType="textUri"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@color/orangedim" />
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <CheckBox
+                        android:textColor="@color/orange"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:text="HTTPS" />
+
+                    <EditText
+
+                        android:id="@+id/UrlField"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="0.3"
+                        android:alpha="10"
+                        android:ems="10"
+                        android:hint="@string/your_url_here"
+                        android:imeOptions="actionDone"
+                        android:inputType="textUri"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@color/orangedim" />
+                </LinearLayout>
+
 
 
             </LinearLayout>
