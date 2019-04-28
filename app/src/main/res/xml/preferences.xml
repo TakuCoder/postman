@@ -2,20 +2,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
+        android:defaultValue="8"
         android:key="timeout"
-        android:defaultValue="8000"
-        android:title="Change Timeout" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="toggle"
-        android:title="Use Custom Certificate" />
-    <Preference
-        android:dependency="toggle"
-        android:key="CertPicker"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:defaultValue="false"
-        android:summary="Import SelfSigned Certificate"
-        android:title="Import SelfSigned Certificate" />
+        android:title="Change Timeout(Seconds)" />
 
+    <!--<SwitchPreference-->
+        <!--android:defaultValue="false"-->
+        <!--android:key="toggle"-->
+        <!--android:title="Use Custom Certificate" />-->
+    <!--<Preference-->
+        <!--android:defaultValue="false"-->
+        <!--android:dependency="toggle"-->
+        <!--android:key="CertPicker"-->
+        <!--android:selectAllOnFocus="true"-->
+        <!--android:singleLine="true"-->
+        <!--android:summary="Import SelfSigned Certificate"-->
+        <!--android:title="Import SelfSigned Certificate" />-->
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="sslverify"
+        android:title="ssl verification" />
 </PreferenceScreen>

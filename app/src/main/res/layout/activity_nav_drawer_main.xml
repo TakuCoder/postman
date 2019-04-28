@@ -79,11 +79,13 @@
                     android:weightSum="1">
 
                     <CheckBox
-                        android:textColor="@color/orange"
+                        android:id="@+id/checkbox_https"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="0.7"
-                        android:text="HTTPS" />
+                        android:buttonTint="@color/orange"
+                        android:text="HTTPS"
+                        android:textColor="@color/orange" />
 
                     <EditText
 

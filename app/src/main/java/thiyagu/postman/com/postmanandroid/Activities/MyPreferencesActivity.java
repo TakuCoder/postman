@@ -14,6 +14,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -57,6 +58,7 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
         static Preference timeout;
         static Preference toggle;
         static Preference CertPicker;
+        static Preference sslverify;
 
         SharedPreferences sharedPreferences;
 
@@ -73,56 +75,56 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
 
 
             Preference p1 = prefScreen.getPreference(0);
-            Preference p2 = prefScreen.getPreference(1);
-            Preference p3 = prefScreen.getPreference(2);
+//            Preference p2 = prefScreen.getPreference(1);
+//            Preference p3 = prefScreen.getPreference(2);
 
             String value = sharedPreferences.getString(p1.getKey(), "");
             Log.v("starting", p1.getKey() + value);
             setPreferenceSummary(p1, value);
-            String value1 = sharedPreferences.getString(p3.getKey(), "");
-            Log.v("starting", p3.getKey() + value1);
-            setPreferenceSummary(p3, value1);
+//            String value1 = sharedPreferences.getString(p3.getKey(), "");
+//            Log.v("starting", p3.getKey() + value1);
+//            setPreferenceSummary(p3, value1);
 
             timeout = findPreference("timeout");
             toggle = findPreference("toggle");
-            CertPicker = findPreference("CertPicker");
+           // CertPicker = findPreference("CertPicker");
+            sslverify = findPreference("sslverify");
 
-
-            toggle.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (CertPicker.isEnabled()) {
-                        Log.v("dsfsdfdsf", "enabled");
-                        String s = CertPicker.getSummary().toString();
-                        Log.v("dsfsdfdsf", s);
-
-                    } else {
-                        Log.v("dsfsdfdsf", "disabled");
-                        editor.putString("CertPicker", "DEFAULT");
-                        editor.apply();
-                        editor.commit();
-                    }
-
-                    return false;
-                }
-            });
-
-
-            CertPicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-//                    Intent intent = new Intent();
-//                    intent.setType("file/*");
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 200);
+//            toggle.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+//                    if (CertPicker.isEnabled()) {
+//                        Log.v("dsfsdfdsf", "enabled");
+//                        String s = CertPicker.getSummary().toString();
+//                        Log.v("dsfsdfdsf", s);
 //
+//                    } else {
+//                        Log.v("dsfsdfdsf", "disabled");
+//                        editor.putString("CertPicker", "DEFAULT");
+//                        editor.apply();
+//                        editor.commit();
+//                    }
 //
+//                    return false;
+//                }
+//            });
 
-                    checkPermissionsAndOpenFilePicker();
 
-                    return true;
-                }
-            });
+//            CertPicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(Preference preference) {
+////                    Intent intent = new Intent();
+////                    intent.setType("file/*");
+////                    intent.setAction(Intent.ACTION_GET_CONTENT);
+////                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), 200);
+////
+////
+//
+//                    checkPermissionsAndOpenFilePicker();
+//
+//                    return true;
+//                }
+//            });
         }
 
 

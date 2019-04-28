@@ -1,10 +1,12 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -29,9 +31,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,11 +47,18 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.Call;
@@ -88,10 +100,12 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
     public static String flag;
+    String weburl;
     private static NavDrawerActivityMain instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
     private Toolbar toolbar;
+    CheckBox checkbox_https;
     String IPaddress;
     NavigationView navigationView;
     DrawerLayout drawer;
@@ -100,8 +114,10 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     AssetManager assetManager;
     ActionBarDrawerToggle toggle;
     SharedPreferences.Editor editor;
-    public long timeout;
-
+    public int timeout;
+    String fullurl;
+boolean https_check;
+    boolean sslflag;
     @Inject
     MyDatabaseReference myDatabaseReference;
 
@@ -116,12 +132,41 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
         feedReaderDbHelper = new FeedReaderDbHelper(this);
+        checkbox_https = findViewById(R.id.checkbox_https);
+
+
 
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
+        https_check = prefs.getBoolean("https_check",false);
+        if(https_check)
+        {
+
+            checkbox_https.setChecked(true);
+        }
+        else {
+            checkbox_https.setChecked(false);
+
+        }
+       // Toast.makeText(getApplicationContext(),String.valueOf(https_check),Toast.LENGTH_LONG).show();
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
         instance = this;
+        checkbox_https.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkbox_https.isChecked()) {
+                    editor.putBoolean("https_check", true);
+                    editor.apply();
+                    Log.v("status","true");
+                } else {
 
+                    editor.putBoolean("https_check", false);
+                    editor.apply();
+                    Log.v("status","false");
+                }
+
+            }
+        });
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -154,6 +199,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         NetwordDetect();
 
 //
+
 
 
         materialBetterSpinner.setAdapter(arrayadapter);
@@ -205,7 +251,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
-                timeout = Long.valueOf(sharedPreferences.getString("timeout", ""));
+                sslflag = sharedPreferences.getBoolean("sslverify", false);
+
+                Log.v("sdfdsfdsf", String.valueOf(sslflag));
+                timeout = Integer.valueOf(sharedPreferences.getString("timeout", ""));
+
                 Log.v("status", status);
                 if (status == "DEFAULT") {
 
@@ -215,13 +265,42 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                 }
 
+
+
+
+
+//                checkbox_https.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        if (isChecked) {
+//                            editor.putBoolean("https_check", true);
+//                            editor.apply();
+//                            Log.v("status","true");
+//                        } else {
+//
+//                            editor.putBoolean("https_check", false);
+//                            editor.apply();
+//                            Log.v("status","false");
+//                        }
+//                    }
+//                });
                 Log.v("mypreference", status);
-                editor.putString("url_value", UrlField.getText().toString());
+                weburl = UrlField.getText().toString();
+                if (isHttps()) {
+                    fullurl = "https://" + weburl;
+
+                } else {
+                    fullurl = "http://" + weburl;
+
+                }
+
+
+                Log.v("fdfdfd", weburl);
+                editor.putString("url_value", weburl);
                 editor.putString("req_value", materialBetterSpinner.getText().toString());
                 editor.apply();
 
-
-                if (isValid(UrlField.getText().toString())) {
+                if (isValid(fullurl)) {
 
 
                     // feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
@@ -309,7 +388,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                     String seletecvalue = materialBetterSpinner.getText().toString();
-                    String Address = UrlField.getText().toString();
+                    // String Address = UrlField.getText().toString();
                     switch (seletecvalue) {
 
 
@@ -318,7 +397,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             Log.v(Tag, "Diving Into GET");
                             if (isOnline()) {
                                 // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
-                                GetRequest("GET", Address, headerBuilder, urlencodedparams);
+                                GetRequest("GET", fullurl, headerBuilder, urlencodedparams);
                             } else {
 
                                 ShowNetError();
@@ -336,57 +415,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                                 ArrayList<String> part = feedReaderDbHelper.getAllBody();
                                 final String rawbody = prefs.getString("rawbody", null);
                                 Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                                GetRequest("POST", Address, headerBuilder, urlencodedparams);
-
-//                                if (part.size() > 0)
-//                                {
-//                                    Log.v(Tag, "======================part size greater than 0========================");
-//                                    // new RequestMaker().execute("POST", Address, headerBuilder, urlencodedparams);
-//
-//                                } else
-//
-//                                    {
-//                                    Log.v(Tag, "======================part size lseer or equal to 0========================");
-//                                    runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run()
-//
-//                                        {
-//                                            TabLayout.Tab tab = tabLayout.getTabAt(3);
-//                                            tab.select();
-//
-//                                           String rawbodytype = prefs.getString("rawbodytype", "");
-////                                            Log.v("sadsad",rawbody);
-//                                            switch (rawbodytype) {
-//
-//
-//                                                case "MULTIFORM":
-//                                                    HighLightButton(R.id.AddBody,"POST request must have atleast one part");
-//                                                    break;
-//
-//                                                case "JSON":
-//                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
-//                                                    break;
-//
-//                                                case "XML":
-//                                                    HighLightButton(R.id.button_addRawText,"POST request must have atleast one part");
-//                                                    break;
-//                                                    default:
-//
-//                                                        //body_spinner.setSelection(0);
-//
-//                                                        HighLightButton(R.id.body_spinner,"Please select the type");
-//                                                        Log.v("sdasdsd","this"+rawbodytype);
-//                                                        break;
-//
-//
-//                                            }
-//
-//                                        }
-//                                    });
-//
-//
-//                                }
+                                GetRequest("POST", fullurl, headerBuilder, urlencodedparams);
 
 
                             } else {
@@ -402,7 +431,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                             if (isOnline()) {
                                 //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                                GetRequest("DELETE", Address, headerBuilder, urlencodedparams);
+                                GetRequest("DELETE", fullurl, headerBuilder, urlencodedparams);
 
                             } else {
 
@@ -417,7 +446,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
                                 Log.v(Tag, "Diving Into PUT");
                                 //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
-                                GetRequest("PUT", Address, headerBuilder, urlencodedparams);
+                                GetRequest("PUT", fullurl, headerBuilder, urlencodedparams);
                             } else {
                                 ShowNetError();
 
@@ -442,7 +471,9 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                     Toasty.warning(NavDrawerActivityMain.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
-
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
 
                 }
 
@@ -474,33 +505,6 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
     }
 
-    private void HighLightButton(final int resource, final String message) {
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run()
-
-
-            {
-
-
-                new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(resource).setPrimaryText(message).setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
-                    @Override
-                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
-                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
-                            //toreg
-                            //Toast.makeText(getApplicationContext(), "presseddddd", Toast.LENGTH_SHORT).show();
-                            Toasty.warning(NavDrawerActivityMain.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
-
-                        }
-                    }
-                }).show();
-
-            }
-        }, 1000);
-    }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -530,6 +534,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         NetworkInfo[] networkInfo = CM.getAllNetworkInfo();
 
+
         for (NetworkInfo netInfo : networkInfo) {
 
             if (netInfo.getTypeName().equalsIgnoreCase("WIFI"))
@@ -545,7 +550,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     MOBILE = true;
         }
 
-        if (WIFI == true)
+        if (WIFI)
 
         {
             IPaddress = GetDeviceipWiFiData();
@@ -555,7 +560,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
         }
 
-        if (MOBILE == true) {
+        if (MOBILE) {
 
             IPaddress = GetDeviceipMobileData();
             Log.v("asdasdsadad", IPaddress);
@@ -808,26 +813,28 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             try {
 
                 Log.v("asdsadsadasdas", String.valueOf(timeout));
-                OkHttpClient client1 = new OkHttpClient();
-                OkHttpClient client = client1.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
+                OkHttpClient client = getClientbasedOnHttp(sslflag);
+                OkHttpClient getClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
 
                         .build();
+
 
                 Request request = new Request.Builder().url(urlvalue).get().headers(customheader).header("User-Agent", "Postman-Android").build();
 
 
                 final String finalUrlvalue = urlvalue;
-                client.newCall(request).enqueue(new Callback() {
+                getClient.newCall(request).enqueue(new Callback() {
 
                     @Override
                     public void onFailure(Call call, final IOException e) {
-                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!show popup here!!!!!!!!!!!!!!!!!!");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 dialog.dismiss();
                                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                showPopup( e.toString());
                             }
                         });
                         NavDrawerActivityMain.flag = "failure";
@@ -910,7 +917,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = getClientbasedOnHttp(sslflag);
+                OkHttpClient postClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
+
+
+                        .build();
 
 
                 String bodyflag = prefs.getString("bodytypeflag", null);
@@ -1023,7 +1034,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
 
 
                 final String finalUrlvalue1 = urlvalue;
-                client.newCall(request).enqueue(new Callback() {
+                postClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1035,6 +1046,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                             public void run() {
                                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
+                                showPopup( e.toString());
                             }
                         });
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -1114,7 +1126,11 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             try {
 
                 Log.v(Tag, "======================DELETE========================");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = getClientbasedOnHttp(sslflag);
+                OkHttpClient deleteClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
+
+
+                        .build();
                 MultipartBody.Builder builder = new MultipartBody.Builder();
                 RequestBody requestBody = null;
                 builder.setType(MultipartBody.FORM);
@@ -1157,7 +1173,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
                     requestBody = builder.build();
                     Request request = new Request.Builder().url(urlvalue).headers(customheader).delete(requestBody).build();
 
-                    client.newCall(request).enqueue(new Callback() {
+                    deleteClient.newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, final IOException e) {
 
@@ -1378,8 +1394,8 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     }
 
     public String getUrlData() {
-        String sss = UrlField.getText().toString();
-        return sss;
+        //String sss = UrlField.getText().toString();
+        return weburl;
 
     }
 
@@ -1401,9 +1417,20 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
             loadTimeoutFromPreference(sharedPreferences);
 
         }
+        if (s.equals("sslverify")) {
+            loadSslStatus(sharedPreferences);
+
+
+        }
 
     }
 
+    private void loadSslStatus(SharedPreferences sharedPreferences) {
+        sslflag = sharedPreferences.getBoolean("sslverify", false);
+        // Log.v("sslstaus",sslStatusflag);
+
+        //changeResponseTimeoutTime(response_time);
+    }
 
     private void changeResponseTimeoutTime(int i) {
         Log.v("changedTimeOut", String.valueOf(i));
@@ -1416,6 +1443,94 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
         changeResponseTimeoutTime(response_time);
     }
 
+
+    public boolean isHttps() {
+        if (checkbox_https.isChecked()) {
+            return true;
+
+        } else return false;
+
+    }
+
+
+    public OkHttpClient getClientbasedOnHttp(boolean flag) {
+
+        if (!flag) {
+
+
+            try {
+                // Create a trust manager that does not validate certificate chains
+                final TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                return new java.security.cert.X509Certificate[]{};
+                            }
+                        }
+                };
+
+                // Install the all-trusting trust manager
+                final SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+                // Create an ssl socket factory with our all-trusting manager
+                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+                builder.hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+
+                OkHttpClient okHttpClient = builder.build();
+                return okHttpClient;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+        } else {
+            OkHttpClient client = new OkHttpClient();
+
+            return client;
+
+        }
+
+
+    }
+    public void showPopup(String message)
+    {
+
+
+        final Dialog dialog = new Dialog(NavDrawerActivityMain.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        text.setText(message);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
 }
 
 

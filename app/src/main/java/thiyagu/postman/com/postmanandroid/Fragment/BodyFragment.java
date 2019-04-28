@@ -134,7 +134,7 @@ public class BodyFragment extends Fragment {
 
                       case 0:
 
-                          Toast.makeText(context,"MULTIFORM",Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(context,"MULTIFORM",Toast.LENGTH_LONG).show();
 
 
 
@@ -150,7 +150,7 @@ public class BodyFragment extends Fragment {
                           break;
 
                       case 1:
-                          Toast.makeText(context,"JSON",Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(context,"JSON",Toast.LENGTH_LONG).show();
                          // body_spinner.setText("JSON");
 
                           Log.v("statusofbodyfragment", "setting bodyflag 2");
@@ -163,7 +163,7 @@ public class BodyFragment extends Fragment {
                           break;
 
                       case 2:
-                          Toast.makeText(context,"XML",Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(context,"XML",Toast.LENGTH_LONG).show();
                           //body_spinner.setText("XML");
 
                           raw();
@@ -179,7 +179,7 @@ public class BodyFragment extends Fragment {
                           break;
 
                       case 3:
-                          Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
                          // body_spinner.setText("BINARY");
                           raw();
 
