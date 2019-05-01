@@ -254,7 +254,7 @@ boolean https_check;
                 sslflag = sharedPreferences.getBoolean("sslverify", false);
 
                 Log.v("sdfdsfdsf", String.valueOf(sslflag));
-                timeout = Integer.valueOf(sharedPreferences.getString("timeout", ""));
+                timeout = sharedPreferences.getInt("timeout", 0);
 
                 Log.v("status", status);
                 if (status == "DEFAULT") {

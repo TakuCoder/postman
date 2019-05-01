@@ -35,7 +35,7 @@ public class ParamPopUp extends AppCompatActivity {
         materialBetterSpinner = findViewById(R.id.material_spinner11);
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         KeyField = findViewById(R.id.KeyField);
-        ValueField = findViewById(R.id.ValueField);
+        ValueField = findViewById(R.id.content_types);
         addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override

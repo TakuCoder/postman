@@ -32,40 +32,59 @@
                 android:alpha="255"
                 android:drawableEnd="@drawable/arrow_white"
                 android:gravity="center"
-                android:hint="@string/Key_type"
+                android:hint="@string/Headers"
                 app:met_baseColor="@color/orange"
                 app:met_floatingLabel="highlight"
                 app:met_floatingLabelTextColor="@color/orange"
                 app:met_textColor="@color/white" />
-
             <EditText
+                android:visibility="gone"
                 android:id="@+id/KeyField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/Key"
+                android:hint="@string/Headers"
                 android:inputType="textPersonName"
 
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/orangedim" />
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/material_value"
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="0.5"
+                android:alpha="255"
+                android:drawableEnd="@drawable/arrow_white"
+                android:gravity="center"
+                android:hint="@string/content_types"
+                app:met_baseColor="@color/orange"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelTextColor="@color/orange"
+                app:met_textColor="@color/white" />
+
+
 
             <EditText
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/orangedim"
-
-                android:id="@+id/ValueField"
+                android:visibility="gone"
+                android:id="@+id/content_types"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/req_type_spinner"
-                android:layout_centerHorizontal="true"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Value"
+                android:hint="@string/content_types"
                 android:inputType="textPersonName"
+
                 android:textAlignment="center"
-         />
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/orangedim" />
 
             <Button
                 android:background="#ff6c37"

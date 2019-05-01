@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,7 +22,9 @@ import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyPopUp extends AppCompatActivity {
     MaterialBetterSpinner materialBetterSpinner;
-    EditText KeyField, ValueField;
+    EditText KeyField,ValueField;
+
+
     Button addButton;
     FeedReaderDbHelper feedReaderDbHelper;
     Intent intent = new Intent();
@@ -30,12 +33,44 @@ public class BodyPopUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_activity);
-        final String[] request = {"ACCEPT", "CONTENT-TYPE", "CUSTOM"};
+        final String[] request = {"Content-Type",
+                "Content-Length",
+                "Accept",
+                "Accept-Charset",
+                "Accept-Encoding",
+                "Accept-Language",
+                "Accept-Datetime",
+                "Authorization",
+                "Cache-Control",
+                "Cookie",
+                "Connection",
+                "Content-MD5",
+                "Date",
+                "Expect",
+                "Forwarded",
+                "From",
+                "Host",
+                "If-Match",
+                "If-Modified-Since",
+                "If-None-Match",
+                "If-Range",
+                "If-Unmodified-Since",
+                "Max-Forwards",
+                "Origin",
+                "Pragma",
+                "Proxy-Authorization",
+                "Range",
+                "Referer",
+                "TE",
+                "User-Agent",
+                "Upgrade",
+                "Via",
+                "Warning", "CUSTOM"};
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
         materialBetterSpinner = findViewById(R.id.material_spinner11);
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         KeyField = findViewById(R.id.KeyField);
-        ValueField = findViewById(R.id.ValueField);
+        ValueField = findViewById(R.id.content_types);
         addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,15 +123,9 @@ public class BodyPopUp extends AppCompatActivity {
 
                     KeyField.setText("");
 
-                } else if (value.equals("CONTENT-TYPE")) {
-
-                    KeyField.setText("CONTENT-TYPE");
-                } else if (value.equals("ACCEPT")) {
-
-                    KeyField.setText("ACCEPT");
                 } else {
 
-
+                    KeyField.setText(value);
                 }
             }
         });

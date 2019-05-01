@@ -14,7 +14,7 @@ import thiyagu.postman.com.postmanandroid.R;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class Splash extends Activity{
+public class Splash extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,39 +27,35 @@ public class Splash extends Activity{
 
                 SharedPreferences prefs = Splash.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
                 String check = prefs.getString("wizard", null);
+//                SharedPreferences.Editor sharedPreferences = getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE).edit();
+//                sharedPreferences.putInt("timeout", 8);
+//                sharedPreferences.putBoolean("sslverify", true);
+//                sharedPreferences.apply();
 
-try
-{
+                try {
 
-    if(check.equals("passed"))
-    {
-
-
-
-        Intent intent = new Intent(Splash.this,NavDrawerActivityMain.class);
-        startActivity(intent);
+                    if (check.equals("passed")) {
 
 
-    }
+                        Intent intent = new Intent(Splash.this, NavDrawerActivityMain.class);
+                        startActivity(intent);
 
 
-
-}
-catch (Exception e)
-{
+                    }
 
 
-    Intent intent = new Intent(Splash.this,wizard.class);
-    startActivity(intent);
+                } catch (Exception e) {
 
 
-}
+                    Intent intent = new Intent(Splash.this, wizard.class);
+                    startActivity(intent);
 
 
+                }
 
 
             }
-        },3000);
+        }, 3000);
 
     }
 }

@@ -121,5 +121,7 @@
     <string name="about_view_copy_right">Copyright © 2017</string>
     <string name="about_view_description">App for developers to test REST API.\nTest anywhere and anytime without desktops.</string>
     <string name="copy_right" translatable="false">Copyrights © %1$d</string>
+    <string name="Headers">Headers</string>
+    <string name="content_types">content-types</string>
 
 </resources>
