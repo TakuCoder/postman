@@ -7,19 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.NetworkOnMainThreadException;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -70,7 +66,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import thiyagu.postman.com.postmanandroid.CustomTypefaceSpan;
+import okhttp3.logging.HttpLoggingInterceptor;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
@@ -86,7 +82,13 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-public class NavDrawerActivityMain extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class Activity_Request extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+//
+//    enum RequestType
+//    {
+//        RED, GREEN, BLUE;
+//    }
+
     private static final String TAG = "TAG";
     MaterialBetterSpinner materialBetterSpinner;
     Button sendButton;
@@ -94,14 +96,14 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
     public String ssss;
-    public String Tag = "postman-trace";
+    public String Tag = "postman-thiyagu";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabLayout.Tab body;
     private TabLayout.Tab responsetab;
     public static String flag;
     String weburl;
-    private static NavDrawerActivityMain instance;
+    private static Activity_Request instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
     private Toolbar toolbar;
@@ -116,7 +118,7 @@ public class NavDrawerActivityMain extends AppCompatActivity implements Navigati
     SharedPreferences.Editor editor;
     public int timeout;
     String fullurl;
-boolean https_check;
+    boolean https_check;
     boolean sslflag;
     @Inject
     MyDatabaseReference myDatabaseReference;
@@ -135,19 +137,16 @@ boolean https_check;
         checkbox_https = findViewById(R.id.checkbox_https);
 
 
-
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
-        https_check = prefs.getBoolean("https_check",false);
-        if(https_check)
-        {
+        https_check = prefs.getBoolean("https_check", false);
+        if (https_check) {
 
             checkbox_https.setChecked(true);
-        }
-        else {
+        } else {
             checkbox_https.setChecked(false);
 
         }
-       // Toast.makeText(getApplicationContext(),String.valueOf(https_check),Toast.LENGTH_LONG).show();
+        // Toast.makeText(getApplicationContext(),String.valueOf(https_check),Toast.LENGTH_LONG).show();
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
         setSupportActionBar(toolbar);
         instance = this;
@@ -157,12 +156,12 @@ boolean https_check;
                 if (checkbox_https.isChecked()) {
                     editor.putBoolean("https_check", true);
                     editor.apply();
-                    Log.v("status","true");
+                    Log.v("status", "true");
                 } else {
 
                     editor.putBoolean("https_check", false);
                     editor.apply();
-                    Log.v("status","false");
+                    Log.v("status", "false");
                 }
 
             }
@@ -173,7 +172,7 @@ boolean https_check;
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        dialog = new ProgressDialog(NavDrawerActivityMain.this);
+        dialog = new ProgressDialog(Activity_Request.this);
         dialog.setCancelable(false);
 
 //        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
@@ -199,7 +198,6 @@ boolean https_check;
         NetwordDetect();
 
 //
-
 
 
         materialBetterSpinner.setAdapter(arrayadapter);
@@ -238,10 +236,8 @@ boolean https_check;
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-
-            {
-                NavDrawerActivityMain.this.runOnUiThread(new Runnable() {
+            public void onClick(View v) {
+                Activity_Request.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialog.setMessage("Activating hyperdrive, please wait.");
@@ -249,12 +245,12 @@ boolean https_check;
                     }
                 });
 
-                SharedPreferences sharedPreferences = NavDrawerActivityMain.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = Activity_Request.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
                 sslflag = sharedPreferences.getBoolean("sslverify", false);
 
-                Log.v("sdfdsfdsf", String.valueOf(sslflag));
-                timeout = sharedPreferences.getInt("timeout", 0);
+                //Log.v("sdfdsfdsf", String.valueOf(sslflag));
+                timeout = Integer.valueOf(sharedPreferences.getString("timeout", ""));
 
                 Log.v("status", status);
                 if (status == "DEFAULT") {
@@ -264,9 +260,6 @@ boolean https_check;
                     Log.v("status", "loading user cert");
 
                 }
-
-
-
 
 
 //                checkbox_https.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -303,14 +296,12 @@ boolean https_check;
                 if (isValid(fullurl)) {
 
 
-                    // feedReaderDbHelper = new FeedReaderDbHelper(NavDrawerActivityMain.this);
+                    // feedReaderDbHelper = new FeedReaderDbHelper(Activity_Request.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headerlist.size() > 0) {
                         Log.v(Tag, "=======================adding headers=========================");
-                        for (int i = 0; i < headerlist.size(); i++)
-
-                        {
+                        for (int i = 0; i < headerlist.size(); i++) {
 
                             String[] subvalue = headerlist.get(i).split("@@");
                             Log.v(Tag, subvalue[1] + subvalue[2]);
@@ -319,9 +310,7 @@ boolean https_check;
                     }
                     Log.v(Tag, "=======================added headers=========================");
 
-                    try
-
-                    {
+                    try {
                         editor = getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
                         editor.putString("response", "");
                         editor.putString("code", "");
@@ -362,9 +351,7 @@ boolean https_check;
                     ArrayList<String> urlencodedparams = new ArrayList<>();
                     if (paramlist.size() > 0) {
                         Log.v(Tag, "Adding Params====================> ");
-                        for (int i = 0; i < paramlist.size(); i++)
-
-                        {
+                        for (int i = 0; i < paramlist.size(); i++) {
 
                             String[] subvalue = paramlist.get(i).split("@@");
 
@@ -454,7 +441,7 @@ boolean https_check;
                             break;
                         default:
                             Log.v(Tag, "Nothing selected in request");
-                            new MaterialTapTargetPrompt.Builder(NavDrawerActivityMain.this).setTarget(findViewById(R.id.req_type_spinner)).setPrimaryText("Select the type of request").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            new MaterialTapTargetPrompt.Builder(Activity_Request.this).setTarget(findViewById(R.id.req_type_spinner)).setPrimaryText("Select the type of request").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                                 @Override
                                 public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
                                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
@@ -470,7 +457,7 @@ boolean https_check;
                 } else {
 
 
-                    Toasty.warning(NavDrawerActivityMain.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
+                    Toasty.warning(Activity_Request.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
                     if (dialog != null) {
                         dialog.dismiss();
                     }
@@ -550,9 +537,7 @@ boolean https_check;
                     MOBILE = true;
         }
 
-        if (WIFI)
-
-        {
+        if (WIFI) {
             IPaddress = GetDeviceipWiFiData();
             mDrawerHeaderTitle.setText(IPaddress);
             Log.v("asdasdsadad", IPaddress);
@@ -616,7 +601,7 @@ boolean https_check;
 
     public void ShowNetError() {
 
-        Toasty.warning(NavDrawerActivityMain.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
+        Toasty.warning(Activity_Request.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
 
 
     }
@@ -701,7 +686,7 @@ boolean https_check;
         if (id == R.id.bookmark) {
 //ABC123456789
 
-            Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            Toasty.warning(Activity_Request.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
             Intent intent = new Intent(this, HistoryActivity.class);
@@ -716,7 +701,7 @@ boolean https_check;
             Intent intent = new Intent(this, AboutusActivity.class);
             startActivity(intent);
         } else if (id == R.id.test) {
-            Toasty.warning(NavDrawerActivityMain.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            Toasty.warning(Activity_Request.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -834,10 +819,10 @@ boolean https_check;
                             public void run() {
                                 dialog.dismiss();
                                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                                showPopup( e.toString());
+                                showPopup(e.toString());
                             }
                         });
-                        NavDrawerActivityMain.flag = "failure";
+                        Activity_Request.flag = "failure";
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
 
@@ -862,7 +847,7 @@ boolean https_check;
                             Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                             Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                            NavDrawerActivityMain.flag = "success";
+                            Activity_Request.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
@@ -881,7 +866,7 @@ boolean https_check;
 //                                    tab.select();
 
 
-                            Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+                            Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
                             intent.putExtra("url", finalUrlvalue);
                             intent.putExtra("reqtype", "GET");
                             startActivity(intent);
@@ -891,13 +876,13 @@ boolean https_check;
                         } catch (NetworkOnMainThreadException exception) {
 
                             exception.printStackTrace();
-                            Toasty.warning(NavDrawerActivityMain.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+                            Toasty.warning(Activity_Request.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
                             //  if (dialog != null) dialog.dismiss();
                         } catch (Exception e) {
 
                             Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
 
-                            Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+                            Toasty.warning(Activity_Request.this, e.toString(), Toast.LENGTH_SHORT, true).show();
 
                         }
 
@@ -910,10 +895,11 @@ boolean https_check;
                 Log.v(Tag, "exception happened  get request" + e.toString());
 
                 e.printStackTrace();
-                Toasty.warning(NavDrawerActivityMain.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+                Toasty.warning(Activity_Request.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        } else if (method.equals("POST")) {
+        } else if (method.equals("POST"))
+        {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -947,17 +933,12 @@ boolean https_check;
                         String[] subvalue = null;
 
 
-                        if (part.size() > 0)
-
-
-                        {
+                        if (part.size() > 0) {
 
                             Log.v(Tag, "====================Adding Builder=========================================");
 
 
-                            for (int i = 0; i < part.size(); i++)
-
-                            {
+                            for (int i = 0; i < part.size(); i++) {
 
 
                                 try {
@@ -1034,7 +1015,8 @@ boolean https_check;
 
 
                 final String finalUrlvalue1 = urlvalue;
-                postClient.newCall(request).enqueue(new Callback() {
+                postClient.newCall(request).enqueue(new Callback()
+                {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1046,7 +1028,7 @@ boolean https_check;
                             public void run() {
                                 Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                                 dialog.dismiss();
-                                showPopup( e.toString());
+                                showPopup(e.toString());
                             }
                         });
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -1090,11 +1072,11 @@ boolean https_check;
                                     //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
-                                    // Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
                                     // intent.putExtra("url", finalUrlvalue);
 
                                     // startActivity(intent);
-                                    Intent intent = new Intent(NavDrawerActivityMain.this, ResultActivity.class);
+                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
                                     intent.putExtra("url", finalUrlvalue1);
                                     intent.putExtra("reqtype", "POST");
                                     startActivity(intent);
@@ -1119,128 +1101,202 @@ boolean https_check;
             }
 
 
-        } else if (method.equals("DELETE"))
+        }
 
 
+        else if (method.equals("DELETE"))
         {
             try {
-
-                Log.v(Tag, "======================DELETE========================");
+                Request request = null;
+                Log.v(Tag, "======================POST========================");
                 OkHttpClient client = getClientbasedOnHttp(sslflag);
-                OkHttpClient deleteClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
+                OkHttpClient postClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
 
                         .build();
-                MultipartBody.Builder builder = new MultipartBody.Builder();
-                RequestBody requestBody = null;
-                builder.setType(MultipartBody.FORM);
-
-                ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                String[] subvalue = null;
 
 
-                if (part.size() > 0)
+                String bodyflag = prefs.getString("bodytypeflag", null);
+                String rawbody = prefs.getString("rawbody", null);
+
+                if (bodyflag == null) {
+
+                    bodyflag = "4";
+
+                }
+                switch (bodyflag) {
+
+                    case "1":
 
 
-                {
+                        MultipartBody.Builder builder = new MultipartBody.Builder();
+                        RequestBody requestBody;
+                        Log.v("statusofbodytype", "=============case 1 detected============");
+                        builder.setType(MultipartBody.FORM);
 
-                    Log.v(Tag, "====================Adding Builder=========================================");
-
-
-                    for (int i = 0; i < part.size(); i++)
-
-                    {
-
-
-                        try {
-                            subvalue = part.get(i).split("@@");
+                        ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                        String[] subvalue = null;
 
 
-                            Log.v(Tag, "builder" + i + subvalue[0]);
-                            Log.v(Tag, "builder" + i + subvalue[1]);
-                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+                        if (part.size() > 0) {
+
+                            Log.v(Tag, "====================Adding Builder=========================================");
 
 
-                        } catch (Exception e) {
-                            Log.v(Tag, "exception happened while adding builder in post");
-                            Log.v(Tag, e.toString());
+                            for (int i = 0; i < part.size(); i++) {
+
+
+                                try {
+                                    subvalue = part.get(i).split("@@");
+
+
+                                    Log.v(Tag, "builder" + i + subvalue[0]);
+                                    Log.v(Tag, "builder" + i + subvalue[1]);
+                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                                } catch (Exception e) {
+                                    Log.v(Tag, "exception happened while adding builder in post");
+                                    Log.v(Tag, e.toString());
+
+                                }
+
+                            }
+
 
                         }
+
+
+                        requestBody = builder.build();
+                        request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").delete(requestBody).build();
+                        Log.v("statusofbodytype", "=============case 1 detected============");
+                        break;
+
+
+                    case "2":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/json");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").delete(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112232");
+
+                        }
+                        Log.v("statusofbodytype", "=============case 2 detected============");
+                        break;
+
+
+                    case "3":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 3 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/xml");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").delete(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112234");
+
+                        }
+                        break;
+
+                    case "4":
+
+                        //   Log.v("statusofbodytype", "=============case 4 detected=======rawbody=====" + rawbody);
+                        //MediaType mediaType = MediaType.parse("application/xml");
+
+                        RequestBody newbody = RequestBody.create(null, "");
+                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").delete(newbody).build();
+                        break;
+
+                }
+
+
+                final String finalUrlvalue1 = urlvalue;
+                postClient.newCall(request).enqueue(new Callback()
+                {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+
+                        //  if (dialog != null) dialog.dismiss();
+                        Log.d(Tag, "failure");
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                showPopup(e.toString());
+                            }
+                        });
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                     }
 
-                    requestBody = builder.build();
-                    Request request = new Request.Builder().url(urlvalue).headers(customheader).delete(requestBody).build();
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
 
-                    deleteClient.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, final IOException e) {
+                        dialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
 
-                            // if (dialog != null) dialog.dismiss();
-                            Log.d(Tag, "failure");
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DELETE FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                    String bodyy = response.body().string();
+                                    int responsecode = response.code();
 
-                        }
+                                    String Headers = response.headers().toString();
 
-                        @Override
-                        public void onResponse(Call call, final Response response) throws IOException {
+                                    long tx = response.sentRequestAtMillis();
+                                    long rx = response.receivedResponseAtMillis();
 
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-
-                                        String bodyy = response.body().string();
-                                        int responsecode = response.code();
-
-                                        String Headers = response.headers().toString();
-
-                                        long tx = response.sentRequestAtMillis();
-                                        long rx = response.receivedResponseAtMillis();
+                                    Log.v(Tag, "======================BODY========================");
+                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
 
-                                        Log.v(Tag, "======================BODY========================");
-                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                    editor.putString("response", bodyy);
+                                    editor.putString("Headers", Headers);
+                                    editor.putString("code", String.valueOf(responsecode));
+                                    editor.putString("time", "" + (rx - tx));
+                                    editor.apply();
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    //   if (dialog != null) dialog.dismiss();
 
+                                    //here comes response activity
+                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    // intent.putExtra("url", finalUrlvalue);
 
-                                        editor.putString("response", bodyy);
-                                        editor.putString("code", String.valueOf(responsecode));
-                                        editor.putString("time", "" + (rx - tx));
-                                        editor.apply();
-                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        //     if (dialog != null) dialog.dismiss();
-                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                        tab.select();
+                                    // startActivity(intent);
+                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    intent.putExtra("url", finalUrlvalue1);
+                                    intent.putExtra("reqtype", "POST");
+                                    startActivity(intent);
+                                } catch (Exception e) {
 
-                                    } catch (Exception e) {
-
-
-                                    }
 
                                 }
-                            });
+
+                            }
+                        });
 
 
-                        }
-                    });
-
-
-                }
+                    }
+                });
 
 
             } catch (final Exception e) {
@@ -1250,125 +1306,200 @@ boolean https_check;
 
             }
 
-        } else if (method.equals("PUT")) {
 
-
+        } else if (method.equals("PUT"))
+        {
             try {
-
-                Log.v(Tag, "======================PUT========================");
-                OkHttpClient client = new OkHttpClient();
-                MultipartBody.Builder builder = new MultipartBody.Builder();
-                RequestBody requestBody = null;
-                builder.setType(MultipartBody.FORM);
-
-                ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
-                String[] subvalue = null;
+                Request request = null;
+                Log.v(Tag, "======================POST========================");
+                OkHttpClient client = getClientbasedOnHttp(sslflag);
+                OkHttpClient postClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
 
-                if (part.size() > 0)
+                        .build();
 
 
-                {
+                String bodyflag = prefs.getString("bodytypeflag", null);
+                String rawbody = prefs.getString("rawbody", null);
 
-                    Log.v(Tag, "====================Adding Builder=========================================");
+                if (bodyflag == null) {
 
+                    bodyflag = "4";
 
-                    for (int i = 0; i < part.size(); i++)
+                }
+                switch (bodyflag) {
 
-                    {
-
-
-                        try {
-                            subvalue = part.get(i).split("@@");
-
-
-                            Log.v(Tag, "builder" + i + subvalue[0]);
-                            Log.v(Tag, "builder" + i + subvalue[1]);
-                            builder.addFormDataPart(subvalue[1], subvalue[2]);
+                    case "1":
 
 
-                        } catch (Exception e) {
-                            Log.v(Tag, "exception happened while adding builder in post");
-                            Log.v(Tag, e.toString());
+                        MultipartBody.Builder builder = new MultipartBody.Builder();
+                        RequestBody requestBody;
+                        Log.v("statusofbodytype", "=============case 1 detected============");
+                        builder.setType(MultipartBody.FORM);
+
+                        ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                        String[] subvalue = null;
+
+
+                        if (part.size() > 0) {
+
+                            Log.v(Tag, "====================Adding Builder=========================================");
+
+
+                            for (int i = 0; i < part.size(); i++) {
+
+
+                                try {
+                                    subvalue = part.get(i).split("@@");
+
+
+                                    Log.v(Tag, "builder" + i + subvalue[0]);
+                                    Log.v(Tag, "builder" + i + subvalue[1]);
+                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
+
+
+                                } catch (Exception e) {
+                                    Log.v(Tag, "exception happened while adding builder in post");
+                                    Log.v(Tag, e.toString());
+
+                                }
+
+                            }
+
 
                         }
+
+
+                        requestBody = builder.build();
+                        request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").put(requestBody).build();
+                        Log.v("statusofbodytype", "=============case 1 detected============");
+                        break;
+
+
+                    case "2":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/json");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").put(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112232");
+
+                        }
+                        Log.v("statusofbodytype", "=============case 2 detected============");
+                        break;
+
+
+                    case "3":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 3 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/xml");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").put(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112234");
+
+                        }
+                        break;
+
+                    case "4":
+
+                        //   Log.v("statusofbodytype", "=============case 4 detected=======rawbody=====" + rawbody);
+                        //MediaType mediaType = MediaType.parse("application/xml");
+
+                        RequestBody newbody = RequestBody.create(null, "");
+                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").put(newbody).build();
+                        break;
+
+                }
+
+
+                final String finalUrlvalue1 = urlvalue;
+                postClient.newCall(request).enqueue(new Callback()
+                {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+
+                        //  if (dialog != null) dialog.dismiss();
+                        Log.d(Tag, "failure");
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                showPopup(e.toString());
+                            }
+                        });
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                     }
 
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
 
-                    requestBody = builder.build();
-                    Request request = new Request.Builder().url(urlvalue).headers(customheader).put(requestBody).build();
+                        dialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
 
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, final IOException e) {
+                                    String bodyy = response.body().string();
+                                    int responsecode = response.code();
 
-                            // if (dialog != null) dialog.dismiss();
-                            Log.d(Tag, "failure");
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                            Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUT FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                    String Headers = response.headers().toString();
 
-                        }
-
-                        @Override
-                        public void onResponse(Call call, final Response response) throws IOException {
+                                    long tx = response.sentRequestAtMillis();
+                                    long rx = response.receivedResponseAtMillis();
 
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-
-                                        String bodyy = response.body().string();
-                                        int responsecode = response.code();
+                                    Log.v(Tag, "======================BODY========================");
+                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
 
-                                        String Headers = response.headers().toString();
-
-                                        long tx = response.sentRequestAtMillis();
-                                        long rx = response.receivedResponseAtMillis();
+                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
 
 
-                                        Log.v(Tag, "======================BODY========================");
-                                        Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
-                                        Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
-                                        Log.d(Tag, "HEADERS         ===========================================>" + Headers);
-                                        Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+                                    editor.putString("response", bodyy);
+                                    editor.putString("Headers", Headers);
+                                    editor.putString("code", String.valueOf(responsecode));
+                                    editor.putString("time", "" + (rx - tx));
+                                    editor.apply();
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    //   if (dialog != null) dialog.dismiss();
 
+                                    //here comes response activity
+                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    // intent.putExtra("url", finalUrlvalue);
 
-                                        Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+                                    // startActivity(intent);
+                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    intent.putExtra("url", finalUrlvalue1);
+                                    intent.putExtra("reqtype", "POST");
+                                    startActivity(intent);
+                                } catch (Exception e) {
 
-
-                                        editor.putString("response", bodyy);
-                                        editor.putString("code", String.valueOf(responsecode));
-                                        editor.putString("time", "" + (rx - tx));
-                                        editor.apply();
-                                        Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
-                                        //     if (dialog != null) dialog.dismiss();
-                                        TabLayout.Tab tab = tabLayout.getTabAt(4);
-                                        tab.select();
-
-                                    } catch (Exception e) {
-
-
-                                    }
 
                                 }
-                            });
+
+                            }
+                        });
 
 
-                        }
-                    });
-
-
-                }
+                    }
+                });
 
 
             } catch (final Exception e) {
@@ -1454,6 +1585,9 @@ boolean https_check;
 
 
     public OkHttpClient getClientbasedOnHttp(boolean flag) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
 
         if (!flag) {
 
@@ -1492,7 +1626,7 @@ boolean https_check;
                     }
                 });
 
-                OkHttpClient okHttpClient = builder.build();
+                OkHttpClient okHttpClient = builder.addInterceptor(interceptor).build();
                 return okHttpClient;
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -1500,19 +1634,20 @@ boolean https_check;
 
 
         } else {
-            OkHttpClient client = new OkHttpClient();
-
-            return client;
+            //OkHttpClient client = new OkHttpClient();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            OkHttpClient okHttpClient = builder.addInterceptor(interceptor).build();
+            return okHttpClient;
 
         }
 
 
     }
-    public void showPopup(String message)
-    {
+
+    public void showPopup(String message) {
 
 
-        final Dialog dialog = new Dialog(NavDrawerActivityMain.this);
+        final Dialog dialog = new Dialog(Activity_Request.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog);
@@ -1531,7 +1666,10 @@ boolean https_check;
         dialog.show();
 
     }
+
+
 }
+
 
 
 

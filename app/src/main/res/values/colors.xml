@@ -4,7 +4,8 @@
     <!--<color name="colorPrimaryDark">#464646</color>-->
 
     <color name="colorPrimary">#464646</color>
-    <color name="colorPrimaryDark">#464646</color>
+    <color name="colorPrimaryDark">#302F2F</color>
+    <color name="background">#302F2F</color>
     <color name="colorAccent">#ff6c37</color>
     <color name="pink">#F78181</color>
     <color name ="gray">#202020</color>
@@ -21,7 +22,8 @@
 <color name="neon">#a4c639</color>
     <color name="keycolor">#F0E68C</color>
 
-
+    <color name="colorPrimaryDarkDefault">#1A1A1A</color>
+    <color name="colorAccentDarkDefault">#2196F3</color>
 
     <color name="ivory">#FFFFF0</color>
     <color name="light_yellow">#FFFFE0</color>

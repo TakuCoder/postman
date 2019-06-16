@@ -216,6 +216,19 @@ public class DifferentRowAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((EventViewHolder) holder).method.setTextColor(Color.parseColor("#ffa000"));
 
                     }
+
+                    if(object.getReqtype().contains("DELETE"))
+                    {
+                        ((EventViewHolder) holder).method.setTextColor(Color.parseColor("#ff0000"));
+
+                    }
+
+                    if(object.getReqtype().contains("PUT"))
+                    {
+                        ((EventViewHolder) holder).method.setTextColor(Color.parseColor("#364EB9"));
+
+                    }
+
                     break;
             }
         }

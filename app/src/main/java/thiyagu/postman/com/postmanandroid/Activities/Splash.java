@@ -6,13 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
-import com.google.firebase.crash.FirebaseCrash;
 
 import thiyagu.postman.com.postmanandroid.R;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class Splash extends Activity {
     @Override
@@ -27,17 +22,14 @@ public class Splash extends Activity {
 
                 SharedPreferences prefs = Splash.this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
                 String check = prefs.getString("wizard", null);
-//                SharedPreferences.Editor sharedPreferences = getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE).edit();
-//                sharedPreferences.putInt("timeout", 8);
-//                sharedPreferences.putBoolean("sslverify", true);
-//                sharedPreferences.apply();
+
 
                 try {
 
                     if (check.equals("passed")) {
 
 
-                        Intent intent = new Intent(Splash.this, NavDrawerActivityMain.class);
+                        Intent intent = new Intent(Splash.this, Activity_Request.class);
                         startActivity(intent);
 
 

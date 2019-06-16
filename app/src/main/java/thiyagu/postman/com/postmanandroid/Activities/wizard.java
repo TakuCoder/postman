@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
@@ -63,9 +61,13 @@ public class wizard extends AppIntro2 {
         editor.putString("wizard", "passed");
         editor.apply();
 
+        SharedPreferences.Editor sharedPreferences = getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE).edit();
+        sharedPreferences.putString("timeout", "8");
+        sharedPreferences.putBoolean("sslverify", true);
+        sharedPreferences.apply();
         finish();
 
-        Intent intent = new Intent(wizard.this,NavDrawerActivityMain.class);
+        Intent intent = new Intent(wizard.this, Activity_Request.class);
         startActivity(intent);
     }
 }

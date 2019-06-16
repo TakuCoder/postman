@@ -18,19 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.logging.Level;
 
 import es.dmoral.toasty.Toasty;
 
-import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
+import thiyagu.postman.com.postmanandroid.Activities.Activity_Request;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
 import thiyagu.postman.com.postmanandroid.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
@@ -85,8 +79,8 @@ public class BodyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         try {
-            editor = NavDrawerActivityMain.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
-            prefs = NavDrawerActivityMain.getContext().getSharedPreferences("Thiyagu", 0);
+            editor = Activity_Request.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
+            prefs = Activity_Request.getContext().getSharedPreferences("Thiyagu", 0);
             ParamLayoutManager = new LinearLayoutManager(getContext());
             Log.v("whichfragment", "BodyFragment");
         }
@@ -179,20 +173,21 @@ public class BodyFragment extends Fragment {
                           break;
 
                       case 3:
-                        //  Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
-                         // body_spinner.setText("BINARY");
-                          raw();
+                          None();
 
 
 
                           Log.v("statusofbodyfragment", "setting bodyflag 4");
                           editor.putString("bodytypeflag", "4");
 
-                          editor.putString("rawbodytype", "BINARY");
+                          editor.putString("rawbodytype", "NONE");
                           Log.v("statusofbodyfragment", "setting bodyflag "+"4"+" success");
                           editor.apply();
                           break;
 
+
+                          //  Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
+                          // body_spinner.setText("BINARY");
 
 
                   }
@@ -239,12 +234,20 @@ public class BodyFragment extends Fragment {
                    // radio_raw.setChecked(false);
 
                     break;
+                case "4":
+                    None();
+                    body_spinner.setText("NONE");
+                    //radio_binary.setChecked(true);
 
+                    // radio_formdata.setChecked(false);
+                    // radio_raw.setChecked(false);
+
+                    break;
             }
         }
         catch (Exception e)
         {
-           // Toast.makeText(NavDrawerActivityMain.getContext(),e.toString(),Toast.LENGTH_LONG).show();
+           // Toast.makeText(Activity_Request.getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
         }
 //        radio_formdata.setOnClickListener(new View.OnClickListener() {
@@ -457,5 +460,22 @@ public void Apply(String sss,String i,String type)
 
     }
 
+    void None()
+    {
 
+
+
+
+
+        //radio_formdata.setChecked(true);//radio_formdata.setChecked(true);
+        //radio_raw.setChecked(false);
+        //radio_binary.setChecked(false);
+
+
+        recyclerView.setVisibility(View.GONE);
+        AddBody.setVisibility(View.GONE);
+        ButtonAddRawText.setVisibility(View.GONE);
+        raw_text.setVisibility(View.GONE);
+
+    }
 }

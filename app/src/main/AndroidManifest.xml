@@ -49,7 +49,7 @@
             android:label="@string/title_activity_result"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.NavDrawerActivityMain"
+            android:name=".Activities.Activity_Request"
             android:label="@string/title_activity_nav_drawer_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

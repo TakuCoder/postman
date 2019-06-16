@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import thiyagu.postman.com.postmanandroid.Activities.NavDrawerActivityMain;
+import thiyagu.postman.com.postmanandroid.Activities.Activity_Request;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -66,7 +66,7 @@ public class DeletePopUp extends AppCompatActivity {
 
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecBody(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
+                    Intent intent1 = new Intent(getApplicationContext(), Activity_Request.class);
                     startActivity(intent1);
 
 
@@ -76,14 +76,14 @@ public class DeletePopUp extends AppCompatActivity {
 
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecHeader(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
+                    Intent intent1 = new Intent(getApplicationContext(), Activity_Request.class);
                     startActivity(intent1);
                 }
                 else if(record.equals("param"))
                 {
                     FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(getApplication());
                     feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
-                    Intent intent1 = new Intent(getApplicationContext(), NavDrawerActivityMain.class);
+                    Intent intent1 = new Intent(getApplicationContext(), Activity_Request.class);
                     startActivity(intent1);
 
 
