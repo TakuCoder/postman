@@ -1,5 +1,7 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
+import android.arch.persistence.room.Database;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,13 +18,20 @@ import android.widget.Toast;
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.util.UUID;
+
+import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.DataPojoClass;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Database.Header;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
+import static thiyagu.postman.com.postmanandroid.Activities.Activity_Request.getContext;
+
 public class HeaderPopUp extends AppCompatActivity {
-    MaterialBetterSpinner materialBetterSpinner,material_value;
-    EditText KeyField,content_types;
+    MaterialBetterSpinner materialBetterSpinner, material_value;
+    EditText KeyField, content_types;
 
     Button addButton;
     FeedReaderDbHelper feedReaderDbHelper;
@@ -32,7 +41,7 @@ public class HeaderPopUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_activity);
-        final String[] request = {"CUSTOM","Content-Type",
+        final String[] request = {"CUSTOM", "Content-Type",
                 "Content-Length",
                 "Accept",
                 "Accept-Charset",
@@ -65,7 +74,7 @@ public class HeaderPopUp extends AppCompatActivity {
                 "Upgrade",
                 "Via",
                 "Warning"};
-        final String[] contenttypes = {"CUSTOM","application/json",
+        final String[] contenttypes = {"CUSTOM", "application/json",
                 "application/xml",
                 "application/x-www-form-urlencoded",
                 "multipart/form-data",
@@ -275,11 +284,11 @@ public class HeaderPopUp extends AppCompatActivity {
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
         materialBetterSpinner = findViewById(R.id.material_spinner11);
         material_value = findViewById(R.id.material_value);
-        content_types = findViewById(R.id.content_types);
+        content_types = findViewById(R.id.value_field);
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         KeyField = findViewById(R.id.KeyField);
 
-        ArrayAdapter arrayAdapter= new ArrayAdapter(this, android.R.layout.simple_list_item_1, contenttypes);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, contenttypes);
         material_value.setAdapter(arrayAdapter);
         material_value.setInputType(0);
 
@@ -290,31 +299,36 @@ public class HeaderPopUp extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if(KeyField.getText().toString().equals(""))
-                {
+                if (KeyField.getText().toString().equals("")) {
 
-                    Toast.makeText(getApplicationContext(),"Please enter key",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please enter key", Toast.LENGTH_LONG).show();
 
 
-                }
-                else if(content_types.getText().toString().equals(""))
-                {
+                } else if (content_types.getText().toString().equals("")) {
 
-                    Toast.makeText(getApplicationContext(),"Please enter Value",Toast.LENGTH_LONG).show();
-                }
+                    Toast.makeText(getApplicationContext(), "Please enter Value", Toast.LENGTH_LONG).show();
+                } else {
+                    RoomDatabase database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db")
+                            .allowMainThreadQueries()   //Allows room to do operation on main thread
+                            .build();
 
-                else
-                {
-
-                    DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), content_types.getText().toString());
-                    feedReaderDbHelper.addEntryHeader(pojoClass);
+                    HeaderDAO headerDAO = database.getHeaderDAO();
+                    Header header = new Header();
+                    header.setKey(KeyField.getText().toString());
+                    header.setValue(content_types.getText().toString());
+                    header.setFlag("true");
+                    String uuid = UUID.randomUUID().toString();
+                    header.setTag(uuid);
+                    headerDAO.insert(header);
+                    Log.v("asdasdsd","adding header");
+                    //DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), content_types.getText().toString());
+                    //feedReaderDbHelper.addEntryHeader(pojoClass);
                     intent.putExtra("editTextValue", "value_here");
                     setResult(RESULT_OK, intent);
                     finish();
 
 
                 }
-
 
 
             }
@@ -337,8 +351,7 @@ public class HeaderPopUp extends AppCompatActivity {
                 Log.v("Text", materialBetterSpinner.getText().toString());
 
                 String value = materialBetterSpinner.getText().toString();
-                if (value.equals("CUSTOM"))
-                {
+                if (value.equals("CUSTOM")) {
 
                     KeyField.setText("");
                     KeyField.setVisibility(View.VISIBLE);
@@ -368,8 +381,7 @@ public class HeaderPopUp extends AppCompatActivity {
                 Log.v("Text", material_value.getText().toString());
 
                 String value = material_value.getText().toString();
-                if (value.equals("CUSTOM"))
-                {
+                if (value.equals("CUSTOM")) {
                     content_types.setVisibility(View.VISIBLE);
                     content_types.setText("");
 

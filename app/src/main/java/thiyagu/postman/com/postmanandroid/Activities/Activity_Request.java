@@ -2,6 +2,7 @@ package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 
 import java.io.IOException;
@@ -46,9 +49,9 @@ import java.net.URL;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -67,7 +70,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import thiyagu.postman.com.postmanandroid.Database.Body;
+import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
+import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
+import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Database.Header;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
@@ -76,7 +86,6 @@ import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
 import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
-import thiyagu.postman.com.postmanandroid.MyDatabaseReference;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
@@ -120,8 +129,8 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
     String fullurl;
     boolean https_check;
     boolean sslflag;
-    @Inject
-    MyDatabaseReference myDatabaseReference;
+    RoomDatabase database ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +145,9 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         checkbox_https = findViewById(R.id.checkbox_https);
 
-
+        database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);
         https_check = prefs.getBoolean("https_check", false);
         if (https_check) {
@@ -298,13 +309,17 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 
                     // feedReaderDbHelper = new FeedReaderDbHelper(Activity_Request.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
+                    HeaderDAO headerDAO = database.getHeaderDAO();
+                    List<Header> headers=  headerDAO.getHeaders();
+
                     Headers.Builder headerBuilder = new Headers.Builder();
-                    if (headerlist.size() > 0) {
+                    if (headerlist.size() > 0)
+                    {
                         Log.v(Tag, "=======================adding headers=========================");
                         for (int i = 0; i < headerlist.size(); i++) {
 
                             String[] subvalue = headerlist.get(i).split("@@");
-                            Log.v(Tag, subvalue[1] + subvalue[2]);
+                            Log.v(Tag+"thiyagu", subvalue[1] + subvalue[2]);
                             headerBuilder.add(subvalue[1], subvalue[2]);
                         }
                     }
@@ -347,29 +362,68 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                         //Toasty.error(getApplicationContext(),e.toString());
                     }
 
-                    ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
+
+
+
+                    ParametersDAO bodyDAO = database.getParametersDAO();
+                    List<parameters> parameters = bodyDAO.getParam();
                     ArrayList<String> urlencodedparams = new ArrayList<>();
-                    if (paramlist.size() > 0) {
+                    if(parameters.size()>0)
+                    {
                         Log.v(Tag, "Adding Params====================> ");
-                        for (int i = 0; i < paramlist.size(); i++) {
+                        for (int i = 0; i < parameters.size(); i++)
+                        {
 
-                            String[] subvalue = paramlist.get(i).split("@@");
+                          //  S//tring[] subvalue = parameters.get(i).split("@@");
 
 
-                            Log.v(Tag, "param1=========>" + subvalue[0]);
-                            Log.v(Tag, "param1=========>" + subvalue[1]);
+                           // Log.v(Tag, "param1=========>" + subvalue[0]);
+                           // Log.v(Tag, "param1=========>" + subvalue[1]);
 
-                            if (i != paramlist.size() - 1) {
-                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
+                            if (i != parameters.size() - 1)
+                            {
+                                urlencodedparams.add(i, parameters.get(i).getKey() + "=" + parameters.get(i).getValue() + "&");
 
                             } else {
-                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2]);
+                                urlencodedparams.add(i, parameters.get(i).getKey() + "=" + parameters.get(i).getValue());
 
                             }
 
 
                         }
+
                     }
+
+
+
+
+
+//                    ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
+//                    ArrayList<String> urlencodedparams = new ArrayList<>();
+//                    if (paramlist.size() > 0)
+//                    {
+//                        Log.v(Tag, "Adding Params====================> ");
+//                        for (int i = 0; i < paramlist.size(); i++)
+//                        {
+//
+//                            String[] subvalue = paramlist.get(i).split("@@");
+//
+//
+//                            Log.v(Tag, "param1=========>" + subvalue[0]);
+//                            Log.v(Tag, "param1=========>" + subvalue[1]);
+//
+//                            if (i != paramlist.size() - 1)
+//                            {
+//                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2] + "&");
+//
+//                            } else {
+//                                urlencodedparams.add(i, subvalue[1] + "=" + subvalue[2]);
+//
+//                            }
+//
+//
+//                        }
+//                    }
 
                     Log.v(Tag, "Added Params====================> ");
 
@@ -399,9 +453,14 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                             Log.v(Tag, "Diving Into POST");
                             if (isOnline()) {
 
-                                ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                                final String rawbody = prefs.getString("rawbody", null);
-                                Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+                               // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+
+
+                                //BodyDAO bodyDAO1 = database.getbodyDAO();
+                                //List<Body>body= bodyDAO1.getBody();
+
+                               // final String rawbody = prefs.getString("rawbody", null);
+                               // Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
                                 GetRequest("POST", fullurl, headerBuilder, urlencodedparams);
 
 
@@ -658,23 +717,34 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+    public boolean onOptionsItemSelected(MenuItem _item) {
+        int id = _item.getItemId();
 
-
-        if (id == R.id.home) {
+        if (id == R.id.save_collections) {
 
 
             Toast.makeText(this, "sdsad", Toast.LENGTH_LONG).show();
-        }
-        if (id == R.id.history) {
-            // do something
 
-            Intent intent = new Intent(this, HistoryActivity.class);
-            startActivity(intent);
-            Toast.makeText(getApplicationContext(), "selected hos", Toast.LENGTH_LONG).show();
+
+            JsonObject info = new JsonObject();
+            info.addProperty("_postman_id","942b9d0a-01db-48c4-a3e1-e52a5824681a");
+            info.addProperty("name","sample");
+            info.addProperty("schema","https://schema.getpostman.com/json/collection/v2.1.0/collection.json");
+
+            JsonArray item = new JsonArray();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("name","sample");
+            item.add(jsonObject);
+
         }
-        return super.onOptionsItemSelected(item);
+//        if (id == R.id.history) {
+//            // do something
+//
+//            Intent intent = new Intent(this, HistoryActivity.class);
+//            startActivity(intent);
+//            Toast.makeText(getApplicationContext(), "selected hos", Toast.LENGTH_LONG).show();
+//        }
+        return super.onOptionsItemSelected(_item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -928,26 +998,45 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                         Log.v("statusofbodytype", "=============case 1 detected============");
                         builder.setType(MultipartBody.FORM);
 
-                        ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                        Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+
+
+
+
+
+
+
+
+                        // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+
+
+                        BodyDAO bodyDAO1 = database.getbodyDAO();
+                        List<Body>body= bodyDAO1.getBody();
+
+
+                      //   Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
+
+
+
+                       // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
                         String[] subvalue = null;
 
 
-                        if (part.size() > 0) {
+                        if (body.size() > 0) {
 
                             Log.v(Tag, "====================Adding Builder=========================================");
 
 
-                            for (int i = 0; i < part.size(); i++) {
+                            for (int i = 0; i < body.size(); i++) {
 
 
                                 try {
-                                    subvalue = part.get(i).split("@@");
+                                  //  subvalue = part.get(i).split("@@");
 
 
-                                    Log.v(Tag, "builder" + i + subvalue[0]);
-                                    Log.v(Tag, "builder" + i + subvalue[1]);
-                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
+                                    Log.v(Tag, "builder" + i + body.get(i).getKey());
+                                    Log.v(Tag, "builder" + i + body.get(i).getValue());
+                                    builder.addFormDataPart(body.get(i).getKey(), body.get(i).getValue());
 
 
                                 } catch (Exception e) {
@@ -1135,7 +1224,12 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                         builder.setType(MultipartBody.FORM);
 
                         ArrayList<String> part = feedReaderDbHelper.getAllBody();
-                        Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
+
+                      BodyDAO bodyDAO = database.getbodyDAO();
+                      List<Body> bodylist = bodyDAO.getBody();
+
+
+                        Log.v(Tag, "======================part size========================" + String.valueOf(bodylist.size()));
                         String[] subvalue = null;
 
 
@@ -1151,9 +1245,9 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                                     subvalue = part.get(i).split("@@");
 
 
-                                    Log.v(Tag, "builder" + i + subvalue[0]);
-                                    Log.v(Tag, "builder" + i + subvalue[1]);
-                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
+                                    Log.v(Tag, "builder" + i +bodylist.get(i).getKey());
+                                    Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
+                                    builder.addFormDataPart(bodylist.get(i).getKey(), bodylist.get(i).getValue());
 
 
                                 } catch (Exception e) {
@@ -1337,6 +1431,10 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                         Log.v("statusofbodytype", "=============case 1 detected============");
                         builder.setType(MultipartBody.FORM);
 
+
+
+
+
                         ArrayList<String> part = feedReaderDbHelper.getAllBody();
                         Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
                         String[] subvalue = null;
@@ -1353,10 +1451,12 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                                 try {
                                     subvalue = part.get(i).split("@@");
 
+                                    BodyDAO bodyDAO = database.getbodyDAO();
+                                    List<Body> bodylist = bodyDAO.getBody();
 
-                                    Log.v(Tag, "builder" + i + subvalue[0]);
-                                    Log.v(Tag, "builder" + i + subvalue[1]);
-                                    builder.addFormDataPart(subvalue[1], subvalue[2]);
+                                    Log.v(Tag, "builder" + i + bodylist.get(i).getKey());
+                                    Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
+                                    builder.addFormDataPart(bodylist.get(i).getKey(),bodylist.get(i).getValue());
 
 
                                 } catch (Exception e) {

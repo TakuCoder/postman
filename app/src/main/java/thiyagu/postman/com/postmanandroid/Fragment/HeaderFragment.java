@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Fragment;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -16,9 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Activities.Activity_Request;
+import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Database.Header;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.PopupActivities.HeaderPopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -90,29 +95,17 @@ public class HeaderFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
     }
-    private ArrayList<HeaderDataObject> getDataSet()
+    private List<Header> getDataSet()
 
     {
-
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllHeader();
-        Log.v("asdasdsad", dataa.toString());
-        ArrayList<HeaderDataObject> results = new ArrayList<>();
-
-        for (int i = 0; i < dataa.size(); i++) {
-
-            String[] splitt = dataa.get(i).split("@@");
-            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            HeaderDataObject paramDataObject = new HeaderDataObject(splitt[0], splitt[1], splitt[2]);
+        thiyagu.postman.com.postmanandroid.Database.RoomDatabase database = Room.databaseBuilder(getContext(), RoomDatabase.class, "data_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
+        HeaderDAO headerDAO = database.getHeaderDAO();
+        List<Header> headers = headerDAO.getHeaders();
 
 
-            results.add(i, paramDataObject);
-            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
-
-        }
-
-
-        return results;
+        return headers;
     }
 
 }

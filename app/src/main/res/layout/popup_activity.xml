@@ -71,20 +71,19 @@
                 app:met_textColor="@color/white" />
 
 
-
             <EditText
-                android:visibility="gone"
-                android:id="@+id/content_types"
+                android:id="@+id/value_field"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/content_types"
                 android:inputType="textPersonName"
-
                 android:textAlignment="center"
+
                 android:textColor="@android:color/white"
-                android:textColorHint="@color/orangedim" />
+                android:textColorHint="@color/orangedim"
+                android:visibility="gone" />
 
             <Button
                 android:background="#ff6c37"

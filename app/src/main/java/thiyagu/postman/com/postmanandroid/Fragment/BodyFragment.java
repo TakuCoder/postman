@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Fragment;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,10 +22,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
 import thiyagu.postman.com.postmanandroid.Activities.Activity_Request;
+import thiyagu.postman.com.postmanandroid.Database.Body;
+import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.JSONUtil;
 import thiyagu.postman.com.postmanandroid.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
@@ -387,29 +392,41 @@ public void Apply(String sss,String i,String type)
         //radio_raw.performClick();
     }
 
-    private ArrayList<BodyDataObject> getDataSet()
+    private List<Body> getDataSet()
 
     {
 
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllBody();
-        Log.v("asdasdsad", dataa.toString());
-        ArrayList<BodyDataObject> results = new ArrayList<>();
-
-        for (int i = 0; i < dataa.size(); i++) {
-
-            String[] splitt = dataa.get(i).split("@@");
-            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            BodyDataObject paramDataObject = new BodyDataObject(splitt[0], splitt[1], splitt[2]);
+       // FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
 
 
-            results.add(i, paramDataObject);
-            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
+        RoomDatabase database = Room.databaseBuilder(getContext(),RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+        BodyDAO bodyDAO = database.getbodyDAO();
+        List<Body> dataa = bodyDAO.getBody();
 
-        }
+       // Log.v(Tag, "builder" + i + bodylist.get(i).getKey());
+        //Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
+        //builder.addFormDataPart(bodylist.get(i).getKey(),bodylist.get(i).getValue());
 
 
-        return results;
+
+       // ArrayList<String> dataa = feedReaderDbHelper.getAllBody();
+//        Log.v("asdasdsad", dataa.toString());
+//        ArrayList<BodyDataObject> results = new ArrayList<>();
+//
+//        for (int i = 0; i < dataa.size(); i++) {
+//
+//            //String[] splitt = dataa.get(i).split("@@");
+//            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
+//            BodyDataObject paramDataObject = new BodyDataObject(dataa.get(0).getReferenceId(), dataa.get(0).getKey(), dataa.get(0).getValue());
+//
+//
+//            results.add(i, paramDataObject);
+//            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
+//
+//        }
+
+
+        return dataa;
     }
 
     void raw()

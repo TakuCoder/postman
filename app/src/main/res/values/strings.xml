@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Postman-Android</string>
+    <string name="app_name">Tellurium REST Client</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="title_activity_card_view">CardViewActivity</string>
@@ -18,18 +18,9 @@
     <string name="Key">key</string>
     <string name="Header_Type">Header Type</string>
     <string name="delete">Delete</string>
-    <string-array name="myarray">
-        <item>English (US)</item>
-        <item>Spanish</item>
-        <item>German</item>
-        <item>French</item>
-        <item>Italian</item>
-        <item>Hindi</item>
-        <item>Albanian</item>
-        <item>Romanian</item>
-    </string-array>
+
     <string name="title_activity_result">Response</string>
-    <string name="title_activity_nav_drawer_main">NavDrawerActivityMain</string>
+    <string name="title_activity_nav_drawer_main">Tellurium</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

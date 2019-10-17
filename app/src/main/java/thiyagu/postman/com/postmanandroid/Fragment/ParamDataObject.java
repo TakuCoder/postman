@@ -7,6 +7,7 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 public  class ParamDataObject {
     private String mText1;
     private String mText2;
+
     private String tag;
 
     public ParamDataObject(String text1, String text2){

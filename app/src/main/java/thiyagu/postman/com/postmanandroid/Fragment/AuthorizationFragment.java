@@ -150,7 +150,8 @@ public class AuthorizationFragment extends Fragment {
                 Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
                 materialBetterSpinner.setHint("Auth Type");
 
-                if (String.valueOf(i).equals("0")) {
+                if (String.valueOf(i).equals("0"))
+                {
 
                     username.setEnabled(false);
                     password.setEnabled(false);
@@ -158,7 +159,7 @@ public class AuthorizationFragment extends Fragment {
                     password.setText("");
                     username.setHintTextColor(getResources().getColor(R.color.gray));
                     password.setHintTextColor(getResources().getColor(R.color.gray));
-                    Log.v("sadsadsad", "0");
+                    //Log.v("sadsadsad", "0");
 
 
 //                    String credentials = USERNAME+":"+PASSWORD;

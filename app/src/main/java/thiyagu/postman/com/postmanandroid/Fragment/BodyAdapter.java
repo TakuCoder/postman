@@ -4,9 +4,9 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  * Created by thiyagu on 3/6/2018.
  */
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -17,26 +17,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
+import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyAdapter extends RecyclerView
         .Adapter<BodyAdapter
         .DataObjectHolder> implements View.OnClickListener {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private ArrayList<BodyDataObject> mDataset;
+    private List<Body> mDataset;
     public Context mcontext;
-
+    RoomDatabase database;
     private static MyClickListener myClickListener;
 
 
-    public BodyAdapter(BodyDataObject dataObject, int i)
+
+    public BodyAdapter(Body dataObject, int i)
     {
         addItem(dataObject,i);
     }
@@ -53,7 +56,7 @@ public class BodyAdapter extends RecyclerView
         CardView card_view;
         Typeface roboto;
         AssetManager assetManager;
-
+        CheckBox checkBox;
         public DataObjectHolder(View itemView) {
             super(itemView);
             key =  itemView.findViewById(R.id.textView);
@@ -61,6 +64,7 @@ public class BodyAdapter extends RecyclerView
             card_view = itemView.findViewById(R.id.card_view);
             assetManager = itemView.getContext().getAssets();
             roboto=Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
+            checkBox = itemView.findViewById(R.id.flag);
             Log.i(LOG_TAG, "Adding Listener");
             Log.v(LOG_TAG,key.getText().toString());
 
@@ -73,9 +77,12 @@ public class BodyAdapter extends RecyclerView
         this.myClickListener = myClickListener;
     }
 
-    public BodyAdapter(ArrayList<BodyDataObject> myDataset, Context context) {
+    public BodyAdapter(List<Body> myDataset, Context context) {
         mDataset = myDataset;
         mcontext = context;
+        database = Room.databaseBuilder(mcontext, RoomDatabase.class, "data_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
     }
 
     @Override
@@ -97,9 +104,28 @@ public class BodyAdapter extends RecyclerView
         holder.key.setTypeface(typeface);
         holder.value.setTypeface(typeface);
 
-        holder.key.setText(mDataset.get(position).getmText1());
-        holder.value.setText(mDataset.get(position).getmText2());
-        holder.card_view.setTag(mDataset.get(position).getTag());
+        holder.key.setText(mDataset.get(position).getKey());
+        holder.value.setText(mDataset.get(position).getValue());
+        holder.card_view.setTag(mDataset.get(position).getReferenceId());
+
+        Log.v("customtag", mDataset.get(position).getFlag());
+        if (mDataset.get(position).getFlag().equals("true")) {
+            holder.checkBox.setChecked(true);
+
+        } else {
+
+            holder.checkBox.setChecked(false);
+        }
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("ASas","AasasaS");
+                Log.v("sdsd",holder.checkBox.isChecked()+"" );
+                //Log.v(Tag, "CheckBoxStatusheader" + holder.checkBox.isChecked() + mDataset.get(position).getTag());
+                database.getbodyDAO().updateBody(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getReferenceId());
+            }
+        });
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
 
@@ -151,7 +177,7 @@ public class BodyAdapter extends RecyclerView
 
     }
 
-    public void addItem(BodyDataObject dataObj, int index) {
+    public void addItem(Body dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }

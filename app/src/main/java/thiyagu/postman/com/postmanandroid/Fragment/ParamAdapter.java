@@ -4,6 +4,7 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  * Created by thiyagu on 3/6/2018.
  */
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
@@ -15,49 +16,58 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ParamAdapter extends RecyclerView
         .Adapter<ParamAdapter
         .DataObjectHolder> implements View.OnClickListener {
     private static String LOG_TAG = "MyRecyclerViewAdapter";
-    private ArrayList<ParamDataObject> mDataset;
+    private List<parameters> mDataset;
     public Context mcontext;
     private static MyClickListener myClickListener;
+    String Tag = this.getClass().getSimpleName();
+
+     RoomDatabase database;
+    public ParamAdapter(parameters dataObject, int i) {
+        addItem(dataObject, i);
 
 
-    public ParamAdapter(ParamDataObject dataObject, int i)
-    {
-        addItem(dataObject,i);
     }
 
     @Override
     public void onClick(View v) {
-        Log.d( "onClick " , String.valueOf(v.getId()));
+        Log.d("onClick ", String.valueOf(v.getId()));
     }
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder
-    {
+    public static class DataObjectHolder extends RecyclerView.ViewHolder {
         TextView key;
         TextView value;
         CardView card_view;
         Typeface roboto;
         AssetManager assetManager;
+        CheckBox checkBox;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
             assetManager = itemView.getContext().getAssets();
-            roboto=Typeface.createFromAsset(assetManager,"fonts/Roboto-Bold.ttf");
-            key =  itemView.findViewById(R.id.textView);
+            roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
+            key = itemView.findViewById(R.id.textView);
             value = itemView.findViewById(R.id.textView2);
             card_view = itemView.findViewById(R.id.card_view);
+            checkBox = itemView.findViewById(R.id.flag);
             Log.i(LOG_TAG, "Adding Listener");
-            Log.v(LOG_TAG,key.getText().toString());
+            Log.v(LOG_TAG, key.getText().toString());
 
         }
 
@@ -68,9 +78,13 @@ public class ParamAdapter extends RecyclerView
         this.myClickListener = myClickListener;
     }
 
-    public ParamAdapter(ArrayList<ParamDataObject> myDataset, Context context) {
+    public ParamAdapter(List<parameters> myDataset, Context context) {
         mDataset = myDataset;
         mcontext = context;
+
+        database  = Room.databaseBuilder(context, RoomDatabase.class, "data_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
     }
 
     @Override
@@ -84,23 +98,37 @@ public class ParamAdapter extends RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(final DataObjectHolder holder, final int position)
+    public void onBindViewHolder(final DataObjectHolder holder, final int position) {
 
-
-    {
 
         Typeface typeface = holder.roboto;
         holder.key.setTypeface(typeface);
         holder.value.setTypeface(typeface);
 
-        holder.key.setText(mDataset.get(position).getmText1());
-        holder.value.setText(mDataset.get(position).getmText2());
+        holder.key.setText(mDataset.get(position).getKey());
+        holder.value.setText(mDataset.get(position).getValue());
         holder.card_view.setTag(mDataset.get(position).getTag());
+
+        Log.v(Tag, mDataset.get(position).getFlag());
+        if (mDataset.get(position).getFlag().equals("true")) {
+            holder.checkBox.setChecked(true);
+
+        } else {
+
+            holder.checkBox.setChecked(false);
+        }
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.v(Tag, "CheckBoxStatus" + holder.checkBox.isChecked() + mDataset.get(position).getTag());
+                database.getParametersDAO().updateParam(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getTag());
+            }
+        });
         holder.card_view.setOnClickListener(new View.OnClickListener() {
             @Override
 
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
 
 //                String sss = holder.card_view.getTag().toString();
@@ -120,15 +148,10 @@ public class ParamAdapter extends RecyclerView
 //                notifyItemRangeChanged(position, mDataset.size());
 
 
+                Log.v("this is position", String.valueOf(position));
+                for (int h = 0; h < mDataset.size(); h++) {
 
-
-
-
-                Log.v("this is position",String.valueOf(position));
-                for(int h=0;h<mDataset.size();h++)
-                {
-
-                    Log.v("this is data",mDataset.get(h).getmText1()+"=======>"+h);
+                    Log.v("this is data", mDataset.get(h).getKey() + "=======>" + h);
 
                 }
 
@@ -140,20 +163,20 @@ public class ParamAdapter extends RecyclerView
                 }
                 builder.setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener()
-                        {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 String sss = holder.card_view.getTag().toString();
 
-                                Log.v("this is position",String.valueOf(position));
+                                Log.v("this is position", String.valueOf(position));
 
 
-                                FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
-                                feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
+                                database.getParametersDAO().deleteParam(sss);
+                                //  FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
+                                //feedReaderDbHelper.DeleteSingleRecParam(Integer.parseInt(sss));
 
                                 //ParamFragment.refershView();
 
-                                Log.v("deleting this",String.valueOf(position));
+                                Log.v("deleting this", String.valueOf(position));
                                 mDataset.remove(position);
                                 notifyItemRemoved(position);
 
@@ -185,32 +208,27 @@ public class ParamAdapter extends RecyclerView
 
     }
 
-    public void addItem(ParamDataObject dataObj, int index) {
+    public void addItem(parameters dataObj, int index) {
         mDataset.add(index, dataObj);
         notifyItemInserted(index);
     }
 
     public void deleteItem(int index) {
-        try
-        {
+        try {
 
             mDataset.remove(index);
             notifyItemRemoved(index);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
-            Log.v("deleting this error",String.valueOf(index));
+            Log.v("deleting this error", String.valueOf(index));
         }
 
     }
 
     @Override
-    public  int getItemCount() {
+    public int getItemCount() {
         return mDataset.size();
     }
-
-
 
 
     public interface MyClickListener {

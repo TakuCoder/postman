@@ -5,9 +5,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://maven.google.com' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
+
 
 
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
@@ -22,6 +24,8 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.google.com' }
+
 
     }
 }
@@ -32,6 +36,9 @@ ext {
     supportLibVersion = '27.1.1'
     iconHandlerVersion = 'v2.0.0'
     butterKnifeVersion = '8.8.1'
+    buildToolsVersion = "25.0.2"
+    supportLibVersion = "25.3.1"
+    archRoomVersion = "1.0.0"
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Fragment;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +15,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.PopupActivities.ParamPopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -24,9 +29,9 @@ import thiyagu.postman.com.postmanandroid.R;
  * Created by thiyagu on 4/6/2018.
  */
 
-public class ParamFragment extends Fragment{
+public class ParamFragment extends Fragment {
 
-    Button AddParams;
+    Button AddParamsButton;
     static RecyclerView recyclerView;
     static Context context;
     static RecyclerView.Adapter ParamsAdapter;
@@ -39,8 +44,7 @@ public class ParamFragment extends Fragment{
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == -1) {
@@ -64,7 +68,7 @@ public class ParamFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        Log.v("whichfragment","ParamFragment");
+        Log.v("whichfragment", "ParamFragment");
         ParamLayoutManager = new LinearLayoutManager(getContext());
 
         // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
@@ -73,8 +77,9 @@ public class ParamFragment extends Fragment{
 
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
-        AddParams = view.findViewById(R.id.AddParams);
-        AddParams.setOnClickListener(new View.OnClickListener() {
+        AddParamsButton = view.findViewById(R.id.AddParams);
+        AddParamsButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ParamPopUp.class);
@@ -95,75 +100,39 @@ public class ParamFragment extends Fragment{
 
     }
 
-    public void RefereshView() {
 
 
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllParam();
-        Log.v("asdasdsad", dataa.toString());
-        ArrayList<ParamDataObject> results = new ArrayList<>();
-
-        for (int i = 0; i < dataa.size(); i++) {
-
-            String[] splitt = dataa.get(i).split("@@");
-            ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            results.add(i, paramDataObject);
-            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
-
-        }
+    private List<parameters> getDataSet() {
 
 
-        ParamsAdapter = new ParamAdapter(results, context);
-        recyclerView.setAdapter(null);
-        recyclerView.setAdapter(ParamsAdapter);
+        RoomDatabase database = Room.databaseBuilder(getContext(), RoomDatabase.class, "data_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
+        ParametersDAO parametersDAO = database.getParametersDAO();
+        List<parameters> parameters = parametersDAO.getParam();
 
 
-    }
+        //FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
+        // ArrayList<String> dataa = feedReaderDbHelper.getAllParam();
+        //  Log.v("asdasdsad", dataa.toString());
+       // ArrayList<ParamDataObject> results = new ArrayList<>();
 
-    private ArrayList<ParamDataObject> getDataSet()
-
-    {
-
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllParam();
-        Log.v("asdasdsad", dataa.toString());
-        ArrayList<ParamDataObject> results = new ArrayList<>();
-
-        for (int i = 0; i < dataa.size(); i++) {
-
-            String[] splitt = dataa.get(i).split("@@");
-            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1], splitt[2]);
-
-
-            results.add(i, paramDataObject);
-            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
-
-        }
+//        for (int i = 0; i < parameters.size(); i++) {
+//
+//           // String[] splitt = parameters.get(i).split("@@");
+//            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
+//            ParamDataObject paramDataObject = new ParamDataObject("", parameters.get(i).getKey(), parameters.get(i).getValue());
+//
+//
+//            results.add(i, paramDataObject);
+//            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
+//
+//        }
 
 
-        return results;
+        return parameters;
     }
 
 
-    public static void refershView() {
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-        ArrayList<String> dataa = feedReaderDbHelper.getAllParam();
-        Log.v("asdasdsad", dataa.toString());
-        ArrayList<ParamDataObject> results = new ArrayList<>();
 
-        for (int i = 0; i < dataa.size(); i++) {
-
-            String[] splitt = dataa.get(i).split("@@");
-            ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-            results.add(i, paramDataObject);
-            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
-
-        }
-
-Log.v("asdsdasd","refreshing...");
-        ParamsAdapter = new ParamAdapter(results, context);
-        recyclerView.setAdapter(null);
-        recyclerView.setAdapter(ParamsAdapter);
-    }
 }
