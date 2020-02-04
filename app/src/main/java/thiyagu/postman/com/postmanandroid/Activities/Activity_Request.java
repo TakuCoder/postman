@@ -1010,7 +1010,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 
 
                         BodyDAO bodyDAO1 = database.getbodyDAO();
-                        List<Body>body= bodyDAO1.getBody();
+                        List<Body>body= bodyDAO1.getBodyFlagged();
 
 
                       //   Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
@@ -1050,11 +1050,25 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 
                         }
 
+try
+{
 
-                        requestBody = builder.build();
-                        request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
-                        Log.v("statusofbodytype", "=============case 1 detected============");
-                        break;
+    requestBody = builder.build();
+    request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
+    Log.v("statusofbodytype", "=============case 1 detected============");
+    break;
+}
+catch(Exception e)
+{
+if(dialog!=null)
+{
+
+    dialog.dismiss();
+}
+    showPopup(e.toString());
+}
+
+
 
 
                     case "2":

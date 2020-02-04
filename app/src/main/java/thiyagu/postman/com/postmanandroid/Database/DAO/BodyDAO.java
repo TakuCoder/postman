@@ -28,4 +28,8 @@ public interface BodyDAO {
 
     @Query("update body set flag=:flag where referenceid=:tag")
     public void updateBody(String flag,String tag);
+
+    @Query("SELECT * FROM body where flag ='true'")
+    public List<Body> getBodyFlagged();
+
 }
