@@ -33,11 +33,11 @@ ext {
     compileSdkVersion = 27
     buildToolsVersion = '28.0.2'
     targetSdkVersion = compileSdkVersion
-    supportLibVersion = '27.1.1'
+
     iconHandlerVersion = 'v2.0.0'
     butterKnifeVersion = '8.8.1'
     buildToolsVersion = "25.0.2"
-    supportLibVersion = "25.3.1"
+    supportLibVersion = "27.1.1"
     archRoomVersion = "1.0.0"
 }
 task clean(type: Delete) {

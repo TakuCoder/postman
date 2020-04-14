@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,6 +20,9 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 
 import java.util.List;
+
+import thiyagu.postman.com.postmanandroid.AppCompatPreferenceActivity;
+import thiyagu.postman.com.postmanandroid.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

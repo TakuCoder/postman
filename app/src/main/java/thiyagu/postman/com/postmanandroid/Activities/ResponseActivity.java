@@ -1,6 +1,7 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.app.Activity;
+import android.arch.persistence.room.Room;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +9,6 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,9 +17,15 @@ import com.yuyh.jsonviewer.library.JsonRecyclerView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import thiyagu.postman.com.postmanandroid.Database.Body;
+import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
+import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.HistoryClass;
+import thiyagu.postman.com.postmanandroid.Database.History;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ResponseActivity extends Activity {
@@ -178,7 +184,25 @@ public class ResponseActivity extends Activity {
                 "\n" + Duration +
                 "\n");
 
-        feedReaderDbHelper.addEntryHistory(historyClass);
+     //   feedReaderDbHelper.addEntryHistory(historyClass);
+
+
+        RoomDatabase database = Room.databaseBuilder(ResponseActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+
+        HistoryDAO historyDAO = database.getHistoryDAO();
+
+        History history = new History();
+        history.setUrl(url);
+        history.setDate(date);
+        history.setTime(time);
+        history.setSize(size);
+        history.setResponse_code(response_code);
+        history.setDuration(Duration);
+        history.setReqtype(reqtype);
+        history.setType(type);
+        historyDAO.insert(history);
+        //BodyDAO bodyDAO = database.getbodyDAO();
+       // List<Body> dataa = bodyDAO.getBody();
     }
 
 

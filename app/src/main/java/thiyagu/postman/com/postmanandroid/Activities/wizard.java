@@ -67,7 +67,7 @@ public class wizard extends AppIntro2 {
         sharedPreferences.apply();
         finish();
 
-        Intent intent = new Intent(wizard.this, Activity_Request.class);
+        Intent intent = new Intent(wizard.this, RequestActivity.class);
         startActivity(intent);
     }
 }

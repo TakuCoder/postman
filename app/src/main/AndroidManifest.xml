@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
+        <activity android:name=".Activities.CollectionsActivity"></activity>
         <activity
             android:name=".Activities.Splash"
             android:noHistory="true">
@@ -42,31 +43,33 @@
         <activity android:name=".Activities.wizard" />
         <activity android:name=".Activities.ResponseActivity" />
         <activity
-            android:name=".HistoryActivity"
+            android:name=".Activities.HistoryActivity"
             android:label="History" />
         <activity
             android:name=".Activities.ResultActivity"
             android:label="@string/title_activity_result"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activities.Activity_Request"
+            android:name=".Activities.RequestActivity"
             android:label="@string/title_activity_nav_drawer_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".Activities.MyPreferencesActivity" />
-        <activity android:name=".Activities.AboutusActivity" />
+        <activity android:name=".Activities.AboutActivity" />
         <activity android:name=".Activities.TestActivity">
 
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
 
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
 
         </activity>
+
+        <service android:name=".Services.NetChecker" />
     </application>
 
 </manifest>

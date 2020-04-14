@@ -21,20 +21,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
-import thiyagu.postman.com.postmanandroid.Activities.Activity_Request;
+import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
 import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
-import thiyagu.postman.com.postmanandroid.JSONUtil;
-import thiyagu.postman.com.postmanandroid.JSONUtils;
+import thiyagu.postman.com.postmanandroid.Utils.JSONUtil;
+import thiyagu.postman.com.postmanandroid.Utils.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
-import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.R;
 
 /**
@@ -84,8 +82,8 @@ public class BodyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         try {
-            editor = Activity_Request.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
-            prefs = Activity_Request.getContext().getSharedPreferences("Thiyagu", 0);
+            editor = RequestActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
+            prefs = RequestActivity.getContext().getSharedPreferences("Thiyagu", 0);
             ParamLayoutManager = new LinearLayoutManager(getContext());
             Log.v("whichfragment", "BodyFragment");
         }
@@ -252,7 +250,7 @@ public class BodyFragment extends Fragment {
         }
         catch (Exception e)
         {
-           // Toast.makeText(Activity_Request.getContext(),e.toString(),Toast.LENGTH_LONG).show();
+           // Toast.makeText(RequestActivity.getContext(),e.toString(),Toast.LENGTH_LONG).show();
 
         }
 //        radio_formdata.setOnClickListener(new View.OnClickListener() {

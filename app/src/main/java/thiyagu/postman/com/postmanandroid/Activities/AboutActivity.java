@@ -19,7 +19,7 @@ import thiyagu.postman.com.postmanandroid.R;
  * Created by dklap on 6/7/2017.
  */
 
-public class AboutusActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
 
     @Override
@@ -64,7 +64,7 @@ public class AboutusActivity extends AppCompatActivity {
         copyRightsElement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AboutusActivity.this, copyrights, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AboutActivity.this, copyrights, Toast.LENGTH_SHORT).show();
             }
         });
         return copyRightsElement;

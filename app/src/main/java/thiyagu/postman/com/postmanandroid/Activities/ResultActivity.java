@@ -1,13 +1,11 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
-import android.content.Intent;
+import android.arch.persistence.room.Room;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,39 +14,32 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import okhttp3.Headers;
+import es.dmoral.toasty.Toasty;
+import thiyagu.postman.com.postmanandroid.Database.Bookmarks;
+import thiyagu.postman.com.postmanandroid.Database.DAO.BookmarkDAO;
+import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.Event.BusProvider;
-import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
-import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
-import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
+import thiyagu.postman.com.postmanandroid.Database.History;
+import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.Fragment.JsonFragment;
-import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.Preview;
 import thiyagu.postman.com.postmanandroid.Fragment.RawFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.HistoryActivity;
-import thiyagu.postman.com.postmanandroid.HistoryClass;
+import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
-import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class ResultActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabLayout tabLayout;
-
+FloatingActionButton fab;
     LinearLayout bottom_sheet;
     TextView fullheader, url,tx_view_response_code;
     SharedPreferences prefs;
@@ -62,9 +53,10 @@ public class ResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-        String url_value = getIntent().getStringExtra("url");
-        String req_type = getIntent().getStringExtra("reqtype");
+        final String url_value = getIntent().getStringExtra("url");
+        final String req_type = getIntent().getStringExtra("reqtype");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        fab = findViewById(R.id.fab);
         setSupportActionBar(toolbar);
         feedReaderDbHelper =  new FeedReaderDbHelper(this);
         fullheader = findViewById(R.id.fullheader);
@@ -87,6 +79,12 @@ public class ResultActivity extends AppCompatActivity {
 
 
 
+        final SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss");
+        Log.v("asdadsa", timee.format(new Date()));
+
+
+        final SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        Log.v("asdadsa", date.format(new Date()));
 
 
 
@@ -94,6 +92,13 @@ public class ResultActivity extends AppCompatActivity {
 
 
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BookMarkSave(url_value, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, req_type+" "+response_code, 1);
+
+            }
+        });
 
 
 
@@ -215,12 +220,6 @@ public class ResultActivity extends AppCompatActivity {
 
         }
 
-        SimpleDateFormat timee = new SimpleDateFormat("HH:mm:ss");
-        Log.v("asdadsa", timee.format(new Date()));
-
-
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        Log.v("asdadsa", date.format(new Date()));
         AutoSave(url_value, date.format(new Date()), timee.format(new Date()),"630bytes", response_code, duration, req_type+" "+response_code, 1);
         fullheader.setText(headers_full);
         url.setText("URL : " + url_value);
@@ -299,9 +298,6 @@ public class ResultActivity extends AppCompatActivity {
     }
     public void AutoSave(String url, String date,String time, String size, String response_code, String Duration, String reqtype, int type) {
 
-
-        FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(this);
-        HistoryClass historyClass = new HistoryClass(url, date,time, size, response_code, Duration, reqtype, type);
         Log.v("autosave", date +
                 "\n" + response_code +
                 "\n" + url +
@@ -309,6 +305,47 @@ public class ResultActivity extends AppCompatActivity {
                 "\n" + Duration +
                 "\n");
 
-        feedReaderDbHelper.addEntryHistory(historyClass);
+        //feedReaderDbHelper.addEntryHistory(historyClass);
+
+        RoomDatabase database = Room.databaseBuilder(ResultActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+
+        HistoryDAO historyDAO = database.getHistoryDAO();
+
+        History history = new History();
+        history.setUrl(url);
+        history.setDate(date);
+        history.setTime(time);
+        history.setSize(size);
+        history.setResponse_code(response_code);
+        history.setDuration(Duration);
+        history.setReqtype(reqtype);
+        history.setType(type);
+        historyDAO.insert(history);
+
+    }
+
+
+
+    public void BookMarkSave(String url, String date,String time, String size, String response_code, String Duration, String reqtype, int type) {
+
+
+        RoomDatabase database = Room.databaseBuilder(ResultActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+
+
+
+        BookmarkDAO bookmarkDAO = database.getBookmarkDAO();
+
+        Bookmarks bookmarks = new Bookmarks();
+        bookmarks.setUrl(url);
+        bookmarks.setDate(date);
+        bookmarks.setTime(time);
+        bookmarks.setSize(size);
+        bookmarks.setResponse_code(response_code);
+        bookmarks.setDuration(Duration);
+        bookmarks.setReqtype(reqtype);
+        bookmarks.setType(type);
+        bookmarkDAO.insert(bookmarks);
+        Toasty.warning(getApplicationContext(), "Bookmark saved!", Toast.LENGTH_SHORT, true).show();
+
     }
 }

@@ -9,7 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import thiyagu.postman.com.postmanandroid.HistoryClass;
+import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 
 /**
  * Created by thiyagu on 3/20/2018.
@@ -39,6 +39,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String COLUMN_REQTYPE = "reqtype";
     private static final String COLUMN_TYPE = "type";
     private static final String COLUMN_DATE = "date";
+
     private static final String SQL_CREATE_TABLE_PARAM =
             "CREATE TABLE " + FeedReaderDbHelper.TABLE_NAME_PARAM + " (" +
                     FeedReaderDbHelper.ID + " INTEGER PRIMARY KEY," +
@@ -87,7 +88,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_PARAM);
         db.execSQL(SQL_CREATE_TABLE_BODY);
         db.execSQL(SQL_CREATE_TABLE_HEADER);
-        db.execSQL(SQL_CREATE_TABLE_HISTORY);
+       // db.execSQL(SQL_CREATE_TABLE_HISTORY);
 
     }
 
@@ -221,7 +222,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
 
 
-    public ArrayList<String> getDate() {
+    public ArrayList<String> getDate()
+    {
         ArrayList<String> array_list = new ArrayList<String>();
 
 //String url, String date,String time, String size, String response_code, String Duration,String reqtype,int type

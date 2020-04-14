@@ -128,7 +128,8 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
         }
 
 
-        private void checkPermissionsAndOpenFilePicker() {
+        private void checkPermissionsAndOpenFilePicker()
+        {
             String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
@@ -178,7 +179,8 @@ public class MyPreferencesActivity extends PreferenceActivity implements SharedP
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
 

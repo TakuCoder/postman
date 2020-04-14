@@ -12,4 +12,9 @@
     <dimen name="margin_huge">64dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
+
+
+
+    <dimen name="standard_material_padding">16dp</dimen>
+    <dimen name="standard_text_size">16sp</dimen>
 </resources>

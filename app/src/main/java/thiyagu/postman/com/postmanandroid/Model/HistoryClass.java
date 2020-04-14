@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Model;
 
 public class HistoryClass {
 
@@ -25,18 +25,7 @@ public class HistoryClass {
         this.mType = type;
 
     }
-    public HistoryClass(int tag, String url, String date, String time,String size, String response_code, String Duration,String reqtype,int type) {
-        this.tag = tag;
-        this.url = url;
-        this.date = date;
-        this.time = time;
-        this.size = size;
-        this.Duration = Duration;
-        this.response_code = response_code;
-        this.reqtype = reqtype;
-        this.mType = type;
 
-    }
 
 
     public String getDuration() {

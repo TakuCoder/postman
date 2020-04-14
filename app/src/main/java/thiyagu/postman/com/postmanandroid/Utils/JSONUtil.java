@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Utils;
 
 public class JSONUtil {
     public static String escape(String input) {

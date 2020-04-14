@@ -84,14 +84,14 @@ import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.HistoryActivity;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
+import thiyagu.postman.com.postmanandroid.Services.NetChecker;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-public class Activity_Request extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class RequestActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener,NetChecker.ConnectionServiceCallback{
 //
 //    enum RequestType
 //    {
@@ -112,7 +112,8 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
     private TabLayout.Tab responsetab;
     public static String flag;
     String weburl;
-    private static Activity_Request instance;
+    Context context;
+    private static RequestActivity instance;
     private ProgressDialog dialog;
     SharedPreferences prefs;
     private Toolbar toolbar;
@@ -138,7 +139,18 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_nav_drawer_main);
 
         intiview();
+        context = this;
         setupSharedPreferences();
+
+        Intent intent = new Intent(this, NetChecker.class);
+        // Interval in seconds
+        intent.putExtra(NetChecker.TAG_INTERVAL, 5);
+        // URL to ping
+        intent.putExtra(NetChecker.TAG_URL_PING, "http://www.google.com");
+        // Name of the class that is calling this service
+        intent.putExtra(NetChecker.TAG_ACTIVITY_NAME, this.getClass().getName());
+        // Starts the service
+        startService(intent);
 
         // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
@@ -183,7 +195,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        dialog = new ProgressDialog(Activity_Request.this);
+        dialog = new ProgressDialog(RequestActivity.this);
         dialog.setCancelable(false);
 
 //        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
@@ -248,7 +260,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Activity_Request.this.runOnUiThread(new Runnable() {
+                RequestActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialog.setMessage("Activating hyperdrive, please wait.");
@@ -256,7 +268,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                     }
                 });
 
-                SharedPreferences sharedPreferences = Activity_Request.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = RequestActivity.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
                 sslflag = sharedPreferences.getBoolean("sslverify", false);
 
@@ -307,7 +319,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                 if (isValid(fullurl)) {
 
 
-                    // feedReaderDbHelper = new FeedReaderDbHelper(Activity_Request.this);
+                    // feedReaderDbHelper = new FeedReaderDbHelper(RequestActivity.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     HeaderDAO headerDAO = database.getHeaderDAO();
                     List<Header> headers=  headerDAO.getHeaders();
@@ -500,7 +512,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                             break;
                         default:
                             Log.v(Tag, "Nothing selected in request");
-                            new MaterialTapTargetPrompt.Builder(Activity_Request.this).setTarget(findViewById(R.id.req_type_spinner)).setPrimaryText("Select the type of request").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                            new MaterialTapTargetPrompt.Builder(RequestActivity.this).setTarget(findViewById(R.id.req_type_spinner)).setPrimaryText("Select the type of request").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                                 @Override
                                 public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
                                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
@@ -516,7 +528,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                 } else {
 
 
-                    Toasty.warning(Activity_Request.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
+                    Toasty.warning(RequestActivity.this, "Please enter valid url", Toast.LENGTH_SHORT, true).show();
                     if (dialog != null) {
                         dialog.dismiss();
                     }
@@ -660,7 +672,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 
     public void ShowNetError() {
 
-        Toasty.warning(Activity_Request.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
+        Toasty.warning(RequestActivity.this, "No internet Found!", Toast.LENGTH_SHORT, true).show();
 
 
     }
@@ -753,10 +765,19 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+        if (id == R.id.Collections) {
+//ABC123456789
+
+            Intent intent = new Intent(this, CollectionsActivity.class);
+            startActivity(intent);
+
+        }
+
         if (id == R.id.bookmark) {
 //ABC123456789
 
-            Toasty.warning(Activity_Request.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
             Intent intent = new Intent(this, HistoryActivity.class);
@@ -768,10 +789,10 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
             startActivity(intent);
 
         } else if (id == R.id.about) {
-            Intent intent = new Intent(this, AboutusActivity.class);
+            Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         } else if (id == R.id.test) {
-            Toasty.warning(Activity_Request.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -892,7 +913,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                                 showPopup(e.toString());
                             }
                         });
-                        Activity_Request.flag = "failure";
+                        RequestActivity.flag = "failure";
                         Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GET FAILURE!!!!!!!!!!!!!!!!!!" + e.toString() + "!!!!!!!!!!!!!!");
 
 
@@ -917,7 +938,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                             Log.d(Tag, "HEADERS         ===========================================>" + Headers);
                             Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
 
-                            Activity_Request.flag = "success";
+                            RequestActivity.flag = "success";
 //                                        Bundle bundle = new Bundle();
 //                                        bundle.putString("time", "" + (rx - tx));
 
@@ -936,7 +957,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
 //                                    tab.select();
 
 
-                            Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                            Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                             intent.putExtra("url", finalUrlvalue);
                             intent.putExtra("reqtype", "GET");
                             startActivity(intent);
@@ -946,13 +967,13 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                         } catch (NetworkOnMainThreadException exception) {
 
                             exception.printStackTrace();
-                            Toasty.warning(Activity_Request.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
+                            Toasty.warning(RequestActivity.this, "Service Expecting SSL link", Toast.LENGTH_SHORT, true).show();
                             //  if (dialog != null) dialog.dismiss();
                         } catch (Exception e) {
 
                             Log.v(Tag, "exception happened in onreseponse get erquest" + e.toString());
 
-                            Toasty.warning(Activity_Request.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+                            Toasty.warning(RequestActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
 
                         }
 
@@ -965,7 +986,7 @@ public class Activity_Request extends AppCompatActivity implements NavigationVie
                 Log.v(Tag, "exception happened  get request" + e.toString());
 
                 e.printStackTrace();
-                Toasty.warning(Activity_Request.this, e.toString(), Toast.LENGTH_SHORT, true).show();
+                Toasty.warning(RequestActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
         } else if (method.equals("POST"))
@@ -1175,11 +1196,11 @@ if(dialog!=null)
                                     //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
-                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    // Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     // intent.putExtra("url", finalUrlvalue);
 
                                     // startActivity(intent);
-                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     intent.putExtra("url", finalUrlvalue1);
                                     intent.putExtra("reqtype", "POST");
                                     startActivity(intent);
@@ -1386,11 +1407,11 @@ if(dialog!=null)
                                     //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
-                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    // Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     // intent.putExtra("url", finalUrlvalue);
 
                                     // startActivity(intent);
-                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     intent.putExtra("url", finalUrlvalue1);
                                     intent.putExtra("reqtype", "POST");
                                     startActivity(intent);
@@ -1595,11 +1616,11 @@ if(dialog!=null)
                                     //   if (dialog != null) dialog.dismiss();
 
                                     //here comes response activity
-                                    // Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    // Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     // intent.putExtra("url", finalUrlvalue);
 
                                     // startActivity(intent);
-                                    Intent intent = new Intent(Activity_Request.this, ResultActivity.class);
+                                    Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
                                     intent.putExtra("url", finalUrlvalue1);
                                     intent.putExtra("reqtype", "POST");
                                     startActivity(intent);
@@ -1761,7 +1782,7 @@ if(dialog!=null)
     public void showPopup(String message) {
 
 
-        final Dialog dialog = new Dialog(Activity_Request.this);
+        final Dialog dialog = new Dialog(RequestActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog);
@@ -1782,6 +1803,15 @@ if(dialog!=null)
     }
 
 
+    @Override
+    public void hasInternetConnection() {
+        Log.v("asdasdsd","yes");
+    }
+
+    @Override
+    public void hasNoInternetConnection() {
+        Log.v("asdasdsd","no");
+    }
 }
 
 

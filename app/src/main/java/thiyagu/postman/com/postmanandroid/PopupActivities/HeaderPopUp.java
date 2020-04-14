@@ -1,6 +1,5 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
-import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +10,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,13 +19,10 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.util.UUID;
 
 import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
-import thiyagu.postman.com.postmanandroid.Database.DataPojoClass;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.Header;
 import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
 import thiyagu.postman.com.postmanandroid.R;
-
-import static thiyagu.postman.com.postmanandroid.Activities.Activity_Request.getContext;
 
 public class HeaderPopUp extends AppCompatActivity {
     MaterialBetterSpinner materialBetterSpinner, material_value;
@@ -347,7 +342,8 @@ public class HeaderPopUp extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
                 Log.v("Text", materialBetterSpinner.getText().toString());
 
                 String value = materialBetterSpinner.getText().toString();
@@ -377,7 +373,8 @@ public class HeaderPopUp extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
                 Log.v("Text", material_value.getText().toString());
 
                 String value = material_value.getText().toString();

@@ -29,7 +29,7 @@ public class Splash extends Activity {
                     if (check.equals("passed")) {
 
 
-                        Intent intent = new Intent(Splash.this, Activity_Request.class);
+                        Intent intent = new Intent(Splash.this, RequestActivity.class);
                         startActivity(intent);
 
 
