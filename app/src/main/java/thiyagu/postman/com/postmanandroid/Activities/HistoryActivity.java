@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.History;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DifferentRowAdapter;
 import thiyagu.postman.com.postmanandroid.R;
@@ -28,7 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
 
-        RoomDatabase database = Room.databaseBuilder(this, RoomDatabase.class, "data_db").allowMainThreadQueries().build();
+        TelleriumDataDatabase database = Room.databaseBuilder(this, TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
         HistoryDAO historyDAO = database.getHistoryDAO();
 
         List<History> history = historyDAO.getHistory();

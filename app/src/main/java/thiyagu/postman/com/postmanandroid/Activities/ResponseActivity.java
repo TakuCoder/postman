@@ -17,14 +17,11 @@ import com.yuyh.jsonviewer.library.JsonRecyclerView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
-import thiyagu.postman.com.postmanandroid.Database.Body;
-import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.History;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -187,7 +184,7 @@ public class ResponseActivity extends Activity {
      //   feedReaderDbHelper.addEntryHistory(historyClass);
 
 
-        RoomDatabase database = Room.databaseBuilder(ResponseActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+        TelleriumDataDatabase database = Room.databaseBuilder(ResponseActivity.this, TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
 
         HistoryDAO historyDAO = database.getHistoryDAO();
 

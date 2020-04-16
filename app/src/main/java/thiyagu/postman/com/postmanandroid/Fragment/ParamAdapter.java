@@ -18,14 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
-import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -38,7 +34,7 @@ public class ParamAdapter extends RecyclerView
     private static MyClickListener myClickListener;
     String Tag = this.getClass().getSimpleName();
 
-     RoomDatabase database;
+     TelleriumDataDatabase database;
     public ParamAdapter(parameters dataObject, int i) {
         addItem(dataObject, i);
 
@@ -82,7 +78,7 @@ public class ParamAdapter extends RecyclerView
         mDataset = myDataset;
         mcontext = context;
 
-        database  = Room.databaseBuilder(context, RoomDatabase.class, "data_db")
+        database  = Room.databaseBuilder(context, TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
     }

@@ -14,13 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
-import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.PopupActivities.ParamPopUp;
 import thiyagu.postman.com.postmanandroid.R;
@@ -105,7 +103,7 @@ public class ParamFragment extends Fragment {
     private List<parameters> getDataSet() {
 
 
-        RoomDatabase database = Room.databaseBuilder(getContext(), RoomDatabase.class, "data_db")
+        TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
         ParametersDAO parametersDAO = database.getParametersDAO();

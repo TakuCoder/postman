@@ -1,6 +1,7 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.FloatingActionButton;
@@ -19,19 +20,27 @@ import android.widget.Toast;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
+import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
+import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
+import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
 import thiyagu.postman.com.postmanandroid.ExpandableRecyclerAdapter;
 import thiyagu.postman.com.postmanandroid.MovieCategory;
 import thiyagu.postman.com.postmanandroid.MovieCategoryAdapter;
 import thiyagu.postman.com.postmanandroid.Movies;
 import thiyagu.postman.com.postmanandroid.R;
+import thiyagu.postman.com.postmanandroid.Utils.CollectionsParser;
 
 public class CollectionsActivity extends AppCompatActivity implements View.OnClickListener {
     private MovieCategoryAdapter mAdapter;
     private RecyclerView recyclerView;
+    public List<MovieCategory> movieCategories = new ArrayList<>();
+    CollectionDatabase collectionDatabase;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
@@ -54,6 +63,28 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         Movies movie_ten = new Movies("Star Wars: Episode V - The Empire Strikes");
         Movies movie_eleven = new Movies("Forrest Gump");
         Movies movie_tweleve = new Movies("Inception");
+        collectionDatabase = Room.databaseBuilder(CollectionsActivity.this, CollectionDatabase.class, "collection_db")
+                .allowMainThreadQueries()   //Allows room to do operation on main thread
+                .build();
+
+
+        InfoDAO info = collectionDatabase.getInfoDAO();
+       List<InfoTable> infoTable = info.getInfo();
+
+
+
+
+       Log.e("lenghtttt",infoTable.size()+"");
+        List<MovieCategory> arrayList = new ArrayList<>();
+       for(int i=0;i<infoTable.size();i++)
+       {
+
+           MovieCategory molvie_category_one = new MovieCategory(infoTable.get(i).getName()+"", Arrays.asList(movie_one, movie_two, movie_three));
+
+           movieCategories.add(molvie_category_one);
+
+       }
+
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -67,12 +98,9 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         fab1.setOnClickListener(this);
         fab2.setOnClickListener(this);
 
-        MovieCategory molvie_category_one = new MovieCategory("Collection 1", Arrays.asList(movie_one, movie_two, movie_three));
-        MovieCategory molvie_category_two = new MovieCategory("Collection 2", Arrays.asList(movie_five, movie_six, movie_seven, movie_eight));
-        MovieCategory molvie_category_three = new MovieCategory("Collection 3", Arrays.asList(movie_nine, movie_ten, movie_eleven, movie_tweleve));
-        MovieCategory molvie_category_four = new MovieCategory("Collection 4", Arrays.asList(movie_one, movie_five, movie_nine, movie_tweleve));
 
-        final List<MovieCategory> movieCategories = Arrays.asList(molvie_category_one, molvie_category_two, molvie_category_three, molvie_category_four);
+
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         mAdapter = new MovieCategoryAdapter(this, movieCategories);
         mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
@@ -201,7 +229,8 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             String path = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             Log.v("dsdsd", path);
 
-
+            CollectionsParser collectionsParser = new CollectionsParser(getApplication());
+            collectionsParser.parse(path);
 
 
         }

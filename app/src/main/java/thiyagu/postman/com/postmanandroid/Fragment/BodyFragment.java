@@ -28,7 +28,7 @@ import es.dmoral.toasty.Toasty;
 import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
 import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Utils.JSONUtil;
 import thiyagu.postman.com.postmanandroid.Utils.JSONUtils;
 import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
@@ -397,7 +397,7 @@ public void Apply(String sss,String i,String type)
        // FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
 
 
-        RoomDatabase database = Room.databaseBuilder(getContext(),RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+        TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
         BodyDAO bodyDAO = database.getbodyDAO();
         List<Body> dataa = bodyDAO.getBody();
 

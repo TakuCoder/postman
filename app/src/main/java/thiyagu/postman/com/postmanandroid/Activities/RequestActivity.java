@@ -76,7 +76,7 @@ import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.Header;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.Event.BusProvider;
 import thiyagu.postman.com.postmanandroid.Fragment.AuthorizationFragment;
@@ -130,7 +130,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
     String fullurl;
     boolean https_check;
     boolean sslflag;
-    RoomDatabase database ;
+    TelleriumDataDatabase database;
 
 
     @Override
@@ -157,7 +157,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         checkbox_https = findViewById(R.id.checkbox_https);
 
-        database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db")
+        database = Room.databaseBuilder(getApplicationContext(), TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
         prefs = this.getSharedPreferences("Thiyagu", MODE_PRIVATE);

@@ -1,7 +1,6 @@
 package thiyagu.postman.com.postmanandroid.PopupActivities;
 
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.util.StringUtil;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,9 +20,8 @@ import java.util.UUID;
 
 import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
-import thiyagu.postman.com.postmanandroid.Database.DataPojoClass;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyPopUp extends AppCompatActivity {
@@ -95,7 +92,7 @@ public class BodyPopUp extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "Please enter Value", Toast.LENGTH_LONG).show();
                 } else {
-                    RoomDatabase database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db").allowMainThreadQueries().build();
+                    TelleriumDataDatabase database = Room.databaseBuilder(getApplicationContext(), TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
 
                     BodyDAO bodyDAO = database.getbodyDAO();
 

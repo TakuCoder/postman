@@ -21,7 +21,7 @@ import java.util.List;
 import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.Header;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.PopupActivities.HeaderPopUp;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -96,7 +96,7 @@ public class HeaderFragment extends Fragment {
     private List<Header> getDataSet()
 
     {
-        thiyagu.postman.com.postmanandroid.Database.RoomDatabase database = Room.databaseBuilder(getContext(), RoomDatabase.class, "data_db")
+        TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
         HeaderDAO headerDAO = database.getHeaderDAO();

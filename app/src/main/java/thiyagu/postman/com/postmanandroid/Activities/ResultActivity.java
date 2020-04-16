@@ -28,12 +28,11 @@ import thiyagu.postman.com.postmanandroid.Database.DAO.BookmarkDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.History;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Fragment.JsonFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.Preview;
 import thiyagu.postman.com.postmanandroid.Fragment.RawFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class ResultActivity extends AppCompatActivity {
@@ -307,7 +306,7 @@ FloatingActionButton fab;
 
         //feedReaderDbHelper.addEntryHistory(historyClass);
 
-        RoomDatabase database = Room.databaseBuilder(ResultActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+        TelleriumDataDatabase database = Room.databaseBuilder(ResultActivity.this, TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
 
         HistoryDAO historyDAO = database.getHistoryDAO();
 
@@ -329,7 +328,7 @@ FloatingActionButton fab;
     public void BookMarkSave(String url, String date,String time, String size, String response_code, String Duration, String reqtype, int type) {
 
 
-        RoomDatabase database = Room.databaseBuilder(ResultActivity.this,RoomDatabase.class,"data_db").allowMainThreadQueries().build();
+        TelleriumDataDatabase database = Room.databaseBuilder(ResultActivity.this, TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
 
 
 

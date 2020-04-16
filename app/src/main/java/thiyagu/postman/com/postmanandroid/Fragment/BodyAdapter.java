@@ -19,13 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyAdapter extends RecyclerView
@@ -34,7 +34,7 @@ public class BodyAdapter extends RecyclerView
     private static String LOG_TAG = "MyRecyclerViewAdapter";
     private List<Body> mDataset;
     public Context mcontext;
-    RoomDatabase database;
+    TelleriumDataDatabase database;
     private static MyClickListener myClickListener;
 
 
@@ -80,7 +80,7 @@ public class BodyAdapter extends RecyclerView
     public BodyAdapter(List<Body> myDataset, Context context) {
         mDataset = myDataset;
         mcontext = context;
-        database = Room.databaseBuilder(mcontext, RoomDatabase.class, "data_db")
+        database = Room.databaseBuilder(mcontext, TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
     }

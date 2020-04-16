@@ -21,7 +21,7 @@ import java.util.UUID;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.Header;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class HeaderPopUp extends AppCompatActivity {
@@ -303,7 +303,7 @@ public class HeaderPopUp extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "Please enter Value", Toast.LENGTH_LONG).show();
                 } else {
-                    RoomDatabase database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db")
+                    TelleriumDataDatabase database = Room.databaseBuilder(getApplicationContext(), TelleriumDataDatabase.class, "data_db")
                             .allowMainThreadQueries()   //Allows room to do operation on main thread
                             .build();
 

@@ -7,7 +7,6 @@ package thiyagu.postman.com.postmanandroid.Fragment;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -21,13 +20,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-
 import thiyagu.postman.com.postmanandroid.Database.Header;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.R;
 
 public class HeaderAdapter extends RecyclerView
@@ -36,7 +32,7 @@ public class HeaderAdapter extends RecyclerView
     private static String LOG_TAG = "MyRecyclerViewAdapter";
     private List<Header> mDataset;
     public Context mcontext;
-    RoomDatabase database;
+    TelleriumDataDatabase database;
     private static MyClickListener myClickListener;
     String Tag ;
 
@@ -83,7 +79,7 @@ public class HeaderAdapter extends RecyclerView
         mDataset = myDataset;
         mcontext = context;
 
-        database = Room.databaseBuilder(mcontext, RoomDatabase.class, "data_db")
+        database = Room.databaseBuilder(mcontext, TelleriumDataDatabase.class, "data_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
     }

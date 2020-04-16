@@ -18,12 +18,9 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.UUID;
 
-import thiyagu.postman.com.postmanandroid.Database.Body;
-import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.DataPojoClass;
-import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
-import thiyagu.postman.com.postmanandroid.Database.RoomDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Database.parameters;
 import thiyagu.postman.com.postmanandroid.R;
 
@@ -315,7 +312,7 @@ public class ParamPopUp extends AppCompatActivity {
 
                     DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), content_types.getText().toString());
 
-                    RoomDatabase database = Room.databaseBuilder(getApplicationContext(), RoomDatabase.class, "data_db")
+                    TelleriumDataDatabase database = Room.databaseBuilder(getApplicationContext(), TelleriumDataDatabase.class, "data_db")
                             .allowMainThreadQueries()   //Allows room to do operation on main thread
                             .build();
                     ParametersDAO parametersDAO = database.getParametersDAO();
