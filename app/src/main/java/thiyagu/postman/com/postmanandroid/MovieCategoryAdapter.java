@@ -1,6 +1,7 @@
 package thiyagu.postman.com.postmanandroid;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,10 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
     @Override
     public void onBindChildViewHolder(MoviesViewHolder moviesViewHolder, int position, Object childListItem) {
         Movies movies = (Movies) childListItem;
+
+        movies.setPosition(position);
         moviesViewHolder.bind(movies);
     }
+
+
 }

@@ -8,20 +8,23 @@ import android.widget.TextView;
 public class MovieCategoryViewHolder extends ParentViewHolder {
 
     private static final float INITIAL_POSITION = 0.0f;
-    private static final float ROTATED_POSITION = 180f;
+    private static final float ROTATED_POSITION = 90f;
 
     private final ImageView mArrowExpandImageView;
     private TextView mMovieTextView;
-
+    private TextView totalCollections;
     public MovieCategoryViewHolder(View itemView) {
         super(itemView);
         mMovieTextView = (TextView) itemView.findViewById(R.id.tv_movie_category);
-
+totalCollections = itemView.findViewById(R.id.total_collections);
         mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.iv_arrow_expand);
     }
 
     public void bind(MovieCategory movieCategory) {
+
+
         mMovieTextView.setText(movieCategory.getName());
+        totalCollections.setText(movieCategory.getNumber()+ " Requests");
     }
 
     @Override

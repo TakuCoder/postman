@@ -45,6 +45,10 @@
         <activity
             android:name=".Activities.HistoryActivity"
             android:label="History" />
+
+        <activity
+            android:name=".Activities.BookmarkActivity"
+            android:label="Bookmark" />
         <activity
             android:name=".Activities.ResultActivity"
             android:label="@string/title_activity_result"

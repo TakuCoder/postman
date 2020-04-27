@@ -26,9 +26,9 @@ public interface BookmarkDAO {
     @Query("SELECT * FROM bookmark")
     public List<Bookmarks> getBookMark();
 
-    @Query("select DISTINCT date FROM history")
+    @Query("select DISTINCT date FROM bookmark")
     public  List<String> getDate();
     //
-    @Query("select * FROM history where date = :date")
+    @Query("select * FROM bookmark where date = :date")
     public List<Bookmarks> getBookMarkByDate(String date);
 }

@@ -41,6 +41,7 @@ public abstract class ExpandableRecyclerAdapter<PVH extends ParentViewHolder, CV
          * @param position The index of the item in the list being expanded
          */
         void onListItemExpanded(int position);
+        void OnClickListener(int position);
 
         /**
          * Called when a list item is collapsed.
@@ -578,6 +579,7 @@ public abstract class ExpandableRecyclerAdapter<PVH extends ParentViewHolder, CV
             if (collapseTriggeredByListItemClick && mExpandCollapseListener != null) {
                 int expandedCountBeforePosition = getExpandedItemCount(parentIndex);
                 mExpandCollapseListener.onListItemCollapsed(parentIndex - expandedCountBeforePosition);
+                mExpandCollapseListener.OnClickListener(parentIndex - expandedCountBeforePosition);
             }
         }
     }

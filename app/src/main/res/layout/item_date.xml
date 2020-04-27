@@ -12,14 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/expander"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_chevron_right_black_24dp">
-
-        </ImageView>
         <TextView
+            android:layout_marginLeft="10dp"
             android:id="@+id/url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -776,8 +776,9 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
         if (id == R.id.bookmark) {
 //ABC123456789
-
-            Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            Intent intent = new Intent(this, BookmarkActivity.class);
+            startActivity(intent);
+           // Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
             Intent intent = new Intent(this, HistoryActivity.class);

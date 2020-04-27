@@ -46,45 +46,20 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collections);
         //  floatingActionButton = findViewById(R.id.fab);
-        Movies movie_one = new Movies("The Shawshank Redemption");
-        Movies movie_two = new Movies("The Godfather");
-        Movies movie_three = new Movies("The Dark Knight");
-        Movies movie_four = new Movies("Schindler's List ");
-        Movies movie_five = new Movies("12 Angry Men ");
-        Movies movie_six = new Movies("Pulp Fiction");
-        Movies movie_seven = new Movies("The Lord of the Rings: The Return of the King");
-        Movies movie_eight = new Movies("The Good, the Bad and the Ugly");
-        Movies movie_nine = new Movies("Fight Club");
-        Movies movie_ten = new Movies("Star Wars: Episode V - The Empire Strikes");
-        Movies movie_eleven = new Movies("Forrest Gump");
-        Movies movie_tweleve = new Movies("Inception");
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         collectionDatabase = Room.databaseBuilder(CollectionsActivity.this, CollectionDatabase.class, "collection_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
 
 
-        InfoDAO info = collectionDatabase.getInfoDAO();
-       List<InfoTable> infoTable = info.getInfo();
-
-
-
-
-       Log.e("lenghtttt",infoTable.size()+"");
-        List<MovieCategory> arrayList = new ArrayList<>();
-       for(int i=0;i<infoTable.size();i++)
-       {
-
-           MovieCategory molvie_category_one = new MovieCategory(infoTable.get(i).getName()+"", Arrays.asList(movie_one, movie_two, movie_three));
-
-           movieCategories.add(molvie_category_one);
-
-       }
-
+        getData();
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -99,36 +74,65 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         fab2.setOnClickListener(this);
 
 
+    }
 
+    private void getData() {
+        // mAdapter = null;
+        movieCategories.clear();
+        InfoDAO info = collectionDatabase.getInfoDAO();
+        List<InfoTable> infoTable = info.getInfo();
+        Log.e("lenghtttt", infoTable.size() + "");
+        List<MovieCategory> arrayList = new ArrayList<>();
+        for (int i = 0; i < infoTable.size(); i++) {
+            List<ItemTable> itemTables = collectionDatabase.getItemDAO().getItemByPostId(infoTable.get(i).get_postman_id());
+            List<Movies> moviesList = new ArrayList<>();
+            for (int h = 0; h < itemTables.size(); h++) {
+                Movies movies = new Movies(itemTables.get(h).getName());
+                movies.setParentName(infoTable.get(i).get_postman_id());
+                moviesList.add(movies);
+            }
+            MovieCategory main_movie = new MovieCategory(infoTable.get(i).getName() + "", moviesList, moviesList.size());
+            movieCategories.add(main_movie);
+        }
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         mAdapter = new MovieCategoryAdapter(this, movieCategories);
+
         mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
             @Override
             public void onListItemExpanded(int position) {
                 MovieCategory expandedMovieCategory = movieCategories.get(position);
 
-                String toastMsg = getResources().getString(R.string.expanded, expandedMovieCategory.getName());
-                Toast.makeText(CollectionsActivity.this,
-                        toastMsg,
-                        Toast.LENGTH_SHORT)
-                        .show();
+//                String toastMsg = getResources().getString(R.string.expanded, expandedMovieCategory.getName());
+//
+//                Toast.makeText(CollectionsActivity.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+            }
+
+            @Override
+            public void OnClickListener(int position) {
+                Log.v("asdsadsadsa", position + "");
             }
 
             @Override
             public void onListItemCollapsed(int position) {
                 MovieCategory collapsedMovieCategory = movieCategories.get(position);
 
-                String toastMsg = getResources().getString(R.string.collapsed, collapsedMovieCategory.getName());
-                Toast.makeText(CollectionsActivity.this,
-                        toastMsg,
-                        Toast.LENGTH_SHORT)
-                        .show();
+//                String toastMsg = getResources().getString(R.string.collapsed, collapsedMovieCategory.getName());
+//                Toast.makeText(CollectionsActivity.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
             }
+
+
         });
 
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
 
@@ -136,6 +140,12 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mAdapter.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
     @Override
@@ -189,8 +199,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void checkPermissionsAndOpenFilePicker()
-    {
+    private void checkPermissionsAndOpenFilePicker() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -203,6 +212,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             openFilePicker();
         }
     }
+
     private void openFilePicker() {
         new MaterialFilePicker().withActivity(this).withRequestCode(FILE_PICKER_REQUEST_CODE).withHiddenFiles(true).withFilter(Pattern.compile(".*\\.json$")).withTitle("Sample title").start();
 //                            Intent intent = new Intent();
@@ -220,8 +230,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
 
