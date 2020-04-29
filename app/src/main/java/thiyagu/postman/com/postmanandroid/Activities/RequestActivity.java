@@ -84,7 +84,7 @@ import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
+import thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Services.NetChecker;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;

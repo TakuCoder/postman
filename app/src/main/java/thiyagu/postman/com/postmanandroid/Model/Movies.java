@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Model;
 
 public class Movies {
 

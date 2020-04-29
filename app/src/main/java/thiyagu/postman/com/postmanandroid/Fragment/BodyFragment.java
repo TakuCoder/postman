@@ -31,7 +31,7 @@ import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 import thiyagu.postman.com.postmanandroid.Utils.JSONUtil;
 import thiyagu.postman.com.postmanandroid.Utils.JSONUtils;
-import thiyagu.postman.com.postmanandroid.MaterialBetterSpinner;
+import thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.PopupActivities.BodyPopUp;
 import thiyagu.postman.com.postmanandroid.R;
 

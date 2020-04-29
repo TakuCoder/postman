@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

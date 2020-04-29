@@ -1,6 +1,9 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.Model;
 
 import java.util.List;
+
+import thiyagu.postman.com.postmanandroid.Model.Movies;
+import thiyagu.postman.com.postmanandroid.Model.ParentListItem;
 
 public class MovieCategory implements ParentListItem {
     private String mName;

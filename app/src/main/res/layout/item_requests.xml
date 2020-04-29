@@ -22,10 +22,10 @@
         >
 
         <TextView
-            android:layout_weight="1"
             android:id="@+id/method"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.9"
 
             android:gravity="start"
             android:text="GEt"
@@ -33,22 +33,23 @@
             android:textSize="18sp" />
 
         <TextView
-            android:layout_weight="1"
             android:id="@+id/url"
-            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_weight="0.4"
+            android:layout_gravity="end"
             android:text="https://www.google.com"
             android:textColor="#939292"
             android:textSize="18sp" />
-<ImageView
-    android:src="@drawable/ic_more_horiz_black_24dp"
-    android:layout_weight="1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
 
-</ImageView>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_more_horiz_black_24dp">
+
+        </ImageView>
     </LinearLayout>
 
 

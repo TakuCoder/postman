@@ -54,7 +54,7 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    <thiyagu.postman.com.postmanandroid.MaterialBetterSpinner
+                    <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner
                         android:id="@+id/req_type_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

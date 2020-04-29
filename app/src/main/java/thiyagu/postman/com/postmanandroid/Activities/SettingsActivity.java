@@ -21,7 +21,6 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-import thiyagu.postman.com.postmanandroid.AppCompatPreferenceActivity;
 import thiyagu.postman.com.postmanandroid.R;
 
 /**

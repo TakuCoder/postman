@@ -21,7 +21,6 @@ import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,9 +29,9 @@ import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
 import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
 import thiyagu.postman.com.postmanandroid.ExpandableRecyclerAdapter;
-import thiyagu.postman.com.postmanandroid.MovieCategory;
+import thiyagu.postman.com.postmanandroid.Model.MovieCategory;
 import thiyagu.postman.com.postmanandroid.MovieCategoryAdapter;
-import thiyagu.postman.com.postmanandroid.Movies;
+import thiyagu.postman.com.postmanandroid.Model.Movies;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Utils.CollectionsParser;
 

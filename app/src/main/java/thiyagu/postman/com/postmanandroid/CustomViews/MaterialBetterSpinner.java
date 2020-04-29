@@ -1,4 +1,4 @@
-package thiyagu.postman.com.postmanandroid;
+package thiyagu.postman.com.postmanandroid.CustomViews;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.util.Calendar;
+
+import thiyagu.postman.com.postmanandroid.R;
 
 
 public class MaterialBetterSpinner extends MaterialAutoCompleteTextView implements AdapterView.OnItemClickListener {

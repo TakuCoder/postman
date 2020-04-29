@@ -23,7 +23,7 @@
             <!--android:visibility="gone" />-->
 
 
-        <thiyagu.postman.com.postmanandroid.MaterialBetterSpinner
+        <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner
             android:id="@+id/body_spinner"
             android:layout_width="match_parent"
             android:layout_height="0dp"
