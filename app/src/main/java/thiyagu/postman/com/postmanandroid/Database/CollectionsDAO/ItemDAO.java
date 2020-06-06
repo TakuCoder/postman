@@ -25,7 +25,10 @@ public interface ItemDAO {
     public List<ItemTable> getItem();
 
 
-    @Query("SELECT * from item where _postman_id = :data")
-    public List<ItemTable> getItemByPostId(String data);
+    @Query("SELECT * from item where _postman_id = :postman_id AND name = :name")
+    public List<ItemTable> getItemByPostIdandName(String postman_id,String name);
 
+
+    @Query("SELECT * from item where _postman_id = :postman_id")
+    public List<ItemTable> getItemByPostId(String postman_id);
 }

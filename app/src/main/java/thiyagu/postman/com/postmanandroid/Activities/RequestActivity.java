@@ -52,6 +52,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
@@ -70,10 +71,15 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import thiyagu.postman.com.postmanandroid.BaseActivity;
+
 import thiyagu.postman.com.postmanandroid.Database.Body;
+import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
+import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
+import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
 import thiyagu.postman.com.postmanandroid.Database.FeedReaderDbHelper;
 import thiyagu.postman.com.postmanandroid.Database.Header;
 import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
@@ -91,7 +97,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
-public class RequestActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener,NetChecker.ConnectionServiceCallback{
+public class RequestActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener, NetChecker.ConnectionServiceCallback {
 //
 //    enum RequestType
 //    {
@@ -132,6 +138,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
     boolean sslflag;
     TelleriumDataDatabase database;
 
+    @Inject
+    CollectionDatabase collectionDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +150,15 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         context = this;
         setupSharedPreferences();
 
+
+        ((BaseActivity) getApplication()).getComponent().inject(this);
+
+        InfoDAO infoDAO = collectionDatabase.getInfoDAO();
+
+        List<InfoTable> infoTables = infoDAO.getInfo();
+        Log.d("sadasd", infoTables.size() + "");
+
+        // ((BaseActivity)getApplication()).getComponent().inject(this);
         Intent intent = new Intent(this, NetChecker.class);
         // Interval in seconds
         intent.putExtra(NetChecker.TAG_INTERVAL, 5);
@@ -322,16 +339,15 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                     // feedReaderDbHelper = new FeedReaderDbHelper(RequestActivity.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     HeaderDAO headerDAO = database.getHeaderDAO();
-                    List<Header> headers=  headerDAO.getHeaders();
+                    List<Header> headers = headerDAO.getHeaders();
 
                     Headers.Builder headerBuilder = new Headers.Builder();
-                    if (headerlist.size() > 0)
-                    {
+                    if (headerlist.size() > 0) {
                         Log.v(Tag, "=======================adding headers=========================");
                         for (int i = 0; i < headerlist.size(); i++) {
 
                             String[] subvalue = headerlist.get(i).split("@@");
-                            Log.v(Tag+"thiyagu", subvalue[1] + subvalue[2]);
+                            Log.v(Tag + "thiyagu", subvalue[1] + subvalue[2]);
                             headerBuilder.add(subvalue[1], subvalue[2]);
                         }
                     }
@@ -375,25 +391,20 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                     }
 
 
-
-
                     ParametersDAO bodyDAO = database.getParametersDAO();
                     List<parameters> parameters = bodyDAO.getParam();
                     ArrayList<String> urlencodedparams = new ArrayList<>();
-                    if(parameters.size()>0)
-                    {
+                    if (parameters.size() > 0) {
                         Log.v(Tag, "Adding Params====================> ");
-                        for (int i = 0; i < parameters.size(); i++)
-                        {
+                        for (int i = 0; i < parameters.size(); i++) {
 
-                          //  S//tring[] subvalue = parameters.get(i).split("@@");
+                            //  S//tring[] subvalue = parameters.get(i).split("@@");
 
 
-                           // Log.v(Tag, "param1=========>" + subvalue[0]);
-                           // Log.v(Tag, "param1=========>" + subvalue[1]);
+                            // Log.v(Tag, "param1=========>" + subvalue[0]);
+                            // Log.v(Tag, "param1=========>" + subvalue[1]);
 
-                            if (i != parameters.size() - 1)
-                            {
+                            if (i != parameters.size() - 1) {
                                 urlencodedparams.add(i, parameters.get(i).getKey() + "=" + parameters.get(i).getValue() + "&");
 
                             } else {
@@ -405,9 +416,6 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                         }
 
                     }
-
-
-
 
 
 //                    ArrayList<String> paramlist = feedReaderDbHelper.getAllParam();
@@ -465,14 +473,14 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             Log.v(Tag, "Diving Into POST");
                             if (isOnline()) {
 
-                               // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                                // ArrayList<String> part = feedReaderDbHelper.getAllBody();
 
 
                                 //BodyDAO bodyDAO1 = database.getbodyDAO();
                                 //List<Body>body= bodyDAO1.getBody();
 
-                               // final String rawbody = prefs.getString("rawbody", null);
-                               // Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
+                                // final String rawbody = prefs.getString("rawbody", null);
+                                // Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
                                 GetRequest("POST", fullurl, headerBuilder, urlencodedparams);
 
 
@@ -739,13 +747,13 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
             JsonObject info = new JsonObject();
-            info.addProperty("_postman_id","942b9d0a-01db-48c4-a3e1-e52a5824681a");
-            info.addProperty("name","sample");
-            info.addProperty("schema","https://schema.getpostman.com/json/collection/v2.1.0/collection.json");
+            info.addProperty("_postman_id", "942b9d0a-01db-48c4-a3e1-e52a5824681a");
+            info.addProperty("name", "sample");
+            info.addProperty("schema", "https://schema.getpostman.com/json/collection/v2.1.0/collection.json");
 
             JsonArray item = new JsonArray();
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name","sample");
+            jsonObject.addProperty("name", "sample");
             item.add(jsonObject);
 
         }
@@ -778,7 +786,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 //ABC123456789
             Intent intent = new Intent(this, BookmarkActivity.class);
             startActivity(intent);
-           // Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
+            // Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
             Intent intent = new Intent(this, HistoryActivity.class);
@@ -803,7 +811,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
     private void setupViewPager(ViewPager viewPager) {
 
-
+        viewPager.setAdapter(null);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ParamFragment(), "PARAMETERS");
         adapter.addFragment(new AuthorizationFragment(), "AUTHORIZATION");
@@ -990,8 +998,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                 Toasty.warning(RequestActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        } else if (method.equals("POST"))
-        {
+        } else if (method.equals("POST")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1021,25 +1028,17 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                         builder.setType(MultipartBody.FORM);
 
 
-
-
-
-
-
-
-
                         // ArrayList<String> part = feedReaderDbHelper.getAllBody();
 
 
                         BodyDAO bodyDAO1 = database.getbodyDAO();
-                        List<Body>body= bodyDAO1.getBodyFlagged();
+                        List<Body> body = bodyDAO1.getBodyFlagged();
 
 
-                      //   Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
+                        //   Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
 
 
-
-                       // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        // ArrayList<String> part = feedReaderDbHelper.getAllBody();
                         Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
                         String[] subvalue = null;
 
@@ -1053,7 +1052,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                                 try {
-                                  //  subvalue = part.get(i).split("@@");
+                                    //  subvalue = part.get(i).split("@@");
 
 
                                     Log.v(Tag, "builder" + i + body.get(i).getKey());
@@ -1072,25 +1071,19 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
                         }
 
-try
-{
+                        try {
 
-    requestBody = builder.build();
-    request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
-    Log.v("statusofbodytype", "=============case 1 detected============");
-    break;
-}
-catch(Exception e)
-{
-if(dialog!=null)
-{
+                            requestBody = builder.build();
+                            request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
+                            Log.v("statusofbodytype", "=============case 1 detected============");
+                            break;
+                        } catch (Exception e) {
+                            if (dialog != null) {
 
-    dialog.dismiss();
-}
-    showPopup(e.toString());
-}
-
-
+                                dialog.dismiss();
+                            }
+                            showPopup(e.toString());
+                        }
 
 
                     case "2":
@@ -1140,8 +1133,7 @@ if(dialog!=null)
 
 
                 final String finalUrlvalue1 = urlvalue;
-                postClient.newCall(request).enqueue(new Callback()
-                {
+                postClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1226,11 +1218,7 @@ if(dialog!=null)
             }
 
 
-        }
-
-
-        else if (method.equals("DELETE"))
-        {
+        } else if (method.equals("DELETE")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1261,8 +1249,8 @@ if(dialog!=null)
 
                         ArrayList<String> part = feedReaderDbHelper.getAllBody();
 
-                      BodyDAO bodyDAO = database.getbodyDAO();
-                      List<Body> bodylist = bodyDAO.getBody();
+                        BodyDAO bodyDAO = database.getbodyDAO();
+                        List<Body> bodylist = bodyDAO.getBody();
 
 
                         Log.v(Tag, "======================part size========================" + String.valueOf(bodylist.size()));
@@ -1281,7 +1269,7 @@ if(dialog!=null)
                                     subvalue = part.get(i).split("@@");
 
 
-                                    Log.v(Tag, "builder" + i +bodylist.get(i).getKey());
+                                    Log.v(Tag, "builder" + i + bodylist.get(i).getKey());
                                     Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
                                     builder.addFormDataPart(bodylist.get(i).getKey(), bodylist.get(i).getValue());
 
@@ -1351,8 +1339,7 @@ if(dialog!=null)
 
 
                 final String finalUrlvalue1 = urlvalue;
-                postClient.newCall(request).enqueue(new Callback()
-                {
+                postClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1437,8 +1424,7 @@ if(dialog!=null)
             }
 
 
-        } else if (method.equals("PUT"))
-        {
+        } else if (method.equals("PUT")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1468,9 +1454,6 @@ if(dialog!=null)
                         builder.setType(MultipartBody.FORM);
 
 
-
-
-
                         ArrayList<String> part = feedReaderDbHelper.getAllBody();
                         Log.v(Tag, "======================part size========================" + String.valueOf(part.size()));
                         String[] subvalue = null;
@@ -1492,7 +1475,7 @@ if(dialog!=null)
 
                                     Log.v(Tag, "builder" + i + bodylist.get(i).getKey());
                                     Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
-                                    builder.addFormDataPart(bodylist.get(i).getKey(),bodylist.get(i).getValue());
+                                    builder.addFormDataPart(bodylist.get(i).getKey(), bodylist.get(i).getValue());
 
 
                                 } catch (Exception e) {
@@ -1560,8 +1543,7 @@ if(dialog!=null)
 
 
                 final String finalUrlvalue1 = urlvalue;
-                postClient.newCall(request).enqueue(new Callback()
-                {
+                postClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1672,6 +1654,7 @@ if(dialog!=null)
 
 
         if (dialog != null) dialog.dismiss();
+        setupViewPager(this.viewPager);
     }
 
     @Override
@@ -1806,12 +1789,12 @@ if(dialog!=null)
 
     @Override
     public void hasInternetConnection() {
-        Log.v("asdasdsd","yes");
+        Log.v("asdasdsd", "yes");
     }
 
     @Override
     public void hasNoInternetConnection() {
-        Log.v("asdasdsd","no");
+        Log.v("asdasdsd", "no");
     }
 }
 

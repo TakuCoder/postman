@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/background"
-
     android:layout_height="match_parent"
+
+    android:background="@color/background"
     tools:context=".Activities.HistoryActivity">
 
     <android.support.v7.widget.RecyclerView
@@ -17,4 +18,24 @@
 
     </android.support.v7.widget.RecyclerView>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/TextViewLayout"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/alert"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="No Data Found!" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

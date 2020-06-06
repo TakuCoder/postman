@@ -32,4 +32,7 @@ public interface ParametersDAO {
 
     @Query("UPDATE parameters set flag =:flag where tag= :tag")
     public void updateParam(String flag,String tag);
+
+    @Query("DELETE FROM parameters")
+    public void nukeParams();
 }

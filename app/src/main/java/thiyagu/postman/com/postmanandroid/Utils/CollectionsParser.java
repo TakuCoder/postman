@@ -19,7 +19,8 @@ import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemDAO;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
 import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
 
-public class CollectionsParser {
+public class CollectionsParser
+{
 
     CollectionDatabase collectionDatabase;
     InfoDAO infoDAO;
@@ -40,17 +41,37 @@ public class CollectionsParser {
 
     }
 
-    public void parse(String s) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(s));
-            StringBuilder sb = new StringBuilder();
-            String line = bufferedReader.readLine();
+    public void parse(String s,String origin) throws IOException
+    {
+
+        String json;
+        if(origin.equalsIgnoreCase("file"))
+        {
+
+            BufferedReader bufferedReader ;
+            StringBuilder sb ;
+            String line;
+            bufferedReader = new BufferedReader(new FileReader(s));
+            sb = new StringBuilder();
+
+            line = bufferedReader.readLine();
             while (line != null) {
                 sb.append(line);
                 sb.append(System.lineSeparator());
                 line = bufferedReader.readLine();
             }
-            String json = sb.toString();
+
+            json = sb.toString();
+        }
+        else {
+
+            json = s;
+        }
+        try {
+
+
+
+
             JSONObject info_Object = new JSONObject(json);
             if (info_Object.has("auth-attribute")) {
                 System.out.println("auth-attribute");
@@ -185,7 +206,8 @@ public class CollectionsParser {
                    String request_method = object_request.get("method").toString();
                    System.out.println(request_method + " request_method");
 
-                   if (object_request.has("header")) {
+                   if (object_request.has("header"))
+                   {
                        PrintLog("found header");
                        JSONArray request_header_array = object_request.getJSONArray("header");
                        for (int i = 0; i < request_header_array.length(); i++) {
@@ -204,9 +226,20 @@ public class CollectionsParser {
                                    String header_description = header_object.getString("description");
                                    System.out.println(header_description + " header_description");
 
-                               } else {
+                               }
+                               else {
                                    System.out.println("header_description" + "no header_description");
                                }
+
+                               if(header_object.has("disabled"))
+                               {
+
+                               }
+                               else
+                               {
+
+                               }
+
                            }
                            System.out.println("");
                        }
@@ -321,19 +354,36 @@ public class CollectionsParser {
 
                        PrintLog("no body found");
                    }
-                   if (object_request.has("url")) {
-                       PrintLog("found url");
-                       JSONObject Object_Url = object_request.getJSONObject("url");
-                       System.out.println(Object_Url);
-                       String raw = Object_Url.getString("raw");
-                       JSONArray hostarray = Object_Url.getJSONArray("host");
-                       String host1 = hostarray.getString(0);
-                       String host2 = hostarray.getString(1);
-                       String host3 = hostarray.getString(2);
-                       System.out.println(raw);
-                       System.out.println(host1 + host2 + host3);
+                   if (object_request.has("url"))
+                   {
 
-                       if (Object_Url.has("query")) {
+                       //https://www.getpostman.com/collections/b6cc1873340f3865ff2a
+                       PrintLog("found url");
+                       String url =  object_request.getJSONObject("url").toString();
+                       System.out.println(url);
+                       JSONObject Object_Url = object_request.getJSONObject("url");
+                       System.out.println(Object_Url.toString());
+                      // System.out.println(Object_Url);
+                     //  String raw = Object_Url.getString("raw");
+                       if(object_request.has("hostarray"))
+                       {
+
+                           JSONArray hostarray = Object_Url.getJSONArray("host");
+                           String host1 = hostarray.getString(0);
+                           String host2 = hostarray.getString(1);
+                           String host3 = hostarray.getString(2);
+                       //    System.out.println(raw);
+                           System.out.println(host1 + host2 + host3);
+                       }
+                     else {
+
+                           System.out.println("no host");
+                       }
+
+
+
+                       if (Object_Url.has("query"))
+                       {
                            PrintLog("has Querry");
                            JSONArray query_array = Object_Url.getJSONArray("query");
                            for (int i = 0; i < query_array.length(); i++) {

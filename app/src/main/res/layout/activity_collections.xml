@@ -34,7 +34,7 @@
         app:pressedTranslationZ="12dp"
         android:src="@drawable/ic_create_new_folder_black_24dp" />
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab1"
+        android:id="@+id/fab_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="90dp"

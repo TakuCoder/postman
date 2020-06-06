@@ -95,7 +95,14 @@ public class ParamFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
+//        if (getFragmentManager() != null) {
+//
+//            getFragmentManager()
+//                    .beginTransaction()
+//                    .detach(this)
+//                    .attach(this)
+//                    .commit();
+//        }
     }
 
 

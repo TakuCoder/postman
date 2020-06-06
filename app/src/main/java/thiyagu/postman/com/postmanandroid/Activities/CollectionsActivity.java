@@ -2,28 +2,56 @@ package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.Manifest;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import com.squareup.otto.ThreadEnforcer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSource;
+import okio.ForwardingSource;
+import okio.Okio;
+import okio.Source;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
@@ -34,25 +62,35 @@ import thiyagu.postman.com.postmanandroid.MovieCategoryAdapter;
 import thiyagu.postman.com.postmanandroid.Model.Movies;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Utils.CollectionsParser;
+import thiyagu.postman.com.postmanandroid.Utils.JSONUtil;
+import thiyagu.postman.com.postmanandroid.Utils.PublicShareCollectionParser;
 
 public class CollectionsActivity extends AppCompatActivity implements View.OnClickListener {
-    private MovieCategoryAdapter mAdapter;
+    private AlertDialog.Builder builder;
+    private AlertDialog alertDialog;
+    static private MovieCategoryAdapter mAdapter;
     private RecyclerView recyclerView;
     public List<MovieCategory> movieCategories = new ArrayList<>();
     CollectionDatabase collectionDatabase;
     private Boolean isFabOpen = false;
-    private FloatingActionButton fab, fab1, fab2;
+    private FloatingActionButton fab, fab_url, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
+    public static Bus bus = new Bus(ThreadEnforcer.MAIN);
+    LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collections);
-        //  floatingActionButton = findViewById(R.id.fab);
-
+        builder = new AlertDialog.Builder(this);
+        bus.register(this);
+        inflater = this.getLayoutInflater();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         collectionDatabase = Room.databaseBuilder(CollectionsActivity.this, CollectionDatabase.class, "collection_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
@@ -62,22 +100,26 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab_url = (FloatingActionButton) findViewById(R.id.fab_url);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
         fab.setOnClickListener(this);
-        fab1.setOnClickListener(this);
+        fab_url.setOnClickListener(this);
         fab2.setOnClickListener(this);
 
 
     }
 
-    private void getData() {
+    public void getData() {
         // mAdapter = null;
+
+
         movieCategories.clear();
+        recyclerView.setAdapter(mAdapter);
+
         InfoDAO info = collectionDatabase.getInfoDAO();
         List<InfoTable> infoTable = info.getInfo();
         Log.e("lenghtttt", infoTable.size() + "");
@@ -94,19 +136,19 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             movieCategories.add(main_movie);
         }
 
-        mAdapter = new MovieCategoryAdapter(this, movieCategories);
+        mAdapter = new MovieCategoryAdapter(this, movieCategories, "asas");
+
 
         mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
             @Override
             public void onListItemExpanded(int position) {
                 MovieCategory expandedMovieCategory = movieCategories.get(position);
 
-//                String toastMsg = getResources().getString(R.string.expanded, expandedMovieCategory.getName());
-//
-//                Toast.makeText(CollectionsActivity.this,
-//                        toastMsg,
-//                        Toast.LENGTH_SHORT)
-//                        .show();
+            }
+
+            @Subscribe
+            public void getMessage(String s) {
+                Toast.makeText(CollectionsActivity.this, s, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -118,19 +160,12 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             public void onListItemCollapsed(int position) {
                 MovieCategory collapsedMovieCategory = movieCategories.get(position);
 
-//                String toastMsg = getResources().getString(R.string.collapsed, collapsedMovieCategory.getName());
-//                Toast.makeText(CollectionsActivity.this,
-//                        toastMsg,
-//                        Toast.LENGTH_SHORT)
-//                        .show();
             }
 
 
         });
 
         recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
     }
 
@@ -159,15 +194,94 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         switch (id) {
             case R.id.fab:
 
-                animateFAB();
-                break;
-            case R.id.fab1:
 
-                Log.d("Raj", "Fab 1");
+                //getData();
+              animateFAB();
+                break;
+            case R.id.fab_url:
+
+                //Initiate Link Capture
+
+                builder.setView(inflater.inflate(R.layout.dialog_download, null))
+                        // Add action buttons
+                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                // sign in the user ...
+
+                                EditText urll = alertDialog.findViewById(R.id.url);
+                                Log.v("asdasdsa", urll.getText().toString());
+
+
+                                final Request request = new Request.Builder()
+                                        .url(urll.getText().toString())
+
+                                        .build();
+                                final OkHttpClient client = new OkHttpClient();
+                                client.newCall(request).enqueue(new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, final Response response) throws IOException {
+
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                String json = null;
+                                                try {
+                                                    json = response.body().string();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+
+
+                                                PublicShareCollectionParser collectionsParser = new PublicShareCollectionParser(getApplication());
+                                                try {
+
+                                                   int status= collectionsParser.parse(json, "json");
+                                                   if(status==0)
+                                                   {
+
+                                                       getData();
+
+                                                   }
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                });
+
+
+                             //   new DownloadJsonFromUrl().execute(urll.getText().toString(), CollectionsActivity.this);
+
+
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // this.getDialog().cancel();
+
+                                if (alertDialog != null) {
+                                    alertDialog.dismiss();
+
+                                }
+                            }
+                        });
+                alertDialog = builder.create();
+
+                alertDialog.show();
 
                 break;
             case R.id.fab2:
                 checkPermissionsAndOpenFilePicker();
+
                 Log.d("Raj", "Fab 2");
                 break;
         }
@@ -178,9 +292,9 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         if (isFabOpen) {
 
             fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
+            fab_url.startAnimation(fab_close);
             fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
+            fab_url.setClickable(false);
             fab2.setClickable(false);
             isFabOpen = false;
             Log.d("Raj", "close");
@@ -188,9 +302,9 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         } else {
 
             fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
+            fab_url.startAnimation(fab_open);
             fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
+            fab_url.setClickable(true);
             fab2.setClickable(true);
             isFabOpen = true;
             Log.d("Raj", "open");
@@ -198,7 +312,8 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void checkPermissionsAndOpenFilePicker() {
+    private void checkPermissionsAndOpenFilePicker()
+    {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -206,10 +321,22 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                 showError();
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{permission}, PERMISSIONS_REQUEST_CODE);
+
+
             }
         } else {
             openFilePicker();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            openFilePicker();
+        }
+        Toast.makeText(getApplicationContext(),"sadasd"+requestCode+grantResults,Toast.LENGTH_LONG).show();
     }
 
     private void openFilePicker() {
@@ -238,9 +365,63 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             Log.v("dsdsd", path);
 
             CollectionsParser collectionsParser = new CollectionsParser(getApplication());
-            collectionsParser.parse(path);
+            try {
+                collectionsParser.parse(path, "file");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
+        }
+    }
+
+
+
+    public class DownloadJsonFromUrl extends AsyncTask<Object, Context, Context> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(Context s) {
+
+            //CollectionsActivity.mAdapter = null;
+            CollectionsActivity collectionsActivity = (CollectionsActivity) s;
+            collectionsActivity.getData();
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected Context doInBackground(Object... strings) {
+
+
+            final OkHttpClient client = new OkHttpClient();
+
+            final Request request = new Request.Builder()
+                    .url((String) strings[0])
+
+                    .build();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String json = response.body().string();
+
+
+                    PublicShareCollectionParser collectionsParser = new PublicShareCollectionParser(getApplication());
+                    collectionsParser.parse(json, "json");
+                }
+            });
+
+
+            return (Context) strings[1];
         }
     }
 }

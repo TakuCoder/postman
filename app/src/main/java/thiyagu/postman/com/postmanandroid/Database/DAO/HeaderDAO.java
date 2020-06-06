@@ -34,4 +34,7 @@ public interface HeaderDAO {
     @Query("UPDATE header set flag=:flag where tag=:tag")
     public  void updateHeader(String flag,String tag);
 
+    @Query("DELETE FROM header")
+    public void nukeHeader();
+
 }

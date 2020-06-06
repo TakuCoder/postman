@@ -31,7 +31,7 @@ public class DatabaseModule {
 
     @Singleton
     @Provides
-    CollectionDatabase provideCollectionDatabase() {
+    CollectionDatabase provideDatabase() {
 
 
         return Room.databaseBuilder(mContext, CollectionDatabase.class, "collection_db")
@@ -40,15 +40,15 @@ public class DatabaseModule {
     }
 
 
-    @Singleton
-    @Provides
-    TelleriumDataDatabase provideTelleriumDatabase() {
-
-
-        return Room.databaseBuilder(mContext, TelleriumDataDatabase.class, "data_db")
-                .allowMainThreadQueries()   //Allows room to do operation on main thread
-                .build();
-    }
+//    @Singleton
+//    @Provides
+//    TelleriumDataDatabase provideTelleriumDatabase() {
+//
+//
+//        return Room.databaseBuilder(mContext, TelleriumDataDatabase.class, "data_db")
+//                .allowMainThreadQueries()   //Allows room to do operation on main thread
+//                .build();
+//    }
 
     @Singleton
     @Provides

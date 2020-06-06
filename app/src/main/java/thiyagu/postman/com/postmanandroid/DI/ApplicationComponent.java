@@ -18,7 +18,7 @@ public interface ApplicationComponent {
 
     void inject(BaseActivity baseActivity);
     void inject(RequestActivity requestActivity);
-    void inject(MovieCategoryAdapter movieCategoryAdapter);
+   // void inject(MovieCategoryAdapter movieCategoryAdapter);
 
     @ApplicationContext
     Context getContext();

@@ -78,6 +78,7 @@ dependencies {
     implementation 'com.github.medyo:android-about-page:1.2.5'
 
 
+
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation "android.arch.persistence.room:runtime:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
