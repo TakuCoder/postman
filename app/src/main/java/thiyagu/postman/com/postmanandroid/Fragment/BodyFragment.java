@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
@@ -52,7 +53,6 @@ public class BodyFragment extends Fragment {
     Button ButtonAddRawText;
     RecyclerView.Adapter ParamsAdapter;
     RecyclerView.LayoutManager ParamLayoutManager;
-    //RadioButton radio_formdata, radio_raw, radio_binary;
     SharedPreferences.Editor editor;
 
     @Override
@@ -65,7 +65,6 @@ public class BodyFragment extends Fragment {
         if (requestCode == 1) {
             if (resultCode == -1) {
                 String strEditText = data.getStringExtra("editTextValue");
-
                 ParamsAdapter = new BodyAdapter(getDataSet(), context);
                 recyclerView.setAdapter(null);
                 recyclerView.setAdapter(ParamsAdapter);
@@ -85,408 +84,221 @@ public class BodyFragment extends Fragment {
             editor = RequestActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
             prefs = RequestActivity.getContext().getSharedPreferences("Thiyagu", 0);
             ParamLayoutManager = new LinearLayoutManager(getContext());
-            Log.v("whichfragment", "BodyFragment");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
 
         }
-
-        // Toast.makeText(getContext(), "onCreate", Toast.LENGTH_LONG).show();
         View view = inflater.inflate(R.layout.tab_fragment_body, container, false);
         context = view.getContext();
         Typeface roboto;
         AssetManager assetManager = context.getAssets();
-        roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         raw_text = view.findViewById(R.id.raw_textfield);
         recyclerView = view.findViewById(R.id.my_recycler_view);
-        //radio_formdata = view.findViewById(R.id.radio_formdata);
-        //radio_raw = view.findViewById(R.id.radio_raw);
         ButtonAddRawText = view.findViewById(R.id.button_addRawText);
-        //radio_binary = view.findViewById(R.id.radio_binary);
         AddBody = view.findViewById(R.id.AddBody);
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         body_spinner = view.findViewById(R.id.body_spinner);
-        //final String[] request = {"MULTIFORM", "JSON", "XML", "BINARY"};
-
-        final String[] request = {"MULTIFORM", "JSON", "XML","NONE"};
-
-        //radio_formdata.setChecked(true);
-        //String rawbody = prefs.getString("bodytypeflag", null);
+        final String[] request = {"MULTIFORM", "JSON", "XML", "NONE"};
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, request);
-      body_spinner.setAdapter(arrayadapter);
-      body_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
-
-              try
-              {
-                  bodytypeflag = prefs.getString("bodytypeflag", null);
-                  rawbody = prefs.getString("rawbody", null);
-                  switch (i)
-                  {
-
-                      case 0:
-
-                        //  Toast.makeText(context,"MULTIFORM",Toast.LENGTH_LONG).show();
-
-
-
-                          Log.v("statusofbodyfragment", "setting bodyflag 1");
-                          editor.putString("bodytypeflag", "1");
-
-                          editor.putString("rawbodytype", "MULTIFORM");
-                          Log.v("statusofbodyfragment", "setting bodyflag "+"1"+" success");
-                          editor.apply();
-
-                          formData();
-
-                          break;
-
-                      case 1:
-                        //  Toast.makeText(context,"JSON",Toast.LENGTH_LONG).show();
-                         // body_spinner.setText("JSON");
-
-                          Log.v("statusofbodyfragment", "setting bodyflag 2");
-                          editor.putString("bodytypeflag", "2");
-
-                          editor.putString("rawbodytype", "JSON");
-                          Log.v("statusofbodyfragment", "setting bodyflag "+"2"+" success");
-                          editor.apply();
-                          raw();
-                          break;
-
-                      case 2:
-                        //  Toast.makeText(context,"XML",Toast.LENGTH_LONG).show();
-                          //body_spinner.setText("XML");
-
-                          raw();
-
-
-
-                          Log.v("statusofbodyfragment", "setting bodyflag 3");
-                          editor.putString("bodytypeflag", "3");
-
-                          editor.putString("rawbodytype", "XML");
-                          Log.v("statusofbodyfragment", "setting bodyflag "+"3"+" success");
-                          editor.apply();
-                          break;
-
-                      case 3:
-                          None();
-
-
-
-                          Log.v("statusofbodyfragment", "setting bodyflag 4");
-                          editor.putString("bodytypeflag", "4");
-
-                          editor.putString("rawbodytype", "NONE");
-                          Log.v("statusofbodyfragment", "setting bodyflag "+"4"+" success");
-                          editor.apply();
-                          break;
-
-
-                          //  Toast.makeText(context,"NONE",Toast.LENGTH_LONG).show();
-                          // body_spinner.setText("BINARY");
-
-
-                  }
-
-              }
-
-              catch (Exception e)
-              {
-
-
-              }
-
-
-          }
-      });
-        try
-        {
-            bodytypeflag = prefs.getString("bodytypeflag", null);
-            rawbody = prefs.getString("rawbody", null);
-            Log.v("rawbody",bodytypeflag);
-            switch (bodytypeflag)
-            {
-                case "1":
-                    //radio_formdata.setChecked(true);
-                    formData();
-                    body_spinner.setText("MULTIFORM");
-                    //radio_raw.setChecked(false);
-                    //radio_binary.setChecked(false);
-                    break;
-
-                case "2":
-                    //radio_raw.setChecked(true);
-                    body_spinner.setText("JSON");
-                    raw();
-                   // radio_formdata.setChecked(false);
-                   // radio_binary.setChecked(false);
-                    break;
-
-                case "3":
-                    body_spinner.setText("XML");
-                    //radio_binary.setChecked(true);
-
-                   // radio_formdata.setChecked(false);
-                   // radio_raw.setChecked(false);
-
-                    break;
-                case "4":
-                    None();
-                    body_spinner.setText("NONE");
-                    //radio_binary.setChecked(true);
-
-                    // radio_formdata.setChecked(false);
-                    // radio_raw.setChecked(false);
-
-                    break;
-            }
-        }
-        catch (Exception e)
-        {
-           // Toast.makeText(RequestActivity.getContext(),e.toString(),Toast.LENGTH_LONG).show();
-
-        }
-//        radio_formdata.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                formData();
-//            }
-//        });
-//
-//
-//        radio_raw.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//           raw();
-//            }
-//        });
-
-        ButtonAddRawText.setOnClickListener(new View.OnClickListener()
-        {
+        body_spinner.setAdapter(arrayadapter);
+        body_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-
-                String sss = raw_text.getText().toString();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
+                try {
+                    bodytypeflag = prefs.getString("bodytypeflag", null);
+                    rawbody = prefs.getString("rawbody", null);
+                    switch (i) {
+
+                        case 0:
+                            //MULTIPART BODYFLAG 1
+                            editor.putString("bodytypeflag", "1");
+                            editor.putString("rawbodytype", "MULTIFORM");
+                            editor.apply();
+                            formData();
+                            break;
+
+                        case 1:
+                            //MULTIPART BODYFLAG 2
+                            editor.putString("bodytypeflag", "2");
+                            editor.putString("rawbodytype", "JSON");
+                            editor.apply();
+                            raw();
+                            break;
+
+                        case 2:
+
+                            //XML BODYFLAG 3
+                            raw();
+                            editor.putString("bodytypeflag", "3");
+                            editor.putString("rawbodytype", "XML");
+                            editor.apply();
+                            break;
+
+                        case 3:
+                            //NONE BODYFLAG 4
+                            None();
+                            editor.putString("bodytypeflag", "4");
+                            editor.putString("rawbodytype", "NONE");
+                            editor.apply();
+                            break;
 
 
-                String bodytype = body_spinner.getText().toString();
+                    }
 
-                switch (bodytype)
-                {
-
-                    case "MULIFORM":
-
-                        Apply(sss,"1","multiform");
-                        break;
-
-
-                    case "JSON":
-
-                        boolean firstStringValid = JSONUtils.isJSONValid(sss); //true
-                        if(firstStringValid == true)
-                        {
-                            Apply(sss,"2","json");
-                            Log.v("sdsdsdsd","the above string is json");
-
-                        }
-                        else
-                        {
-                            Log.v("sdsdsdsd","the above string is not json");
-                            Toasty.warning(context, "Not a valid json string found", Toast.LENGTH_SHORT, true).show();
-                        }
-                        break;
-
-
-
-                    case "XML":
-                        break;
-
-
-
-                    case "BINARY":
-                        break;
-
-
-
+                } catch (Exception e) {
 
 
                 }
 
 
+            }
+        });
+        try {
+            bodytypeflag = prefs.getString("bodytypeflag", null);
+            rawbody = prefs.getString("rawbody", null);
+            Log.v("rawbody", bodytypeflag);
+            switch (bodytypeflag) {
+                case "1":
+                    formData();
+                    body_spinner.setText("MULTIFORM");
+                    break;
+                case "2":
+                    body_spinner.setText("JSON");
+                    raw();
+                    break;
+                case "3":
+                    body_spinner.setText("XML");
+                    break;
+                case "4":
+                    None();
+                    body_spinner.setText("NONE");
+                    break;
+            }
+        } catch (Exception e) {
 
 
+        }
 
+
+        ButtonAddRawText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String raw_text_value = raw_text.getText().toString();
+                String body_type = body_spinner.getText().toString();
+                switch (body_type) {
+                    case "MULIFORM":
+                        Apply(raw_text_value, "1", "multiform");
+                        break;
+                    case "JSON":
+                        boolean firstStringValid = JSONUtils.isJSONValid(raw_text_value); //true
+                        if (firstStringValid == true) {
+                            Apply(raw_text_value, "2", "json");
+                            Log.v("sdsdsdsd", "the above string is json");
+
+                        } else {
+                            Log.v("sdsdsdsd", "the above string is not json");
+                            Toasty.warning(context, "Not a valid json string found", Toast.LENGTH_SHORT, true).show();
+                        }
+                        break;
+                    case "XML":
+                        break;
+                    case "BINARY":
+                        break;
+
+
+                }
 
 
             }
         });
-
-//        radio_binary.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                //radio_formdata.setChecked(true);
-//                radio_formdata.setChecked(false);
-//                radio_raw.setChecked(false);
-//
-//
-//
-//                String rawbody = prefs.getString("rawbody", null);
-//                String rawbodytype = prefs.getString("rawbodytype", null);
-//
-//                Log.v("sasdasdasddasd", rawbody + "==========>" + rawbodytype);
-//
-//
-//            }
-//        });
-
 
         AddBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), BodyPopUp.class);
-
+                String bodytype = body_spinner.getText().toString();
+                intent.putExtra("type", bodytype);
                 startActivityForResult(intent, 1);
-//                Log.v("statusofbodyfragment", "setting bodyflag 1");
-//                editor.putString("bodytypeflag", "1");
-//                editor.apply();
-//                Log.v("statusofbodyfragment", "setting bodyflag 1 success");
             }
         });
         AddBody.setTypeface(roboto);
         recyclerView.setLayoutManager(ParamLayoutManager);
         ParamsAdapter = new BodyAdapter(getDataSet(), context);
-
         recyclerView.setAdapter(ParamsAdapter);
         return view;
     }
-public void Apply(String sss,String i,String type)
-{
-    Log.v("asdasdasdsd", sss);
-    Log.v("statusofbodyfragment", "setting bodyflag "+i);
-    editor.putString("bodytypeflag", i);
-    editor.putString("rawbody", sss);
-    editor.putString("rawbodytype", type);
-    Log.v("statusofbodyfragment", "setting bodyflag "+i+" success");
-    editor.apply();
+
+    public void Apply(String sss, String i, String type) {
+//
+//
+//    TelleriumDataDatabase database = Room.databaseBuilder(this.getActivity(), TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
+//
+//    BodyDAO bodyDAO = database.getbodyDAO();
+//
+//    Body body = new Body();
+//    body.setKey("");
+//    body.setValue("");
+//    body.setRawvalue(sss);
+//    String uuid = UUID.randomUUID().toString();
+//    body.setReferenceId(uuid);
+//    body.setFlag("true");
+//    //Log.v("Top-Secret", intent.getStringExtra("type"));
+//    body.setBodytype(type);
+//    bodyDAO.insert(body);
 
 
 
-}
+        editor.putString("bodytypeflag", i);
+        editor.putString("rawbody", sss);
+        editor.putString("rawbodytype", type);
+        editor.apply();
+//    TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
+//
+//    BodyDAO bodyDAO = database.getbodyDAO();
+//    Body body = new Body();
+//
+//    body.setBodytype(type);
+//    body.setRawvalue(sss);
+//    bodyDAO.insert(body);
+
+
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        //radio_raw.performClick();
+
     }
 
-    private List<Body> getDataSet()
-
-    {
-
-       // FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(context);
-
-
-        TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class,"data_db").allowMainThreadQueries().build();
+    private List<Body> getDataSet() {
+        TelleriumDataDatabase database = Room.databaseBuilder(getContext(), TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
         BodyDAO bodyDAO = database.getbodyDAO();
         List<Body> dataa = bodyDAO.getBody();
-
-       // Log.v(Tag, "builder" + i + bodylist.get(i).getKey());
-        //Log.v(Tag, "builder" + i + bodylist.get(i).getValue());
-        //builder.addFormDataPart(bodylist.get(i).getKey(),bodylist.get(i).getValue());
-
-
-
-       // ArrayList<String> dataa = feedReaderDbHelper.getAllBody();
-//        Log.v("asdasdsad", dataa.toString());
-//        ArrayList<BodyDataObject> results = new ArrayList<>();
-//
-//        for (int i = 0; i < dataa.size(); i++) {
-//
-//            //String[] splitt = dataa.get(i).split("@@");
-//            // ParamDataObject paramDataObject = new ParamDataObject(splitt[0], splitt[1]);
-//            BodyDataObject paramDataObject = new BodyDataObject(dataa.get(0).getReferenceId(), dataa.get(0).getKey(), dataa.get(0).getValue());
-//
-//
-//            results.add(i, paramDataObject);
-//            //DataPojoClass dataPojoClass = new DataPojoClass(splitt[0],splitt[1]);
-//
-//        }
-
-
         return dataa;
     }
 
-    void raw()
-    {
-
-
-        //radio_formdata.setChecked(true);
-        //radio_formdata.setChecked(false);
-        //radio_binary.setChecked(false);
+    void raw() {
         recyclerView.setVisibility(View.GONE);
         AddBody.setVisibility(View.GONE);
-
-
         raw_text.setVisibility(View.VISIBLE);
-
-
-        try
-        {
-           // raw_text.setText(jsonUtil.unescape(rawbody));
-           raw_text.setText(rawbody);
+        try {
+            raw_text.setText(rawbody);
             ButtonAddRawText.setVisibility(View.VISIBLE);
 
+        } catch (Exception e) {
         }
-        catch (Exception e)
-        {
-
-
-        }
-
         ButtonAddRawText.setVisibility(View.VISIBLE);
     }
-    void formData()
-    {
 
-
-
-
-
-        //radio_formdata.setChecked(true);//radio_formdata.setChecked(true);
-        //radio_raw.setChecked(false);
-        //radio_binary.setChecked(false);
-
-
+    void formData() {
         recyclerView.setVisibility(View.VISIBLE);
         AddBody.setVisibility(View.VISIBLE);
-
         raw_text.setVisibility(View.GONE);
-
     }
 
-    void None()
-    {
-
-
-
-
-
-        //radio_formdata.setChecked(true);//radio_formdata.setChecked(true);
-        //radio_raw.setChecked(false);
-        //radio_binary.setChecked(false);
-
-
+    void None() {
         recyclerView.setVisibility(View.GONE);
         AddBody.setVisibility(View.GONE);
         ButtonAddRawText.setVisibility(View.GONE);

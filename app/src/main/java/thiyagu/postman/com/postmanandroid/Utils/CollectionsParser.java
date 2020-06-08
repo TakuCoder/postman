@@ -249,7 +249,8 @@ public class CollectionsParser
                    }
 
 
-                   if (object_request.has("body")) {
+                   if (object_request.has("body"))
+                   {
                        PrintLog("found body");
                        JSONObject object = object_request.getJSONObject("body");
                        String mode = object.getString("mode");

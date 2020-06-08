@@ -32,7 +32,7 @@ public class BodyPopUp extends AppCompatActivity {
 
     Button addButton;
     FeedReaderDbHelper feedReaderDbHelper;
-    Intent intent = new Intent();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +102,12 @@ public class BodyPopUp extends AppCompatActivity {
                     String uuid = UUID.randomUUID().toString();
                     body.setReferenceId(uuid);
                     body.setFlag("true");
+                    //Log.v("Top-Secret", intent.getStringExtra("type"));
+                    body.setBodytype(getIntent().getStringExtra("type"));
                     bodyDAO.insert(body);
                     // DataPojoClass pojoClass = new DataPojoClass(KeyField.getText().toString(), ValueField.getText().toString());
                     // feedReaderDbHelper.addEntryBody(pojoClass);
+                    Intent intent = new Intent();
                     intent.putExtra("editTextValue", "value_here");
                     setResult(RESULT_OK, intent);
                     finish();

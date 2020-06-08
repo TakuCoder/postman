@@ -244,13 +244,15 @@ public class PublicShareCollectionParser {
                     }
 
 
-                    if (object_request.has("body")) {
+                    if (object_request.has("body"))
+                    {
                         PrintLog("found body");
                         JSONObject object = object_request.getJSONObject("body");
                         String mode = object.getString("mode");
                         System.out.println(mode);
 
-                        switch (mode) {
+                        switch (mode)
+                        {
 
                             case "formdata":
 
@@ -354,46 +356,46 @@ public class PublicShareCollectionParser {
 
                         if(request_method.equalsIgnoreCase("GET"))
                         {
-
-                            JSONObject Object_Url = object_request.getJSONObject("url");
-                            String raw = Object_Url.getString("raw");
-                            if (Object_Url.has("query"))
-                            {
-                                PrintLog("has Querry");
-                                JSONArray query_array = Object_Url.getJSONArray("query");
-                                for (int i = 0; i < query_array.length(); i++) {
-                                    JSONObject jsonObject2 = query_array.getJSONObject(i);
-                                    String query_key = jsonObject2.getString("key");
-                                    String query_value = jsonObject2.getString("value");
-
-                                    System.out.println("query_key " + query_key);
-                                    System.out.println("query_value " + query_value);
-
-                                    if (jsonObject2.has("description")) {
-
-                                        String query_description = jsonObject2.getString("description");
-                                        System.out.println("query_description " + query_description);
-                                    } else {
-                                        //String query_description = jsonObject2.getString("description");
-                                        System.out.println("query_description " + "nodesc");
-
-                                    }
-
-
-                                    if (jsonObject2.has("disabled")) {
-                                        String disabled = jsonObject2.optString("disabled");
-                                        System.out.println("disabled " + disabled);
-                                    } else {
-                                        System.out.println("disabled " + "false");
-
-                                    }
-                                    System.out.println("");
-                                }
-
-                            } else {
-                                PrintLog("No Querry");
-
-                            }
+String url = object_request.getString("url");
+                        //    JSONObject Object_Url = object_request.getJSONObject("url");
+                         //   String raw = Object_Url.getString("raw");
+//                            if (Object_Url.has("query"))
+//                            {
+//                                PrintLog("has Querry");
+//                                JSONArray query_array = Object_Url.getJSONArray("query");
+//                                for (int i = 0; i < query_array.length(); i++) {
+//                                    JSONObject jsonObject2 = query_array.getJSONObject(i);
+//                                    String query_key = jsonObject2.getString("key");
+//                                    String query_value = jsonObject2.getString("value");
+//
+//                                    System.out.println("query_key " + query_key);
+//                                    System.out.println("query_value " + query_value);
+//
+//                                    if (jsonObject2.has("description")) {
+//
+//                                        String query_description = jsonObject2.getString("description");
+//                                        System.out.println("query_description " + query_description);
+//                                    } else {
+//                                        //String query_description = jsonObject2.getString("description");
+//                                        System.out.println("query_description " + "nodesc");
+//
+//                                    }
+//
+//
+//                                    if (jsonObject2.has("disabled")) {
+//                                        String disabled = jsonObject2.optString("disabled");
+//                                        System.out.println("disabled " + disabled);
+//                                    } else {
+//                                        System.out.println("disabled " + "false");
+//
+//                                    }
+//                                    System.out.println("");
+//                                }
+//
+//                            } else {
+//                                PrintLog("No Querry");
+//
+//                            }
 
 
                         }

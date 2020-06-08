@@ -27,8 +27,10 @@ import javax.inject.Inject;
 
 import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
 import thiyagu.postman.com.postmanandroid.DI.DatabaseModule;
+import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
+import thiyagu.postman.com.postmanandroid.Database.DAO.BodyDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.HeaderDAO;
 import thiyagu.postman.com.postmanandroid.Database.DAO.ParametersDAO;
 import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
@@ -164,7 +166,114 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
                         PrintLog("no found header");
                     }
+                    if (object_request.has("body")) {
+                        BodyDAO bodyDAO = telleriumDataDatabase.getbodyDAO();
 
+                        PrintLog("found body");
+                        JSONObject object = object_request.getJSONObject("body");
+                        String mode = object.getString("mode");
+                        System.out.println(mode);
+                        Body body;
+                        switch (mode) {
+
+                            case "formdata":
+
+                                body = new Body();
+                                JSONArray formdata_Array = object.getJSONArray("formdata");
+                               // body.bodytype();
+                                for (int i = 0; i < formdata_Array.length(); i++) {
+                                    JSONObject formdata_object = formdata_Array.getJSONObject(i);
+                                    String formdata_key = formdata_object.getString("key");
+
+                                    String formdata_type = formdata_object.getString("type");
+                                    if (formdata_type.equals("text")) {
+                                        String formdata_value = formdata_object.getString("value");
+                                        System.out.println(formdata_value + "   formdata_value");
+                                    } else if (formdata_type.equals("file")) {
+
+                                        String formdata_value = formdata_object.getString("src");
+                                        System.out.println(formdata_value + "   formdata_value");
+                                    }
+                                    if (formdata_object.has("disabled")) {
+                                        if (formdata_object.get("disabled").equals(true)) {
+
+                                            System.out.println("Disabled");
+
+                                        }
+
+                                    } else {
+
+                                        System.out.println("not Disabled");
+                                    }
+                                    System.out.println(formdata_key + "   formdata_key");
+                                    System.out.println(formdata_type + "   formdata_type");
+                                    if (formdata_object.has("description")) {
+
+                                        String formdata_description = formdata_object.getString("description");
+                                        System.out.println(formdata_description + "   formdata_description");
+                                    } else {
+                                        System.out.println(" no  formdata_description");
+
+                                    }
+
+
+                                }
+                                PrintLog("found formdata");
+                                break;
+
+                            case "urlencoded":
+                                PrintLog("found urlencoded");
+
+                                formdata_Array = object.getJSONArray("urlencoded");
+                                for (int i = 0; i < formdata_Array.length(); i++) {
+                                    JSONObject urlencoded_object = formdata_Array.getJSONObject(i);
+                                    String urlencoded_key = urlencoded_object.getString("key");
+                                    String urlencoded_value = urlencoded_object.getString("value");
+                                    String urlencoded_type = urlencoded_object.getString("type");
+                                    if (urlencoded_object.has("disabled")) {
+                                        System.out.println(urlencoded_object.get("disabled"));
+
+                                    } else {
+
+                                        System.out.println("not Disabled");
+                                    }
+                                    System.out.println(urlencoded_key + "   urlencoded_key");
+                                    System.out.println(urlencoded_value + "   urlencoded_value");
+
+                                    System.out.println(urlencoded_type + "   urlencoded_type");
+                                    if (urlencoded_object.has("description")) {
+
+                                        String formdata_description = urlencoded_object.getString("description");
+                                        System.out.println(formdata_description + "   urlencoded_description");
+                                    } else {
+                                        System.out.println(" no  urlencoded_description");
+
+                                    }
+                                    System.out.println();
+
+                                }
+                                break;
+
+                            case "raw":
+                                System.out.println(object.get("raw"));
+                                PrintLog("found raw");
+                                break;
+
+                            case "file":
+                                PrintLog("found file");
+                                break;
+
+                            default:
+                                break;
+
+
+                        }
+
+                        System.out.println(mode);
+                    } else {
+
+                        PrintLog("no body found");
+                    }
 
                     if (url_object.has("query")) {
                         ParametersDAO parametersDAO = telleriumDataDatabase.getParametersDAO();
