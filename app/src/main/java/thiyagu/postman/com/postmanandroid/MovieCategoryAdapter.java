@@ -3,6 +3,7 @@ package thiyagu.postman.com.postmanandroid;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amitshekhar.utils.Utils;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +54,8 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
     CollectionDatabase collectionDatabase;
     TelleriumDataDatabase telleriumDataDatabase;
-
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     private LayoutInflater mInflator;
 
     public MovieCategoryAdapter(Context mcontext, List<? extends ParentListItem> parentItemList, String s) {
@@ -62,6 +65,8 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
         ss = s;
         collectionDatabase = Room.databaseBuilder(context, CollectionDatabase.class, "collection_db").allowMainThreadQueries().build();
         telleriumDataDatabase = Room.databaseBuilder(context, TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
+        editor = RequestActivity.getContext().getApplicationContext().getSharedPreferences("Thiyagu", 0).edit();
+        prefs = RequestActivity.getContext().getSharedPreferences("Thiyagu", 0);
     }
 
     @Override
@@ -180,7 +185,7 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
                                 body = new Body();
                                 JSONArray formdata_Array = object.getJSONArray("formdata");
-                               // body.bodytype();
+                                // body.bodytype();
                                 for (int i = 0; i < formdata_Array.length(); i++) {
                                     JSONObject formdata_object = formdata_Array.getJSONObject(i);
                                     String formdata_key = formdata_object.getString("key");
@@ -255,7 +260,37 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                                 break;
 
                             case "raw":
+
+
+                                JSONObject options = object.getJSONObject("options");
+                                String raw_value = options.getString("raw");
+                                JSONObject raw = options.getJSONObject("raw")
+;                                String language = raw.getString("language");
+
+                                switch (language)
+                                {
+                                    case "text":
+                                    break;
+
+                                    case "json":
+                                        editor.putString("bodytypeflag", 2+"");
+                                        editor.putString("rawbody", raw_value);
+                                        editor.putString("rawbodytype", "json");
+                                        editor.apply();
+                                        break;
+
+                                    case "xml":
+
+                                        editor.putString("bodytypeflag", "3");
+                                        editor.putString("rawbodytype", "XML");
+                                        editor.apply();
+                                        break;
+
+
+                                }
                                 System.out.println(object.get("raw"));
+
+
                                 PrintLog("found raw");
                                 break;
 
@@ -294,7 +329,8 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                             parameterss.setValue(query_value);
                             parameterss.setTag(UUID.randomUUID().toString().substring(0, 7));
 
-                            if (jsonObject2.has("description")) {
+                            if (jsonObject2.has("description"))
+                            {
 
                                 String query_description = jsonObject2.getString("description");
                                 System.out.println("query_description " + query_description);

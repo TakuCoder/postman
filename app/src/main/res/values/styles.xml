@@ -21,7 +21,9 @@
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="TabLayoutTextSize" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">17sp</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

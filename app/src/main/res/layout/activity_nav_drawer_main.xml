@@ -54,6 +54,11 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
+
+
+
+
+
                     <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner
                         android:id="@+id/req_type_spinner"
                         android:layout_width="match_parent"
@@ -86,6 +91,11 @@
                         android:buttonTint="@color/orange"
                         android:text="HTTPS"
                         android:textColor="@color/orange" />
+
+
+
+
+
 
                     <EditText
 
@@ -125,6 +135,7 @@
                     android:elevation="6dp"
                     android:minHeight="?attr/actionBarSize"
                     app:tabMode="scrollable"
+                    app:tabTextAppearance="@style/TabLayoutTextSize"
                     app:tabSelectedTextColor="@android:color/white"
                     app:tabTextColor="@android:color/white" />
 
