@@ -17,9 +17,12 @@
         android:roundIcon="@drawable/postmanicon"
         android:screenOrientation="nosensor"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/MatterialAppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Activities.CollectionsActivity"></activity>
+        <activity android:name=".TestActivity">
+
+        </activity>
+        <activity android:name=".Activities.CollectionsActivity" />
         <activity
             android:name=".Activities.Splash"
             android:noHistory="true">
@@ -46,7 +49,6 @@
         <activity
             android:name=".Activities.HistoryActivity"
             android:label="History" />
-
         <activity
             android:name=".Activities.BookmarkActivity"
             android:label="Bookmark" />
@@ -57,7 +59,7 @@
         <activity
             android:name=".Activities.RequestActivity"
             android:label="@string/title_activity_nav_drawer_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/MatterialAppTheme" />
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" />

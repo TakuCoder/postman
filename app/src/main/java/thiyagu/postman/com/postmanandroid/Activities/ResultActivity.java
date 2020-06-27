@@ -1,15 +1,15 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -228,6 +228,7 @@ FloatingActionButton fab;
 
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                Log.v("Check-State",newState+"");
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
@@ -235,9 +236,9 @@ FloatingActionButton fab;
 
                     }
                     break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
 
-                    }
+
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
                         break;
@@ -272,7 +273,7 @@ FloatingActionButton fab;
                 sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 // btnBottomSheet.setText("Close sheet");
             } else {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 // btnBottomSheet.setText("Expand sheet");
             }
 

@@ -3,10 +3,7 @@ package thiyagu.postman.com.postmanandroid.Services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import androidx.annotation.Nullable;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

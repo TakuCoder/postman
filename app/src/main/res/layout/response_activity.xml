@@ -11,7 +11,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="wrap_content">
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view_responsetype"
         android:layout_weight="3"
 
@@ -119,9 +119,9 @@
 
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view_responsedata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -192,8 +192,8 @@
             </LinearLayout>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view_responsetype2"
         android:layout_weight="3"
 
@@ -202,7 +202,7 @@
         android:layout_gravity="center"
 
         card_view:cardCornerRadius="0dp">
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
     <Button
         android:layout_marginTop="10dp"
         android:id="@+id/sendButton"

@@ -56,7 +56,7 @@
             app:met_textColor="@color/white"
             app:met_floatingLabelTextColor="@color/orange"/>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
             android:id="@+id/input_layout_username"
@@ -80,8 +80,8 @@
                 android:textColor="@android:color/white"
                 android:hint="username" />
 
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
 
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:hint="password" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:windowSoftInputMode="adjustPan"

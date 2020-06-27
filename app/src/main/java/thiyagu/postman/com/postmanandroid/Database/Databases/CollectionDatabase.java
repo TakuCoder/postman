@@ -1,9 +1,9 @@
 package thiyagu.postman.com.postmanandroid.Database.Databases;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.Database;
+import androidx.room.Entity;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import thiyagu.postman.com.postmanandroid.Converters.DateTypeConverter;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;

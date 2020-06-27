@@ -3,7 +3,7 @@ package thiyagu.postman.com.postmanandroid.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro2;

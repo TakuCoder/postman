@@ -4,14 +4,14 @@ package thiyagu.postman.com.postmanandroid.Fragment;
  * Created by thiyagu on 3/6/2018.
  */
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,11 +151,11 @@ public class ParamAdapter extends RecyclerView
 
                 }
 
-                android.support.v7.app.AlertDialog.Builder builder;
+                androidx.appcompat.app.AlertDialog.Builder builder;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    builder = new android.support.v7.app.AlertDialog.Builder(mcontext, android.R.style.Theme_Material_Dialog_Alert);
+                    builder = new androidx.appcompat.app.AlertDialog.Builder(mcontext, android.R.style.Theme_Material_Dialog_Alert);
                 } else {
-                    builder = new android.support.v7.app.AlertDialog.Builder(mcontext);
+                    builder = new androidx.appcompat.app.AlertDialog.Builder(mcontext);
                 }
                 builder.setTitle("Delete entry")
                         .setMessage("Are you sure you want to delete this entry?")

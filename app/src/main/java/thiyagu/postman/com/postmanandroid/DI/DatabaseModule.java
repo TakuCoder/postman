@@ -1,18 +1,16 @@
 package thiyagu.postman.com.postmanandroid.DI;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import android.content.Context;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import thiyagu.postman.com.postmanandroid.Activities.CollectionsActivity;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemDAO;
 import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
-import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
 
 @Module
 public class DatabaseModule {

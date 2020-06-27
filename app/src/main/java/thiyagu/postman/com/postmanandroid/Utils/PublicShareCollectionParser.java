@@ -1,6 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Utils;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
 
 import org.json.JSONArray;

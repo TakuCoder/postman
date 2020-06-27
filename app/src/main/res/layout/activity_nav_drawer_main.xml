@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,45 +7,41 @@
     tools:context=".Activities.RequestActivity">
 
 
-
-
-
-    <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:background="@color/gray"
         android:layout_height="match_parent"
+        android:background="@color/gray"
         android:fitsSystemWindows="true">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:background="@color/gray"
             android:orientation="vertical">
-            <android.support.design.widget.AppBarLayout
+
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.AppBarOverlay">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:title="Tellurium" />
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-
-                android:padding="2dp">
+                android:padding="2dp"
+                android:weightSum="1">
 
 
                 <LinearLayout
@@ -55,26 +51,56 @@
                     android:weightSum="1">
 
 
+                    <!--                    <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner-->
+                    <!--                        android:id="@+id/req_type_spinner"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_weight="0.5"-->
+                    <!--                        android:alpha="2"-->
+
+                    <!--                        android:drawableEnd="@drawable/arrow_white"-->
+                    <!--                        android:hint="@string/Request_type"-->
+                    <!--                        app:met_baseColor="@color/orange"-->
+                    <!--                        app:met_floatingLabel="normal"-->
 
 
+                    <!--                        app:met_floatingLabelTextColor="@color/orange"-->
+                    <!--                        app:met_textColor="@color/white" />-->
 
-
-                    <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/req_type_spinner"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:alpha="2"
+                        android:layout_margin="4dp"
+                        android:layout_weight="0.2"
+app:boxBackgroundColor="@color/orange"
+                        android:hint=""
+                        app:errorEnabled="false"
+                        app:helperText=""
+                        app:helperTextEnabled="false">
 
-                        android:drawableEnd="@drawable/arrow_white"
-                        android:hint="@string/Request_type"
-                        app:met_baseColor="@color/orange"
-                        app:met_floatingLabel="normal"
+                        <AutoCompleteTextView
+                            style="@style/MyAutoCompleteTextView"
+                            android:id="@+id/outlined_exposed_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/orange"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                        app:met_floatingLabelTextColor="@color/orange"
-                        app:met_textColor="@color/white" />
 
+
+                    <CheckBox
+
+                        android:id="@+id/checkbox_https"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:buttonTint="@color/orange"
+                        android:text="HTTPS"
+                        android:textColor="@color/orange" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -83,36 +109,23 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    <CheckBox
-                        android:id="@+id/checkbox_https"
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/outlinedTextField"
+                        style="@style/outlinetextbox"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.7"
-                        android:buttonTint="@color/orange"
-                        android:text="HTTPS"
-                        android:textColor="@color/orange" />
+                        android:layout_height="wrap_content"
 
+                        android:hint="URL">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/UrlField"
+                            android:textColor="@color/orange"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
-
-
-
-                    <EditText
-
-                        android:id="@+id/UrlField"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="0dp"
-                        android:layout_weight="0.3"
-                        android:alpha="10"
-                        android:ems="10"
-                        android:hint="@string/your_url_here"
-                        android:imeOptions="actionDone"
-                        android:inputType="textUri"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@color/orangedim" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
 
 
             </LinearLayout>
@@ -125,7 +138,7 @@
                 android:weightSum="3">
 
 
-                <android.support.design.widget.TabLayout
+                <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
 
                     android:layout_width="match_parent"
@@ -135,19 +148,20 @@
                     android:elevation="6dp"
                     android:minHeight="?attr/actionBarSize"
                     app:tabMode="scrollable"
-                    app:tabTextAppearance="@style/TabLayoutTextSize"
                     app:tabSelectedTextColor="@android:color/white"
+                    app:tabTextAppearance="@style/TabLayoutTextSize"
                     app:tabTextColor="@android:color/white" />
 
-                <android.support.v4.view.ViewPager
+                <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2">
 
-                </android.support.v4.view.ViewPager>
+                </androidx.viewpager.widget.ViewPager>
 
                 <Button
+                    style="@style/button"
                     android:id="@+id/sendButton"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -160,18 +174,18 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:fitsSystemWindows="true"
             android:background="@color/gray"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header"
             app:itemIconTint="#ffffff"
             app:itemTextColor="@color/white"
-            app:menu="@menu/drawer_menu"
-            app:headerLayout="@layout/nav_header" />
-    </android.support.v4.widget.DrawerLayout>
+            app:menu="@menu/drawer_menu" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

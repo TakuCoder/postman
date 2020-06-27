@@ -1,25 +1,22 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Database.Bookmarks;
 import thiyagu.postman.com.postmanandroid.Database.DAO.BookmarkDAO;
-import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
-import thiyagu.postman.com.postmanandroid.Database.History;
 import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.PopupActivities.DifferentRowAdapter;
 import thiyagu.postman.com.postmanandroid.R;

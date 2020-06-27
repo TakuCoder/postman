@@ -2,7 +2,9 @@ package thiyagu.postman.com.postmanandroid.Activities;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.arch.persistence.room.Room;
+
+import androidx.room.Room;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,22 +16,29 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
 import android.preference.PreferenceManager;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.viewpager.widget.ViewPager;
+
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -103,11 +112,12 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 //    {
 //        RED, GREEN, BLUE;
 //    }
-
+    com.google.android.material.textfield.TextInputLayout req_type_spinner;
     private static final String TAG = "TAG";
-    MaterialBetterSpinner materialBetterSpinner;
+    // MaterialBetterSpinner materialBetterSpinner;
+    AutoCompleteTextView autoCompleteTextView;
     Button sendButton;
-    EditText UrlField;
+    com.google.android.material.textfield.TextInputEditText UrlField;
     FeedReaderDbHelper feedReaderDbHelper;
     Typeface roboto;
     public String ssss;
@@ -149,8 +159,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         intiview();
         context = this;
         setupSharedPreferences();
-
-
+        autoCompleteTextView = findViewById(R.id.outlined_exposed_dropdown);
+        req_type_spinner = findViewById(R.id.req_type_spinner);
         ((BaseActivity) getApplication()).getComponent().inject(this);
 
         InfoDAO infoDAO = collectionDatabase.getInfoDAO();
@@ -171,6 +181,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
         // ((MyApplication)getApplicationContext()).getMyComponent().inject(this);
 
+
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         checkbox_https = findViewById(R.id.checkbox_https);
 
@@ -188,7 +199,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         }
         // Toast.makeText(getApplicationContext(),String.valueOf(https_check),Toast.LENGTH_LONG).show();
         editor = this.getApplicationContext().getSharedPreferences("Thiyagu", MODE_PRIVATE).edit();
-        setSupportActionBar(toolbar);
+        // setSupportActionBar(toolbar);
         instance = this;
         checkbox_https.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -228,8 +239,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
 
 
-        final String[] request = {"GET", "POST", "DELETE", "PUT"};
-
+     final String[] request = {"GET", "POST", "DELETE", "PUT"};
+       // final String[] request = {"11", "22", "33", "44"};
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
 
         body = tabLayout.getTabAt(3);
@@ -240,8 +251,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 //
 
 
-        materialBetterSpinner.setAdapter(arrayadapter);
-        materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        autoCompleteTextView.setAdapter(arrayadapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -272,18 +283,12 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
         sendButton.setTypeface(roboto);
         UrlField.setTypeface(roboto);
-        materialBetterSpinner.setTypeface(roboto);
+        autoCompleteTextView.setTypeface(roboto);
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.setMessage("Activating hyperdrive, please wait.");
-                        dialog.show();
-                    }
-                });
+
 
                 SharedPreferences sharedPreferences = RequestActivity.this.getSharedPreferences("thiyagu.postman.com.postmanandroid_preferences", MODE_PRIVATE);
                 String status = sharedPreferences.getString("CertPicker", "");
@@ -330,7 +335,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
                 Log.v("fdfdfd", weburl);
                 editor.putString("url_value", weburl);
-                editor.putString("req_value", materialBetterSpinner.getText().toString());
+                editor.putString("req_value", autoCompleteTextView.getText().toString());
                 editor.apply();
 
                 if (isValid(fullurl)) {
@@ -448,13 +453,13 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                     Log.v(Tag, "Added Params====================> ");
 
 
-                    String seletecvalue = materialBetterSpinner.getText().toString();
+                    String seletecvalue = autoCompleteTextView.getText().toString();
                     // String Address = UrlField.getText().toString();
                     switch (seletecvalue) {
 
 
                         case "GET":
-
+                            showHyperDriveDialog();
                             Log.v(Tag, "Diving Into GET");
                             if (isOnline()) {
                                 // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
@@ -469,7 +474,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             break;
 
                         case "POST":
-
+                            showHyperDriveDialog();
                             Log.v(Tag, "Diving Into POST");
                             if (isOnline()) {
 
@@ -492,7 +497,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             break;
 
                         case "DELETE":
-
+                            showHyperDriveDialog();
                             Log.v(Tag, "Diving Into DELETE");
 
                             if (isOnline()) {
@@ -507,7 +512,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             break;
 
                         case "PUT":
-
+                            showHyperDriveDialog();
                             if (isOnline()) {
 
                                 Log.v(Tag, "Diving Into PUT");
@@ -545,6 +550,16 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
             }
+
+            private void showHyperDriveDialog() {
+                RequestActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setMessage("Activating hyperdrive, please wait.");
+                        dialog.show();
+                    }
+                });
+            }
         });
         try {
 
@@ -552,7 +567,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             Log.v(Tag, "setting default value for url and req type");
             String url_value = prefs.getString("url_value", null);
             String req_value = prefs.getString("req_value", null);
-            materialBetterSpinner.setText(req_value);
+            autoCompleteTextView.setText(req_value,false);
             UrlField.setText(url_value);
             Log.v(Tag, "=============================");
             Log.v(Tag, "setting value on on create");
@@ -586,7 +601,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.pager);
         sendButton = findViewById(R.id.sendButton);
-        materialBetterSpinner = findViewById(R.id.req_type_spinner);
+        // materialBetterSpinner = findViewById(R.id.req_type_spinner);
         UrlField = findViewById(R.id.UrlField);
 
     }

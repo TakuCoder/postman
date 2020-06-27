@@ -1,10 +1,10 @@
 package thiyagu.postman.com.postmanandroid;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,21 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amitshekhar.utils.Utils;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
-import thiyagu.postman.com.postmanandroid.DI.DatabaseModule;
 import thiyagu.postman.com.postmanandroid.Database.Body;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;

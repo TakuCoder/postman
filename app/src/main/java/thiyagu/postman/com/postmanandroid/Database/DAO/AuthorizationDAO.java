@@ -1,15 +1,14 @@
 package thiyagu.postman.com.postmanandroid.Database.DAO;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
 import thiyagu.postman.com.postmanandroid.Database.Authorization;
-import thiyagu.postman.com.postmanandroid.Database.Header;
 
 @Dao
 public interface AuthorizationDAO {

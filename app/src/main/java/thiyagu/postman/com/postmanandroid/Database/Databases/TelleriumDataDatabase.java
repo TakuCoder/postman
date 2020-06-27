@@ -1,7 +1,7 @@
 package thiyagu.postman.com.postmanandroid.Database.Databases;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.TypeConverters;
+import androidx.room.Database;
+import androidx.room.TypeConverters;
 
 import thiyagu.postman.com.postmanandroid.Converters.DateTypeConverter;
 import thiyagu.postman.com.postmanandroid.Database.Authorization;
@@ -18,7 +18,7 @@ import thiyagu.postman.com.postmanandroid.Database.parameters;
 
 @Database(entities = {Authorization.class, Body.class, Header.class, parameters.class, History.class, Bookmarks.class},version = 1,exportSchema = false)
 @TypeConverters({DateTypeConverter.class})
-public abstract class TelleriumDataDatabase extends android.arch.persistence.room.RoomDatabase {
+public abstract class TelleriumDataDatabase extends androidx.room.RoomDatabase {
 
     public abstract BodyDAO getbodyDAO();
     public abstract HeaderDAO getHeaderDAO();

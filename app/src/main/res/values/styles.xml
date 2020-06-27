@@ -9,6 +9,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="CheckBox" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">false</item>
@@ -17,13 +18,16 @@
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="TabLayoutTextSize" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -37,6 +41,7 @@
         <item name="colorControlNormal">@color/colorAccent</item>
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
+
     <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -55,6 +60,7 @@
         <item name="android:backgroundTint">@android:color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="AppTheme.TextAppearanceLarge">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorAccent</item>
@@ -73,6 +79,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlActivated">@android:color/white</item>
     </style>
+
     <style name="AppTheme.TextAppearanceNormal">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
@@ -88,6 +95,19 @@
 
     </style>
 
+    <style name="button" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="outlinetextbox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="boxStrokeColor">@color/text_input_box_stroke</item>
+        <item name="hintTextColor">@color/orange</item>
+        <item name="android:textColorHint">@color/orange</item>
+
+    </style>
 
     <style name="poptheme" parent="Theme.AppCompat.Dialog.Alert">
         <!-- Customize your theme here. -->
@@ -96,8 +116,27 @@
         <item name="windowNoTitle">true</item>
 
     </style>
+
     <style name="AppTheme.TextAppearanceSmall">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+
+    <style name="MatterialAppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MyAutoCompleteTextView">
+        <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>
+        <item name="android:popupBackground">@color/orange</item>
+        <item name="android:background">?attr/editTextBackground</item>
+        <item name="android:textColor">?attr/editTextColor</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+
     </style>
 </resources>
