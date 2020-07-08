@@ -18,72 +18,160 @@
             android:orientation="vertical"
             android:layout_height="wrap_content">
 
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+<!--            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
+<!--                android:id="@+id/material_spinner11"-->
+<!--                android:layout_width="match_parent"-->
+
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginLeft="16dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:alpha="255"-->
+<!--                android:drawableEnd="@drawable/arrow_white"-->
+<!--                android:gravity="center"-->
+<!--                android:hint="@string/Headers"-->
+<!--                app:met_baseColor="@color/orange"-->
+<!--                app:met_floatingLabel="highlight"-->
+<!--                app:met_floatingLabelTextColor="@color/orange"-->
+<!--                app:met_textColor="@color/white" />-->
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/material_spinner11"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-
                 android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="0.5"
+                app:boxBackgroundColor="@color/orange"
+                android:hint=""
+                app:errorEnabled="false"
+                app:helperText=""
+                app:helperTextEnabled="false">
+
+                <AutoCompleteTextView
+                    style="@style/MyAutoCompleteTextView"
+
+                    android:id="@+id/outlined_exposed_dropdown_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orange"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+<!--            <EditText-->
+<!--                android:id="@+id/KeyField"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:ems="10"-->
+<!--                android:hint="@string/Headers"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:textAlignment="center"-->
+
+<!--                android:textColor="@android:color/white"-->
+<!--                android:textColorHint="@color/orangedim"-->
+<!--                android:visibility="visible" />-->
+
+
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="visible"
+                android:id="@+id/outlinedTextField_key"
+                android:layout_weight="1"
+                style="@style/outlinetextbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="0.5"
-                android:alpha="255"
-                android:drawableEnd="@drawable/arrow_white"
-                android:gravity="center"
-                android:hint="@string/Headers"
-                app:met_baseColor="@color/orange"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelTextColor="@color/orange"
-                app:met_textColor="@color/white" />
-            <EditText
-                android:visibility="gone"
-                android:id="@+id/KeyField"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/Headers"
-                android:inputType="textPersonName"
+                android:hint="Enter Custom Param Key">
 
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/orangedim" />
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/KeyField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/orange" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/material_value"
-                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
 
-                android:layout_height="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="0.5"
+                app:boxBackgroundColor="@color/orange"
+                android:hint=""
+                app:errorEnabled="false"
+                app:helperText=""
+                app:helperTextEnabled="false">
+
+                <AutoCompleteTextView
+                    style="@style/MyAutoCompleteTextView"
+                    android:id="@+id/outlined_exposed_dropdown_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orange"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <EditText-->
+<!--                android:id="@+id/value_field"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:ems="10"-->
+<!--                android:hint="@string/content_types"-->
+<!--                android:inputType="textPersonName"-->
+<!--                android:textAlignment="center"-->
+
+<!--                android:textColor="@android:color/white"-->
+<!--                android:textColorHint="@color/orangedim"-->
+<!--                android:visibility="visible" />-->
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="visible"
+                android:id="@+id/outlinedTextField_value"
+                style="@style/outlinetextbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="0.5"
-                android:alpha="255"
-                android:drawableEnd="@drawable/arrow_white"
-                android:gravity="center"
-                android:hint="@string/content_types"
-                app:met_baseColor="@color/orange"
-                app:met_floatingLabel="highlight"
-                app:met_floatingLabelTextColor="@color/orange"
-                app:met_textColor="@color/white" />
+                android:hint="Enter Custom Param Value">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/value_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/orange" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <EditText
-                android:id="@+id/value_field"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="@string/content_types"
-                android:inputType="textPersonName"
-                android:textAlignment="center"
-
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/orangedim"
-                android:visibility="gone" />
 
             <Button
                 android:background="#ff6c37"

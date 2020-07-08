@@ -43,28 +43,65 @@
         <!--app:layout_constraintVertical_bias="0.048"-->
         <!--app:met_floatingLabel="normal" />-->
 
-        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-            android:id="@+id/material_spinnerauth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/SpinnerTheme"
-            android:hint="@string/Auth_type"
-            app:met_floatingLabel="normal"
 
-            app:met_baseColor="@color/orange"
-            android:drawableEnd="@drawable/arrow_white"
-            app:met_textColor="@color/white"
-            app:met_floatingLabelTextColor="@color/orange"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/material_spinner11"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
+            app:boxBackgroundColor="@color/orange"
+            android:hint=""
+            app:errorEnabled="false"
+            app:helperText=""
+            app:helperTextEnabled="false">
+
+            <AutoCompleteTextView
+                style="@style/MyAutoCompleteTextView"
+
+                android:id="@+id/outlined_exposed_dropdown_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/orange"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+<!--        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner-->
+<!--            android:id="@+id/material_spinnerauth"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:theme="@style/SpinnerTheme"-->
+<!--            android:hint="@string/Auth_type"-->
+<!--            app:met_floatingLabel="normal"-->
+
+<!--            app:met_baseColor="@color/orange"-->
+<!--            android:drawableEnd="@drawable/arrow_white"-->
+<!--            app:met_textColor="@color/white"-->
+<!--            app:met_floatingLabelTextColor="@color/orange"/>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
             android:id="@+id/input_layout_username"
+            style="@style/outlinetextbox"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:textColorHint="@color/orange"
             android:layout_height="wrap_content">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
 
 
                 android:id="@+id/input_username"
@@ -74,10 +111,9 @@
                 android:maxLines="1"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
-                android:textColorHint="@color/orangedim"
                 android:nextFocusForward="@id/input_password"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/orange"
                 android:hint="username" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,19 +122,23 @@
             android:windowSoftInputMode="adjustPan"
             android:isScrollContainer="true"
             android:id="@+id/input_layout_password"
+            style="@style/outlinetextbox"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:textColorHint="@color/orange"
             android:layout_height="wrap_content">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:maxLines="1"
 
                 android:singleLine="true"
                 android:imeOptions="actionDone"
                 android:id="@+id/input_password"
-                android:textColorHint="@color/orangedim"
                 android:layout_width="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/orange"
                 android:windowSoftInputMode="adjustPan"
                 android:isScrollContainer="true"
                 android:layout_height="wrap_content"

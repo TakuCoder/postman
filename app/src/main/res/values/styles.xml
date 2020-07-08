@@ -25,7 +25,7 @@
     </style>
 
     <style name="TabLayoutTextSize" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -109,14 +109,39 @@
 
     </style>
 
-    <style name="poptheme" parent="Theme.AppCompat.Dialog.Alert">
+<!--    <style name="poptheme" parent="Theme.AppCompat.Dialog.Alert">-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+<!--        <item name="windowActionBar">true</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+
+<!--    </style>-->
+    <style name="poptheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <!-- Customize your theme here. -->
-        <item name="colorAccent">@color/colorAccent</item>
+
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
 
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
+
+    <style name="MtButtonStyle"
+        parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/button_blue</item>
+    </style>
+    <style name="button_blue" parent="Theme.MaterialComponents">
+        <!-- Customize your theme here. -->
+
+
+        <item name="colorPrimary">@color/buttonblue</item>
+        <item name="colorPrimaryDark">@color/buttonblue</item>
+        <item name="colorAccent">@color/buttonblue</item>
+
+    </style>
     <style name="AppTheme.TextAppearanceSmall">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>

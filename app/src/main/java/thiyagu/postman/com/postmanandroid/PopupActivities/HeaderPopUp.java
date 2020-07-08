@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +26,9 @@ import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDataba
 import thiyagu.postman.com.postmanandroid.R;
 
 public class HeaderPopUp extends AppCompatActivity {
-    MaterialBetterSpinner materialBetterSpinner, material_value;
+
+
+    AutoCompleteTextView outlined_exposed_dropdown_key,outlined_exposed_dropdown_value;
     EditText KeyField, content_types;
 
     Button addButton;
@@ -276,16 +279,18 @@ public class HeaderPopUp extends AppCompatActivity {
                 "video/x-flv",
                 "video/x-m4v"};
 
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
-        materialBetterSpinner = findViewById(R.id.material_spinner11);
-        material_value = findViewById(R.id.material_value);
+
+        outlined_exposed_dropdown_key = findViewById(R.id.outlined_exposed_dropdown_key);
+        outlined_exposed_dropdown_value = findViewById(R.id.outlined_exposed_dropdown_value);
         content_types = findViewById(R.id.value_field);
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         KeyField = findViewById(R.id.KeyField);
+        ArrayAdapter request_adapter = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, request);
+        ArrayAdapter content_adapter = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, contenttypes);
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, contenttypes);
-        material_value.setAdapter(arrayAdapter);
-        material_value.setInputType(0);
+
+        //outlined_exposed_dropdown_value.setAdapter(content_adapter);
+        //outlined_exposed_dropdown_value.setInputType(0);
 
 
         addButton = findViewById(R.id.addButton);
@@ -328,9 +333,12 @@ public class HeaderPopUp extends AppCompatActivity {
 
             }
         });
-        materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
-        materialBetterSpinner.setAdapter(arrayadapter);
-        materialBetterSpinner.addTextChangedListener(new TextWatcher() {
+
+
+
+        outlined_exposed_dropdown_key.setAdapter(request_adapter);
+        outlined_exposed_dropdown_key.setText(request_adapter.getItem(0).toString(),false);
+        outlined_exposed_dropdown_key.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -344,9 +352,9 @@ public class HeaderPopUp extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s)
             {
-                Log.v("Text", materialBetterSpinner.getText().toString());
+                Log.v("Text", outlined_exposed_dropdown_key.getText().toString());
 
-                String value = materialBetterSpinner.getText().toString();
+                String value = outlined_exposed_dropdown_key.getText().toString();
                 if (value.equals("CUSTOM")) {
 
                     KeyField.setText("");
@@ -359,9 +367,14 @@ public class HeaderPopUp extends AppCompatActivity {
             }
         });
 
-        material_value.setBackgroundColor(Color.parseColor("#464646"));
-        material_value.setAdapter(arrayAdapter);
-        material_value.addTextChangedListener(new TextWatcher() {
+
+
+
+
+
+        outlined_exposed_dropdown_value.setAdapter(content_adapter);
+        outlined_exposed_dropdown_value.setText(content_adapter.getItem(0).toString(),false);
+        outlined_exposed_dropdown_value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -375,9 +388,9 @@ public class HeaderPopUp extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s)
             {
-                Log.v("Text", material_value.getText().toString());
+                Log.v("Text", outlined_exposed_dropdown_value.getText().toString());
 
-                String value = material_value.getText().toString();
+                String value = outlined_exposed_dropdown_value.getText().toString();
                 if (value.equals("CUSTOM")) {
                     content_types.setVisibility(View.VISIBLE);
                     content_types.setText("");

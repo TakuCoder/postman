@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import thiyagu.postman.com.postmanandroid.R;
@@ -34,7 +36,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class AuthorizationFragment extends Fragment {
-    MaterialBetterSpinner materialBetterSpinner;
+   // MaterialBetterSpinner materialBetterSpinner;
     Context context;
 
     @Override
@@ -53,37 +55,38 @@ public class AuthorizationFragment extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
         Log.v("whichfragment", "AuthFragment");
         Button updateauthrequest;
-        final EditText username, password;
+        final TextInputEditText username, password;
+       final AutoCompleteTextView outlined_exposed_dropdown_key;
 
         Typeface roboto;
         final View view = inflater.inflate(R.layout.tab_fragment_authorization, container, false);
         context = view.getContext();
-        materialBetterSpinner = view.findViewById(R.id.material_spinnerauth);
+        outlined_exposed_dropdown_key = view.findViewById(R.id.outlined_exposed_dropdown_key);
         final String[] authdata = {"No auth", "Basic Auth"};
-        materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
+
         AssetManager assetManager = context.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         updateauthrequest = view.findViewById(R.id.updateauthrequest);
         username = view.findViewById(R.id.input_username);
         password = view.findViewById(R.id.input_password);
-        materialBetterSpinner.setHideUnderline(true);
+
         username.setTypeface(roboto);
         password.setTypeface(roboto);
         updateauthrequest.setTypeface(roboto);
-        materialBetterSpinner.setTypeface(roboto);
+        outlined_exposed_dropdown_key.setTypeface(roboto);
         updateauthrequest.setOnClickListener(new View.OnClickListener()
 
         {
             @Override
             public void onClick(View v) {
 
-                Log.v("adaasdasdasd", materialBetterSpinner.getHint().toString());
 
-                if (materialBetterSpinner.getHint().toString().equals("Auth type")) {
+
+                if (outlined_exposed_dropdown_key.getText().toString().equals("Auth type")) {
 
 
                     Log.v("asdasdasdsa", "nulllllll");
-                    new MaterialTapTargetPrompt.Builder(getActivity()).setTarget(view.findViewById(R.id.material_spinnerauth)).setPrimaryText("Select the auth type").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
+                    new MaterialTapTargetPrompt.Builder(getActivity()).setTarget(view.findViewById(R.id.outlined_exposed_dropdown_key)).setPrimaryText("Select the auth type").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                         @Override
                         public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
                             if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED) {
@@ -93,9 +96,9 @@ public class AuthorizationFragment extends Fragment {
                     }).show();
 
 
-                } else if (materialBetterSpinner.getHint().toString().equals("Auth Type")) {
+                } else if (outlined_exposed_dropdown_key.getText().toString().equals("Auth Type")) {
 
-                    if (materialBetterSpinner.getText().toString().equals("Basic Auth")) {
+                    if (outlined_exposed_dropdown_key.getText().toString().equals("Basic Auth")) {
 
                         int username_length = username.getText().toString().length();
                         int password_length = password.getText().toString().length();
@@ -120,7 +123,7 @@ public class AuthorizationFragment extends Fragment {
                         }
 
 
-                    } else if (materialBetterSpinner.getText().toString().equals("No auth")) {
+                    } else if (outlined_exposed_dropdown_key.getText().toString().equals("No auth")) {
 
 
                         //String Credentials = "No auth";
@@ -142,13 +145,13 @@ public class AuthorizationFragment extends Fragment {
         });
 
 
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, authdata);
-        materialBetterSpinner.setAdapter(arrayadapter);
-        materialBetterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       final ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, authdata);
+        outlined_exposed_dropdown_key.setAdapter(arrayadapter);
+        outlined_exposed_dropdown_key.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
-                materialBetterSpinner.setHint("Auth Type");
+               // Toast.makeText(context, String.valueOf(i), Toast.LENGTH_SHORT).show();
+                outlined_exposed_dropdown_key.setText(arrayadapter.getItem(i).toString(),false);
 
                 if (String.valueOf(i).equals("0"))
                 {

@@ -236,6 +236,9 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
         setupViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_AUTO);
+
+       // tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
 

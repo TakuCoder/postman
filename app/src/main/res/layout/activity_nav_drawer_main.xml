@@ -74,22 +74,20 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:layout_weight="0.2"
-app:boxBackgroundColor="@color/orange"
                         android:hint=""
+                        app:boxBackgroundColor="@color/orange"
                         app:errorEnabled="false"
                         app:helperText=""
                         app:helperTextEnabled="false">
 
                         <AutoCompleteTextView
-                            style="@style/MyAutoCompleteTextView"
                             android:id="@+id/outlined_exposed_dropdown"
+                            style="@style/MyAutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/orange"
                             android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-
 
 
                     <CheckBox
@@ -120,9 +118,9 @@ app:boxBackgroundColor="@color/orange"
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/UrlField"
-                            android:textColor="@color/orange"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/orange" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -140,7 +138,7 @@ app:boxBackgroundColor="@color/orange"
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
-
+                    style="@style/Widget.Design.TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
@@ -148,6 +146,7 @@ app:boxBackgroundColor="@color/orange"
                     android:elevation="6dp"
                     android:minHeight="?attr/actionBarSize"
                     app:tabMode="scrollable"
+
                     app:tabSelectedTextColor="@android:color/white"
                     app:tabTextAppearance="@style/TabLayoutTextSize"
                     app:tabTextColor="@android:color/white" />
@@ -161,12 +160,11 @@ app:boxBackgroundColor="@color/orange"
                 </androidx.viewpager.widget.ViewPager>
 
                 <Button
-                    style="@style/button"
                     android:id="@+id/sendButton"
+                    style="@style/MtButtonStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="120dp"
                     android:layout_weight="1"
-                    android:background="@drawable/sendbuttonbackground"
                     android:text="@string/Send"
                     android:textColor="@android:color/white" />
 
