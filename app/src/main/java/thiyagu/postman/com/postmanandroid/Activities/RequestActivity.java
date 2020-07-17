@@ -345,18 +345,18 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                     // feedReaderDbHelper = new FeedReaderDbHelper(RequestActivity.this);
-                    ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
+                 ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     HeaderDAO headerDAO = database.getHeaderDAO();
                     List<Header> headers = headerDAO.getHeaders();
 
                     Headers.Builder headerBuilder = new Headers.Builder();
-                    if (headerlist.size() > 0) {
+                    if (headers.size() > 0) {
                         Log.v(Tag, "=======================adding headers=========================");
-                        for (int i = 0; i < headerlist.size(); i++) {
+                        for (int i = 0; i < headers.size(); i++) {
 
-                            String[] subvalue = headerlist.get(i).split("@@");
-                            Log.v(Tag + "thiyagu", subvalue[1] + subvalue[2]);
-                            headerBuilder.add(subvalue[1], subvalue[2]);
+
+                            Log.v(Tag + "thiyagu", headers.get(i).getKey() + headers.get(i).getValue());
+                            headerBuilder.add(headers.get(i).getKey(),  headers.get(i).getValue());
                         }
                     }
                     Log.v(Tag, "=======================added headers=========================");
@@ -1110,7 +1110,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             MediaType mediaType = MediaType.parse("application/json");
 
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
-                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
 
 
                         } else {
@@ -1128,7 +1128,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             MediaType mediaType = MediaType.parse("application/xml");
 
                             RequestBody newbody = RequestBody.create(mediaType, rawbody);
-                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
 
 
                         } else {
@@ -1144,7 +1144,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                         //MediaType mediaType = MediaType.parse("application/xml");
 
                         RequestBody newbody = RequestBody.create(null, "");
-                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").header("connection", "Keep-Alive").post(newbody).build();
+                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
                         break;
 
                 }
@@ -1672,7 +1672,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
         if (dialog != null) dialog.dismiss();
-        setupViewPager(this.viewPager);
+        //setupViewPager(this.viewPager);
     }
 
     @Override

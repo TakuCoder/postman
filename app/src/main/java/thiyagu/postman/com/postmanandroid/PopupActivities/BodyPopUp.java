@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,8 +26,13 @@ import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDataba
 import thiyagu.postman.com.postmanandroid.R;
 
 public class BodyPopUp extends AppCompatActivity {
-    MaterialBetterSpinner materialBetterSpinner;
-    MaterialBetterSpinner material_value;
+
+
+
+    AutoCompleteTextView outlined_exposed_dropdown_key,outlined_exposed_dropdown_value;
+
+
+
     EditText KeyField, ValueField;
 
 
@@ -72,8 +78,8 @@ public class BodyPopUp extends AppCompatActivity {
                 "Via",
                 "Warning", "CUSTOM"};
         ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
-        materialBetterSpinner = findViewById(R.id.material_spinner11);
-        material_value = findViewById(R.id.material_value);
+        outlined_exposed_dropdown_key = findViewById(R.id.outlined_exposed_dropdown_key);
+        outlined_exposed_dropdown_value = findViewById(R.id.outlined_exposed_dropdown_value);
         feedReaderDbHelper = new FeedReaderDbHelper(this);
         KeyField = findViewById(R.id.KeyField);
         ValueField = findViewById(R.id.value_field);
@@ -114,9 +120,9 @@ public class BodyPopUp extends AppCompatActivity {
                 }
             }
         });
-        materialBetterSpinner.setBackgroundColor(Color.parseColor("#464646"));
-        materialBetterSpinner.setAdapter(arrayadapter);
-        materialBetterSpinner.addTextChangedListener(new TextWatcher() {
+
+        outlined_exposed_dropdown_key.setAdapter(arrayadapter);
+        outlined_exposed_dropdown_key.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -129,9 +135,9 @@ public class BodyPopUp extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.v("Text", materialBetterSpinner.getText().toString());
+                Log.v("Text", outlined_exposed_dropdown_key.getText().toString());
 
-                String value = materialBetterSpinner.getText().toString();
+                String value = outlined_exposed_dropdown_key.getText().toString();
                 if (value.equals("CUSTOM")) {
 
                     KeyField.setText("");
@@ -349,9 +355,9 @@ public class BodyPopUp extends AppCompatActivity {
                 "video/x-flv",
                 "video/x-m4v"};
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, contenttypes);
-        material_value.setBackgroundColor(Color.parseColor("#464646"));
-        material_value.setAdapter(arrayAdapter);
-        material_value.addTextChangedListener(new TextWatcher() {
+
+        outlined_exposed_dropdown_value.setAdapter(arrayAdapter);
+        outlined_exposed_dropdown_value.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -364,9 +370,9 @@ public class BodyPopUp extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.v("Text", materialBetterSpinner.getText().toString());
+                Log.v("Text", outlined_exposed_dropdown_value.getText().toString());
 
-                String value = materialBetterSpinner.getText().toString();
+                String value = outlined_exposed_dropdown_value.getText().toString();
                 if (value.equals("CUSTOM")) {
 
                     ValueField.setText("");

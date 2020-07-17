@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import thiyagu.postman.com.postmanandroid.CustomClass.MyAdapter;
 import thiyagu.postman.com.postmanandroid.R;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground;
@@ -145,7 +146,7 @@ public class AuthorizationFragment extends Fragment {
         });
 
 
-       final ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, authdata);
+       final MyAdapter<String> arrayadapter = new MyAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, authdata);
         outlined_exposed_dropdown_key.setAdapter(arrayadapter);
         outlined_exposed_dropdown_key.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

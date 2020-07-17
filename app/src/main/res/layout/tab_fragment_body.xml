@@ -13,7 +13,7 @@
         android:weightSum="100">
 
         <!--<RadioButton-->
-            <!--android:id="@+id/radio_formdata"-->
+            <!--android:id="@+id/radio_formdata"-->0
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_weight="33.3"-->
@@ -22,42 +22,29 @@
             <!--android:textColor="@color/white"-->
             <!--android:visibility="gone" />-->
 
-
-        <thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner
-            android:id="@+id/body_spinner"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/req_type_spinner"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="100"
-            android:alpha="2"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="0.2"
+            android:hint=""
+            app:boxBackgroundColor="@color/orange"
+            app:errorEnabled="false"
+            app:helperText=""
+            app:helperTextEnabled="false">
 
-            android:drawableEnd="@drawable/arrow_white"
-            android:hint="Body type"
-            app:met_baseColor="@color/orange"
-            app:met_floatingLabel="normal"
+            <AutoCompleteTextView
+                android:id="@+id/outlined_exposed_dropdown"
+                style="@style/MyAutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/orange"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-            app:met_floatingLabelTextColor="@color/orange"
-            app:met_textColor="@color/white" />
-
-        <!--<RadioButton-->
-            <!--android:id="@+id/radio_raw"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="33.3"-->
-            <!--android:onClick="RadioButtonClick"-->
-            <!--android:text="RAW"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:visibility="gone" />-->
-
-        <!--<RadioButton-->
-            <!--android:id="@+id/radio_binary"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="33.3"-->
-            <!--android:onClick="RadioButtonClick"-->
-            <!--android:text="Binary"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:visibility="gone" />-->
 
     </LinearLayout>
 
@@ -73,6 +60,7 @@
         android:textColor="@android:color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_margin="4dp"
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -93,8 +81,11 @@
         android:scrollbars="vertical" />
 
     <Button
+
         android:id="@+id/button_addRawText"
         android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="#ff6c37"

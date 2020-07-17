@@ -12,7 +12,6 @@
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
 
 
@@ -25,15 +24,18 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/alert"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="30sp"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lav_thumbUp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="No Data Found!" />
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="false"
+            app:lottie_fileName="nodata.json"
+            app:lottie_loop="true"
+            app:lottie_speed="1.25" />
 
     </RelativeLayout>
 

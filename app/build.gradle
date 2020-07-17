@@ -78,7 +78,7 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
     implementation 'com.github.medyo:android-about-page:1.2.5'
 
-
+    implementation 'com.airbnb.android:lottie:3.4.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'androidx.room:room-runtime:2.0.0'
     annotationProcessor 'androidx.room:room-compiler:2.0.0'

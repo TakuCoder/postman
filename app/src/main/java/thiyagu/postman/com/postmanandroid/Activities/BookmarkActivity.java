@@ -1,6 +1,8 @@
 package thiyagu.postman.com.postmanandroid.Activities;
 
 import androidx.room.Room;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -10,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,7 @@ public class BookmarkActivity extends AppCompatActivity {
     List<HistoryClass> historyClassList;
 
 RelativeLayout TextViewLayout;
+LottieAnimationView lottieAnimationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,7 @@ RelativeLayout TextViewLayout;
         TextViewLayout = findViewById(R.id.TextViewLayout);
 
         TelleriumDataDatabase database = Room.databaseBuilder(this, TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
+        lottieAnimationView = findViewById(R.id.lav_thumbUp);
 
         BookmarkDAO bookmarkDAO = database.getBookmarkDAO();
 
@@ -51,6 +57,8 @@ RelativeLayout TextViewLayout;
         if(date_values.size()==0)
         {
             TextViewLayout.setVisibility(View.VISIBLE);
+            lottieAnimationView.pauseAnimation();
+            lottieAnimationView.playAnimation();
 
         }
 
@@ -86,7 +94,7 @@ RelativeLayout TextViewLayout;
         }
 
         DifferentRowAdapter adapter = new DifferentRowAdapter(historyClassList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
+        @SuppressLint("WrongConstant") LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
         RecyclerView mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
