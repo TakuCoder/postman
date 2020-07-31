@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid.Fragment;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
@@ -63,7 +64,7 @@ public class AuthorizationFragment extends Fragment {
         final View view = inflater.inflate(R.layout.tab_fragment_authorization, container, false);
         context = view.getContext();
         outlined_exposed_dropdown_key = view.findViewById(R.id.outlined_exposed_dropdown_key);
-        final String[] authdata = {"No auth", "Basic Auth"};
+        final String[] authdata = {"No auth", "Basic Auth","API Key","Bearer Token"};
 
         AssetManager assetManager = context.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -86,7 +87,7 @@ public class AuthorizationFragment extends Fragment {
                 if (outlined_exposed_dropdown_key.getText().toString().equals("Auth type")) {
 
 
-                    Log.v("asdasdasdsa", "nulllllll");
+
                     new MaterialTapTargetPrompt.Builder(getActivity()).setTarget(view.findViewById(R.id.outlined_exposed_dropdown_key)).setPrimaryText("Select the auth type").setPromptBackground(new CirclePromptBackground()).setPromptFocal(new RectanglePromptFocal()).setBackgroundColour(getResources().getColor(R.color.buttonblue)).setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener() {
                         @Override
                         public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state) {
@@ -137,10 +138,7 @@ public class AuthorizationFragment extends Fragment {
 
 
                 }
-//
-//
-//
-//
+
 
             }
         });

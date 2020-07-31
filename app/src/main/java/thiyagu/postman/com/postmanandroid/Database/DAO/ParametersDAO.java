@@ -26,6 +26,9 @@ public interface ParametersDAO {
     @Query("SELECT * FROM parameters")
     public List<parameters> getParam();
 
+    @Query("SELECT * FROM parameters where flag = 'false'")
+    public List<parameters> getParamFlagBased();
+
     @Query("DELETE FROM parameters where tag= :tag")
     public void deleteParam(String tag);
 
@@ -35,4 +38,5 @@ public interface ParametersDAO {
 
     @Query("DELETE FROM parameters")
     public void nukeParams();
+
 }

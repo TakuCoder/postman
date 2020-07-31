@@ -107,24 +107,27 @@ public class ParamAdapter extends RecyclerView
 
         Log.v(Tag, mDataset.get(position).getFlag());
         if (mDataset.get(position).getFlag().equals("true")) {
-            holder.checkBox.setChecked(true);
+            holder.checkBox.setChecked(false);
 
         } else {
 
-            holder.checkBox.setChecked(false);
+            holder.checkBox.setChecked(true);
         }
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+
+
+        holder.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
 
                 Log.v(Tag, "CheckBoxStatus" + holder.checkBox.isChecked() + mDataset.get(position).getTag());
                 database.getParametersDAO().updateParam(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getTag());
+                return false;
             }
         });
-        holder.card_view.setOnClickListener(new View.OnClickListener() {
+        holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
 
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
 
 
 //                String sss = holder.card_view.getTag().toString();
@@ -199,7 +202,10 @@ public class ParamAdapter extends RecyclerView
 //                // ParamFragment oneFragment = new ParamFragment();
 //                //oneFragment.RefereshView();
 
+return false;
             }
+
+
         });
 
     }

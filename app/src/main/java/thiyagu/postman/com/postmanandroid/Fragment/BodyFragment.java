@@ -73,9 +73,7 @@ public class BodyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.v("test", "onViewCreated");
-        Log.v("test", "onViewCreated");
-      // outlined_exposed_dropdown.setText("");
-        //outlined_exposed_dropdown.showDropDown();
+
     }
     @Nullable
     @Override

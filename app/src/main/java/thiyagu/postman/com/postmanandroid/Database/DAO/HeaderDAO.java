@@ -36,4 +36,8 @@ public interface HeaderDAO {
     @Query("DELETE FROM header")
     public void nukeHeader();
 
+
+    @Query("SELECT * FROM header where flag='false'")
+    public List<Header> getHeadersFlagBased();
+
 }

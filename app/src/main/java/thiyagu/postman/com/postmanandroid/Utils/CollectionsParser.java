@@ -397,14 +397,14 @@ public class CollectionsParser
                                    String query_description = jsonObject2.getString("description");
                                    System.out.println("query_description " + query_description);
                                } else {
-                                   String query_description = jsonObject2.getString("description");
-                                   System.out.println("query_description " + query_description);
+                                   String query_description = "";
+                                   //System.out.println("query_description " + query_description);
 
                                }
 
 
                                if (jsonObject2.has("disabled")) {
-                                   String disabled = jsonObject2.optString("disabled");
+                                 String disabled = jsonObject2.optString("disabled");
                                    System.out.println("disabled " + disabled);
                                } else {
                                    System.out.println("disabled " + "false");

@@ -7,10 +7,8 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import dagger.Provides;
 import thiyagu.postman.com.postmanandroid.Activities.RequestActivity;
 import thiyagu.postman.com.postmanandroid.BaseActivity;
-import thiyagu.postman.com.postmanandroid.MovieCategoryAdapter;
 
 @Singleton
 @Component(modules = {ApplicationModule.class,DatabaseModule.class})

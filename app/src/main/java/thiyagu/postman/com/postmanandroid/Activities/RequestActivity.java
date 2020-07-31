@@ -46,6 +46,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -107,12 +108,12 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptB
 import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal;
 
 public class RequestActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener, NetChecker.ConnectionServiceCallback {
-//
+    //
 //    enum RequestType
 //    {
 //        RED, GREEN, BLUE;
 //    }
-    com.google.android.material.textfield.TextInputLayout req_type_spinner;
+    TextInputLayout req_type_spinner;
     private static final String TAG = "TAG";
     // MaterialBetterSpinner materialBetterSpinner;
     AutoCompleteTextView autoCompleteTextView;
@@ -147,7 +148,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
     boolean https_check;
     boolean sslflag;
     TelleriumDataDatabase database;
-
+    ArrayAdapter<String> method_adapter;
     @Inject
     CollectionDatabase collectionDatabase;
 
@@ -238,13 +239,13 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         setupViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_AUTO);
 
-       // tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        // tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setupWithViewPager(viewPager);
 
 
-     final String[] request = {"GET", "POST", "DELETE", "PUT"};
-       // final String[] request = {"11", "22", "33", "44"};
-        ArrayAdapter<String> arrayadapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, request);
+        final String[] method_array = {"GET", "POST", "DELETE", "PUT"};
+        // final String[] request = {"11", "22", "33", "44"};
+        method_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, method_array);
 
         body = tabLayout.getTabAt(3);
         responsetab = tabLayout.getTabAt(4);
@@ -254,7 +255,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 //
 
 
-        autoCompleteTextView.setAdapter(arrayadapter);
+        autoCompleteTextView.setAdapter(method_adapter);
+
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -345,9 +347,9 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                     // feedReaderDbHelper = new FeedReaderDbHelper(RequestActivity.this);
-                 ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
+                    ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     HeaderDAO headerDAO = database.getHeaderDAO();
-                    List<Header> headers = headerDAO.getHeaders();
+                    List<Header> headers = headerDAO.getHeadersFlagBased();
 
                     Headers.Builder headerBuilder = new Headers.Builder();
                     if (headers.size() > 0) {
@@ -356,7 +358,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                             Log.v(Tag + "thiyagu", headers.get(i).getKey() + headers.get(i).getValue());
-                            headerBuilder.add(headers.get(i).getKey(),  headers.get(i).getValue());
+                            headerBuilder.add(headers.get(i).getKey(), headers.get(i).getValue());
                         }
                     }
                     Log.v(Tag, "=======================added headers=========================");
@@ -400,7 +402,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                     ParametersDAO bodyDAO = database.getParametersDAO();
-                    List<parameters> parameters = bodyDAO.getParam();
+                    List<parameters> parameters = bodyDAO.getParamFlagBased();
                     ArrayList<String> urlencodedparams = new ArrayList<>();
                     if (parameters.size() > 0) {
                         Log.v(Tag, "Adding Params====================> ");
@@ -570,8 +572,19 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             Log.v(Tag, "setting default value for url and req type");
             String url_value = prefs.getString("url_value", null);
             String req_value = prefs.getString("req_value", null);
-            autoCompleteTextView.setText(req_value,false);
-            UrlField.setText(url_value);
+
+            if (req_value == null) {
+
+                autoCompleteTextView.setText(method_adapter.getItem(0), false);
+                UrlField.setText("");
+            }
+            else{
+
+                autoCompleteTextView.setText(req_value, false);
+                UrlField.setText(url_value);
+            }
+
+
             Log.v(Tag, "=============================");
             Log.v(Tag, "setting value on on create");
             Log.v(Tag, "URL VALUE=========================> " + url_value);
@@ -581,8 +594,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         } catch (Exception e) {
             Log.v(Tag, e.toString());
 
-            FirebaseCrash.logcat(Log.ERROR, TAG, "NPE caught");
-            FirebaseCrash.report(e);
+           // FirebaseCrash.logcat(Log.ERROR, TAG, "NPE caught");
+           // FirebaseCrash.report(e);
 
         }
 

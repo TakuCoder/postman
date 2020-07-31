@@ -48,7 +48,7 @@ import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
 import thiyagu.postman.com.postmanandroid.ExpandableRecyclerAdapter;
 import thiyagu.postman.com.postmanandroid.Model.MovieCategory;
 import thiyagu.postman.com.postmanandroid.Model.Movies;
-import thiyagu.postman.com.postmanandroid.MovieCategoryAdapter;
+import thiyagu.postman.com.postmanandroid.CollectionMultiAdapter;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Utils.CollectionsParser;
 import thiyagu.postman.com.postmanandroid.Utils.PublicShareCollectionParser;
@@ -56,7 +56,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
     public static Bus bus = new Bus(ThreadEnforcer.MAIN);
-    static private MovieCategoryAdapter mAdapter;
+    static private CollectionMultiAdapter mAdapter;
     public List<MovieCategory> movieCategories = new ArrayList<>();
     CollectionDatabase collectionDatabase;
     LayoutInflater inflater;
@@ -98,10 +98,12 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setAdapter(mAdapter);
         InfoDAO info = collectionDatabase.getInfoDAO();
         List<InfoTable> infoTable = info.getInfo();
-        if (infoTable.size() > 0) {
+        if (infoTable.size() > 0)
+        {
             Log.e("lenghtttt", infoTable.size() + "");
             List<MovieCategory> arrayList = new ArrayList<>();
-            for (int i = 0; i < infoTable.size(); i++) {
+            for (int i = 0; i < infoTable.size(); i++)
+            {
                 List<ItemTable> itemTables = collectionDatabase.getItemDAO().getItemByPostId(infoTable.get(i).get_postman_id());
                 List<Movies> moviesList = new ArrayList<>();
                 for (int h = 0; h < itemTables.size(); h++) {
@@ -112,7 +114,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                 MovieCategory main_movie = new MovieCategory(infoTable.get(i).getName() + "", moviesList, moviesList.size());
                 movieCategories.add(main_movie);
             }
-            mAdapter = new MovieCategoryAdapter(this, movieCategories, "asas");
+            mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
             mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
                 @Override
                 public void onListItemExpanded(int position) {

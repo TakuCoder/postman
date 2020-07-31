@@ -110,11 +110,11 @@ public class BodyAdapter extends RecyclerView
 
         Log.v("customtag", mDataset.get(position).getFlag());
         if (mDataset.get(position).getFlag().equals("true")) {
-            holder.checkBox.setChecked(true);
+            holder.checkBox.setChecked(false);
 
         } else {
 
-            holder.checkBox.setChecked(false);
+            holder.checkBox.setChecked(true);
         }
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {

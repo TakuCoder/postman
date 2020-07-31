@@ -1,10 +1,13 @@
 package thiyagu.postman.com.postmanandroid;
 
 import androidx.room.Room;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +41,7 @@ import thiyagu.postman.com.postmanandroid.Model.ParentListItem;
 
 import static thiyagu.postman.com.postmanandroid.Utils.CollectionsParser.PrintLog;
 
-public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategoryViewHolder, MoviesViewHolder> {
+public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<CollectionCategoryViewHolder, CollectionViewHolder> {
     public static String ss;
     //
 //    @Inject
@@ -51,7 +54,7 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
     SharedPreferences.Editor editor;
     private LayoutInflater mInflator;
 
-    public MovieCategoryAdapter(Context mcontext, List<? extends ParentListItem> parentItemList, String s) {
+    public CollectionMultiAdapter(Context mcontext, List<? extends ParentListItem> parentItemList, String s) {
         super(parentItemList);
         this.context = mcontext;
         mInflator = LayoutInflater.from(context);
@@ -63,30 +66,30 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
     }
 
     @Override
-    public MovieCategoryViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
+    public CollectionCategoryViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
         View movieCategoryView = mInflator.inflate(R.layout.movie_category_view, parentViewGroup, false);
-        return new MovieCategoryViewHolder(movieCategoryView);
+        return new CollectionCategoryViewHolder(movieCategoryView);
     }
 
     @Override
-    public MoviesViewHolder onCreateChildViewHolder(ViewGroup childViewGroup) {
+    public CollectionViewHolder onCreateChildViewHolder(ViewGroup childViewGroup) {
         View moviesView = mInflator.inflate(R.layout.movies_view, childViewGroup, false);
-        return new MoviesViewHolder(moviesView);
+        return new CollectionViewHolder(moviesView);
     }
 
     @Override
-    public void onBindParentViewHolder(MovieCategoryViewHolder movieCategoryViewHolder, int position, ParentListItem parentListItem) {
+    public void onBindParentViewHolder(CollectionCategoryViewHolder collectionCategoryViewHolder, int position, ParentListItem parentListItem) {
         MovieCategory movieCategory = (MovieCategory) parentListItem;
-        movieCategoryViewHolder.bind(movieCategory);
+        collectionCategoryViewHolder.bind(movieCategory);
     }
 
     @Override
-    public void onBindChildViewHolder(MoviesViewHolder moviesViewHolder, final int position, Object childListItem) {
+    public void onBindChildViewHolder(CollectionViewHolder collectionViewHolder, final int position, Object childListItem) {
         final Movies movies = (Movies) childListItem;
 
         movies.setPosition(position);
-        moviesViewHolder.bind(movies);
-        moviesViewHolder.itemView.findViewById(R.id.tv_movies).setOnClickListener(new View.OnClickListener() {
+        collectionViewHolder.bind(movies);
+        collectionViewHolder.itemView.findViewById(R.id.tv_movies).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e("adsadasd", movies.getParentName() + " " + movies.getName() + " " + position);
@@ -149,11 +152,11 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
                                 if (header_object.has("disabled")) {
                                     String disabled_status = header_object.getString("disabled");
-                                    headers.setFlag("false");
+                                    headers.setFlag("true");
                                     System.out.println("disabled_status" + disabled_status);
 
                                 } else {
-                                    headers.setFlag("true");
+                                    headers.setFlag("false");
                                     System.out.println("disabled_status" + "false");
                                 }
                             }
@@ -171,21 +174,26 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                         JSONObject object = object_request.getJSONObject("body");
                         String mode = object.getString("mode");
                         System.out.println(mode);
-                        Body body;
-                        switch (mode) {
+                        Body body = new Body();
+                        switch (mode)
+                        {
 
                             case "formdata":
 
-                                body = new Body();
+                                editor.putString("bodytypeflag", 1 + "");
+                                editor.apply();
                                 JSONArray formdata_Array = object.getJSONArray("formdata");
+                                body.setBodytype("MULTIFORM");
                                 // body.bodytype();
-                                for (int i = 0; i < formdata_Array.length(); i++) {
+                                for (int i = 0; i < formdata_Array.length(); i++)
+                                {
                                     JSONObject formdata_object = formdata_Array.getJSONObject(i);
                                     String formdata_key = formdata_object.getString("key");
-
+                                    body.setKey(formdata_key);
                                     String formdata_type = formdata_object.getString("type");
                                     if (formdata_type.equals("text")) {
                                         String formdata_value = formdata_object.getString("value");
+                                        body.setValue(formdata_value);
                                         System.out.println(formdata_value + "   formdata_value");
                                     } else if (formdata_type.equals("file")) {
 
@@ -194,13 +202,13 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                                     }
                                     if (formdata_object.has("disabled")) {
                                         if (formdata_object.get("disabled").equals(true)) {
-
+                                            body.setFlag("true");
                                             System.out.println("Disabled");
 
                                         }
 
                                     } else {
-
+                                        body.setFlag("false");
                                         System.out.println("not Disabled");
                                     }
                                     System.out.println(formdata_key + "   formdata_key");
@@ -213,7 +221,7 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                                         System.out.println(" no  formdata_description");
 
                                     }
-
+                                    bodyDAO.insert(body);
 
                                 }
                                 PrintLog("found formdata");
@@ -221,18 +229,26 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
                             case "urlencoded":
                                 PrintLog("found urlencoded");
-
+                                body.setBodytype("URLENCODED");
                                 formdata_Array = object.getJSONArray("urlencoded");
                                 for (int i = 0; i < formdata_Array.length(); i++) {
                                     JSONObject urlencoded_object = formdata_Array.getJSONObject(i);
                                     String urlencoded_key = urlencoded_object.getString("key");
                                     String urlencoded_value = urlencoded_object.getString("value");
+                                    body.setKey(urlencoded_key);
+                                    body.setValue(urlencoded_value);
                                     String urlencoded_type = urlencoded_object.getString("type");
                                     if (urlencoded_object.has("disabled")) {
+
+                                        if (urlencoded_object.get("disabled").equals(true)) {
+                                            body.setFlag("true");
+                                            //System.out.println("Disabled");
+
+                                        }
                                         System.out.println(urlencoded_object.get("disabled"));
 
                                     } else {
-
+                                        body.setFlag("false");
                                         System.out.println("not Disabled");
                                     }
                                     System.out.println(urlencoded_key + "   urlencoded_key");
@@ -257,26 +273,25 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
                                 JSONObject options = object.getJSONObject("options");
                                 String raw_value = options.getString("raw");
-                                JSONObject raw = options.getJSONObject("raw")
-;                                String language = raw.getString("language");
+                                JSONObject raw = options.getJSONObject("raw");
+                                String language = raw.getString("language");
 
-                                switch (language)
-                                {
+                                switch (language) {
                                     case "text":
-                                    break;
+                                        break;
 
                                     case "json":
-                                        editor.putString("bodytypeflag", 2+"");
+                                        editor.putString("bodytypeflag", 2 + "");
                                         editor.putString("rawbody", raw_value);
                                         editor.putString("rawbodytype", "json");
-                                        editor.apply();
+                                       // editor.apply();
                                         break;
 
                                     case "xml":
 
                                         editor.putString("bodytypeflag", "3");
                                         editor.putString("rawbodytype", "XML");
-                                        editor.apply();
+                                       // editor.apply();
                                         break;
 
 
@@ -296,6 +311,7 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
 
                         }
+
 
                         System.out.println(mode);
                     } else {
@@ -322,8 +338,7 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                             parameterss.setValue(query_value);
                             parameterss.setTag(UUID.randomUUID().toString().substring(0, 7));
 
-                            if (jsonObject2.has("description"))
-                            {
+                            if (jsonObject2.has("description")) {
 
                                 String query_description = jsonObject2.getString("description");
                                 System.out.println("query_description " + query_description);
@@ -337,10 +352,10 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
                             if (jsonObject2.has("disabled")) {
                                 String disabled = jsonObject2.optString("disabled");
                                 System.out.println("disabled " + disabled);
-                                parameterss.setFlag("false");
+                                parameterss.setFlag("true");
                             } else {
                                 System.out.println("disabled " + "false");
-                                parameterss.setFlag("true");
+                                parameterss.setFlag("false");
                             }
 
                             parametersDAO.insert(parameterss);
@@ -367,11 +382,11 @@ public class MovieCategoryAdapter extends ExpandableRecyclerAdapter<MovieCategor
 
 }
 
-class MoviesViewHolder extends RecyclerView.ViewHolder {
-    String sss = MovieCategoryAdapter.ss;
+class CollectionViewHolder extends RecyclerView.ViewHolder {
+    String sss = CollectionMultiAdapter.ss;
     private TextView mMoviesTextView;
 
-    public MoviesViewHolder(View itemView) {
+    public CollectionViewHolder(View itemView) {
         super(itemView);
         mMoviesTextView = (TextView) itemView.findViewById(R.id.tv_movies);
 
@@ -391,7 +406,7 @@ class MoviesViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
-class MovieCategoryViewHolder extends ParentViewHolder {
+class CollectionCategoryViewHolder extends ParentViewHolder {
 
     private static final float INITIAL_POSITION = 0.0f;
     private static final float ROTATED_POSITION = 90f;
@@ -401,7 +416,7 @@ class MovieCategoryViewHolder extends ParentViewHolder {
     private TextView totalCollections;
     private ImageView options;
 
-    public MovieCategoryViewHolder(View itemView) {
+    public CollectionCategoryViewHolder(View itemView) {
         super(itemView);
         mMovieTextView = (TextView) itemView.findViewById(R.id.tv_movie_category);
         totalCollections = itemView.findViewById(R.id.total_collections);
