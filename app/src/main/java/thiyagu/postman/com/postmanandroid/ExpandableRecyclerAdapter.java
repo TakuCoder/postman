@@ -75,6 +75,7 @@ public abstract class ExpandableRecyclerAdapter<PVH extends ParentViewHolder, CV
     @Override
     public int getItemViewType(int position) {
         Object listItem = getListItem(position);
+
         if (listItem instanceof ParentWrapper) {
             return TYPE_PARENT;
         } else if (listItem == null) {

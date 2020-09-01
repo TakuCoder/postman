@@ -115,7 +115,8 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                 movieCategories.add(main_movie);
             }
             mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
-            mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener() {
+            mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener()
+            {
                 @Override
                 public void onListItemExpanded(int position) {
                     MovieCategory expandedMovieCategory = movieCategories.get(position);
@@ -171,6 +172,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                         .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+
                                 // sign in the user ...
                                 EditText urll = alertDialog.findViewById(R.id.url);
                                 Log.v("asdasdsa", urll.getText().toString());

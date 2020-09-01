@@ -42,12 +42,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -100,7 +98,6 @@ import thiyagu.postman.com.postmanandroid.Fragment.BodyFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.HeaderFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ParamFragment;
 import thiyagu.postman.com.postmanandroid.Fragment.ViewPagerAdapter;
-import thiyagu.postman.com.postmanandroid.CustomViews.MaterialBetterSpinner;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Services.NetChecker;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -468,7 +465,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                             Log.v(Tag, "Diving Into GET");
                             if (isOnline()) {
                                 // new RequestMaker().execute("GET", Address, headerBuilder, urlencodedparams);
-                                GetRequest("GET", fullurl, headerBuilder, urlencodedparams);
+                                RequestDecider("GET", fullurl, headerBuilder, urlencodedparams);
                             } else {
 
                                 ShowNetError();
@@ -491,7 +488,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
                                 // final String rawbody = prefs.getString("rawbody", null);
                                 // Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
-                                GetRequest("POST", fullurl, headerBuilder, urlencodedparams);
+                                RequestDecider("POST", fullurl, headerBuilder, urlencodedparams);
 
 
                             } else {
@@ -507,7 +504,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
                             if (isOnline()) {
                                 //new RequestMaker().execute("DELETE", Address, headerBuilder, urlencodedparams);
-                                GetRequest("DELETE", fullurl, headerBuilder, urlencodedparams);
+                                RequestDecider("DELETE", fullurl, headerBuilder, urlencodedparams);
 
                             } else {
 
@@ -522,7 +519,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
                                 Log.v(Tag, "Diving Into PUT");
                                 //new RequestMaker().execute("PUT", Address, headerBuilder, urlencodedparams);
-                                GetRequest("PUT", fullurl, headerBuilder, urlencodedparams);
+                                RequestDecider("PUT", fullurl, headerBuilder, urlencodedparams);
                             } else {
                                 ShowNetError();
 
@@ -874,7 +871,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         //if (dialog != null) dialog.dismiss();
     }
 
-    public void GetRequest(Object... strings) {
+    public void RequestDecider(Object... strings) {
 
         Log.v(Tag, "======================onPreExecute========================");
         Log.v(Tag, "======================onPreExecute done========================");
@@ -889,25 +886,11 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         Log.v(Tag, "======================BEFORE DETECTION========================");
         Log.v(Tag, urlvalue);
         Log.v(Tag, "======================BEFORE DETECTION========================");
-//        if (urlvalue.contains("www") && urlvalue.contains("http://")) {
-//            Log.v(Tag, "contains www and http");
-//            //urlvalue = "https://" + urlvalue;
-//        } else if (urlvalue.contains("www") && urlvalue.contains("https://")) {
-//            Log.v(Tag, "contains www and https");
-//            //urlvalue = "http://" + urlvalue;
-//        } else if (!urlvalue.contains("www"))
-//
-//
-//        {
-//            Log.v(Tag, "dont contain www");
-//            urlvalue = "http://www." + urlvalue;
-//
-//
-//        } else {
-//
-//            urlvalue = "http://" + urlvalue;
-//
-//        }
+
+
+
+
+
 
         if (paramlist.size() > 0) {
             urlvalue = urlvalue + "?";
@@ -928,7 +911,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             Log.v(Tag, "======================GET========================");
             try {
 
-                Log.v("asdsadsadasdas", String.valueOf(timeout));
+
                 OkHttpClient client = getClientbasedOnHttp(sslflag);
                 OkHttpClient getClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
 
@@ -1029,7 +1012,237 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                 Toasty.warning(RequestActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        } else if (method.equals("POST")) {
+        }
+        else if (method.equals("POST"))
+        {
+            try {
+                Request request = null;
+                Log.v(Tag, "======================POST========================");
+                OkHttpClient client = getClientbasedOnHttp(sslflag);
+                OkHttpClient postClient = client.newBuilder().connectTimeout(timeout, TimeUnit.SECONDS)
+
+
+                        .build();
+
+
+                String bodyflag = prefs.getString("bodytypeflag", null);
+                String rawbody = prefs.getString("rawbody", null);
+
+                if (bodyflag == null) {
+
+                    bodyflag = "4";
+
+                }
+                switch (bodyflag)
+                {
+
+
+                    case "1":
+
+
+                        MultipartBody.Builder builder = new MultipartBody.Builder();
+                        RequestBody requestBody;
+                        Log.v("statusofbodytype", "=============case 1 detected============");
+                        builder.setType(MultipartBody.FORM);
+
+
+                        // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+
+
+                        BodyDAO bodyDAO1 = database.getbodyDAO();
+                        List<Body> body = bodyDAO1.getBodyFlagged();
+
+
+                        //   Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
+
+
+                        // ArrayList<String> part = feedReaderDbHelper.getAllBody();
+                        Log.v(Tag, "======================part size========================" + String.valueOf(body.size()));
+                        String[] subvalue = null;
+
+
+                        if (body.size() > 0) {
+
+                            Log.v(Tag, "====================Adding Builder=========================================");
+
+
+                            for (int i = 0; i < body.size(); i++) {
+
+
+                                try {
+                                    //  subvalue = part.get(i).split("@@");
+
+
+                                    Log.v(Tag, "builder" + i + body.get(i).getKey());
+                                    Log.v(Tag, "builder" + i + body.get(i).getValue());
+                                    builder.addFormDataPart(body.get(i).getKey(), body.get(i).getValue());
+
+
+                                } catch (Exception e) {
+                                    Log.v(Tag, "exception happened while adding builder in post");
+                                    Log.v(Tag, e.toString());
+
+                                }
+
+                            }
+
+
+                        }
+
+                        try {
+                            requestBody = builder.build();
+
+                            request = new Request.Builder().url(urlvalue).headers(customheader).header("content-type", "multipart/form-data").post(requestBody).build();
+                            Log.v("statusofbodytype", "=============case 1 detected============");
+                            break;
+                        } catch (Exception e) {
+                            if (dialog != null) {
+
+                                dialog.dismiss();
+                            }
+                            showPopup(e.toString());
+                            break;
+                        }
+
+
+                    case "2":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 2 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/json");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112232");
+
+                        }
+                        Log.v("statusofbodytype", "=============case 2 detected============");
+                        break;
+
+
+                    case "3":
+                        if (rawbody.length() > 0) {
+                            Log.v("statusofbodytype", "=============case 3 detected=======rawbody=====" + rawbody);
+                            MediaType mediaType = MediaType.parse("application/xml");
+
+                            RequestBody newbody = RequestBody.create(mediaType, rawbody);
+                            request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
+
+
+                        } else {
+
+                            Log.v("error", "error here errorid 112234");
+
+                        }
+                        break;
+
+                    case "4":
+
+                        //   Log.v("statusofbodytype", "=============case 4 detected=======rawbody=====" + rawbody);
+                        //MediaType mediaType = MediaType.parse("application/xml");
+
+                        RequestBody newbody = RequestBody.create(null, "");
+                        request = new Request.Builder().url(urlvalue).header("User-Agent", "Postman-Android").headers(customheader).post(newbody).build();
+                        break;
+
+                }
+
+
+                final String finalUrlvalue1 = urlvalue;
+                postClient.newCall(request).enqueue(new Callback()
+                {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+
+                        //  if (dialog != null) dialog.dismiss();
+                        Log.d(Tag, "failure");
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                showPopup(e.toString());
+                            }
+                        });
+                        Log.d(Tag, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!POST FAILURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+
+                        dialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+
+                                    String bodyy = response.body().string();
+                                    int responsecode = response.code();
+
+                                    String Headers = response.headers().toString();
+
+                                    long tx = response.sentRequestAtMillis();
+                                    long rx = response.receivedResponseAtMillis();
+
+
+                                    Log.v(Tag, "======================BODY========================");
+                                    Log.d(Tag, "GET BODY CONTENT========================================>" + bodyy);
+                                    Log.d(Tag, "RESPONSE    CODE===========================================>" + String.valueOf(responsecode));
+                                    Log.d(Tag, "HEADERS         ===========================================>" + Headers);
+                                    Log.d(Tag, "RESPONSE TIME   ===========================================>" + (rx - tx) + " ms");
+
+
+                                    Log.d(Tag, "===============writing data to shared preference=========================>" + bodyy);
+
+
+                                    editor.putString("response", bodyy);
+                                    editor.putString("Headers", Headers);
+                                    editor.putString("code", String.valueOf(responsecode));
+                                    editor.putString("time", "" + (rx - tx));
+                                    editor.apply();
+                                    Log.d(Tag, "===============writing data to shared preference done=========================>" + bodyy);
+                                    //   if (dialog != null) dialog.dismiss();
+
+                                    //here comes response activity
+                                    // Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
+                                    // intent.putExtra("url", finalUrlvalue);
+
+                                    // startActivity(intent);
+                                    Intent intent = new Intent(RequestActivity.this, ResultActivity.class);
+                                    intent.putExtra("url", finalUrlvalue1);
+                                    intent.putExtra("reqtype", "POST");
+                                    startActivity(intent);
+                                } catch (Exception e) {
+
+
+                                }
+
+                            }
+                        });
+
+
+                    }
+                });
+
+
+            } catch (final Exception e) {
+
+
+                e.printStackTrace();
+
+            }
+
+
+        }
+
+
+        else if (method.equals("COMMON"))
+        {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1249,7 +1462,9 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             }
 
 
-        } else if (method.equals("DELETE")) {
+        }
+
+        else if (method.equals("DELETE")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");

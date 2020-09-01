@@ -95,7 +95,7 @@ public class BodyFragment extends Fragment {
         AddBody = view.findViewById(R.id.AddBody);
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         outlined_exposed_dropdown = view.findViewById(R.id.outlined_exposed_dropdown);
-        final String[] request = {"MULTIFORM", "JSON", "XML", "NONE"};
+        final String[] request = {"MULTIFORM", "JSON", "XML", "NONE","URLENCODED"};
          arrayadapter = new MyAdapter<>(context, android.R.layout.simple_dropdown_item_1line, request);
 
 
@@ -136,6 +136,15 @@ public class BodyFragment extends Fragment {
                             editor.putString("rawbodytype", "NONE");
                             editor.apply();
                             break;
+
+
+                        case 5:
+                            //NONE BODYFLAG 4
+                            None();
+                            editor.putString("bodytypeflag", "5");
+                            editor.putString("rawbodytype", "URLENCODED");
+                            editor.apply();
+                            break;
                     }
                 } catch (Exception e) {
                     Log.e("Err", e.toString());
@@ -161,6 +170,10 @@ public class BodyFragment extends Fragment {
                 case "4":
                     None();
                     outlined_exposed_dropdown.setText("NONE", false);
+                    break;
+                case "5":
+                    formData();
+                    outlined_exposed_dropdown.setText("URLENCODED", false);
                     break;
             }
         } catch (Exception e) {

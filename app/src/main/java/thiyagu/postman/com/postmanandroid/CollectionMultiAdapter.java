@@ -1,5 +1,6 @@
 package thiyagu.postman.com.postmanandroid;
 
+import androidx.appcompat.widget.PopupMenu;
 import androidx.room.Room;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
@@ -67,13 +69,13 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
 
     @Override
     public CollectionCategoryViewHolder onCreateParentViewHolder(ViewGroup parentViewGroup) {
-        View movieCategoryView = mInflator.inflate(R.layout.movie_category_view, parentViewGroup, false);
-        return new CollectionCategoryViewHolder(movieCategoryView);
+        View movieCategoryView = mInflator.inflate(R.layout.collection_layout, parentViewGroup, false);
+        return new CollectionCategoryViewHolder(movieCategoryView,context);
     }
 
     @Override
     public CollectionViewHolder onCreateChildViewHolder(ViewGroup childViewGroup) {
-        View moviesView = mInflator.inflate(R.layout.movies_view, childViewGroup, false);
+        View moviesView = mInflator.inflate(R.layout.child_collection_view, childViewGroup, false);
         return new CollectionViewHolder(moviesView);
     }
 
@@ -169,14 +171,13 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
                     }
                     if (object_request.has("body")) {
                         BodyDAO bodyDAO = telleriumDataDatabase.getbodyDAO();
-
+                        bodyDAO.nukeBody();
                         PrintLog("found body");
                         JSONObject object = object_request.getJSONObject("body");
                         String mode = object.getString("mode");
                         System.out.println(mode);
                         Body body = new Body();
-                        switch (mode)
-                        {
+                        switch (mode) {
 
                             case "formdata":
 
@@ -185,8 +186,7 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
                                 JSONArray formdata_Array = object.getJSONArray("formdata");
                                 body.setBodytype("MULTIFORM");
                                 // body.bodytype();
-                                for (int i = 0; i < formdata_Array.length(); i++)
-                                {
+                                for (int i = 0; i < formdata_Array.length(); i++) {
                                     JSONObject formdata_object = formdata_Array.getJSONObject(i);
                                     String formdata_key = formdata_object.getString("key");
                                     body.setKey(formdata_key);
@@ -228,6 +228,8 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
                                 break;
 
                             case "urlencoded":
+                                editor.putString("bodytypeflag", 5 + "");
+                                editor.apply();
                                 PrintLog("found urlencoded");
                                 body.setBodytype("URLENCODED");
                                 formdata_Array = object.getJSONArray("urlencoded");
@@ -284,14 +286,14 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
                                         editor.putString("bodytypeflag", 2 + "");
                                         editor.putString("rawbody", raw_value);
                                         editor.putString("rawbodytype", "json");
-                                       // editor.apply();
+                                        // editor.apply();
                                         break;
 
                                     case "xml":
 
                                         editor.putString("bodytypeflag", "3");
                                         editor.putString("rawbodytype", "XML");
-                                       // editor.apply();
+                                        // editor.apply();
                                         break;
 
 
@@ -407,7 +409,7 @@ class CollectionViewHolder extends RecyclerView.ViewHolder {
 }
 
 class CollectionCategoryViewHolder extends ParentViewHolder {
-
+    int i = 0;
     private static final float INITIAL_POSITION = 0.0f;
     private static final float ROTATED_POSITION = 90f;
 
@@ -415,15 +417,83 @@ class CollectionCategoryViewHolder extends ParentViewHolder {
     private TextView mMovieTextView;
     private TextView totalCollections;
     private ImageView options;
+    Context context;
+    private ImageView ic_baseline_more_vert_24;
 
-    public CollectionCategoryViewHolder(View itemView) {
+    public CollectionCategoryViewHolder(View itemView, Context context)
+
+    {
         super(itemView);
         mMovieTextView = (TextView) itemView.findViewById(R.id.tv_movie_category);
         totalCollections = itemView.findViewById(R.id.total_collections);
         mArrowExpandImageView = (ImageView) itemView.findViewById(R.id.iv_arrow_expand);
-        options = itemView.findViewById(R.id.options);
+        ic_baseline_more_vert_24 = itemView.findViewById(R.id.ic_baseline_more_vert_24);
+        // options = itemView.findViewById(R.id.options);
+        this.context = context;
+        mArrowExpandImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (isExpanded()) {
+                    int i = collapseView();
+                    System.out.println(i);
+                } else {
+                    int i = expandView();
+                    System.out.println(i);
+
+                }
+            }
+        });
+        ic_baseline_more_vert_24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isExpanded()) {
+                    int i = collapseView();
+                    System.out.println(i);
 
 
+                }
+                else {
+
+
+                    showMenu(ic_baseline_more_vert_24,getAdapterPosition());
+                }
+
+            }
+        });
+
+
+
+    }
+
+    public void showMenu(View anchor, final int position) {
+        final PopupMenu popup = new PopupMenu(context, anchor);
+        popup.getMenuInflater().inflate(R.menu.menu_collection, popup.getMenu());
+        popup.show();
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+
+                switch (item.getTitle().toString()){
+
+                    case "delete":
+                        Log.v("statusstaus","deleted"+position);
+                        break;
+
+
+
+                    case "export":
+                        Log.v("statusstaus","exported"+position);
+                        break;
+
+                }
+
+
+                return false;
+            }
+        });
     }
 
     public void bind(MovieCategory movieCategory) {
@@ -433,6 +503,8 @@ class CollectionCategoryViewHolder extends ParentViewHolder {
 
         totalCollections.setText(movieCategory.getNumber() + " Requests");
     }
+
+
 
     @Override
     public void setExpanded(boolean expanded) {

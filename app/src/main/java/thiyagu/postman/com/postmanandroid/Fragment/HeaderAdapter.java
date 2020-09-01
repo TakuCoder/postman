@@ -116,10 +116,11 @@ public class HeaderAdapter extends RecyclerView
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("ASas","AasasaS");
+                Log.v("ASas",mDataset.get(position).getTag());
                 Log.v("sdsd",holder.checkBox.isChecked()+"" );
                 //Log.v(Tag, "CheckBoxStatusheader" + holder.checkBox.isChecked() + mDataset.get(position).getTag());
                 database.getHeaderDAO().updateHeader(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getTag());
+
             }
         });
         holder.card_view.setOnClickListener(new View.OnClickListener() {

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Android-postman.iml" filepath="$PROJECT_DIR$/.idea/modules/Android-postman.iml" group="postman" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android-postman.iml" filepath="$PROJECT_DIR$/.idea/modules/android-postman.iml" group="postman" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="postman/app" />
       <module fileurl="file://$PROJECT_DIR$/postman.iml" filepath="$PROJECT_DIR$/postman.iml" group="postman" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/postman-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/postman-app.iml" group="postman/app" />

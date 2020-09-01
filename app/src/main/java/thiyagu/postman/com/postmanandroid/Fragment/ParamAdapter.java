@@ -108,23 +108,26 @@ public class ParamAdapter extends RecyclerView
         Log.v(Tag, mDataset.get(position).getFlag());
         if (mDataset.get(position).getFlag().equals("true")) {
             holder.checkBox.setChecked(false);
+            Log.v("asdsadsad","false");
 
         } else {
 
             holder.checkBox.setChecked(true);
+            Log.v("asdsadsad","true");
         }
 
 
-        holder.checkBox.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
 
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Log.v(Tag, "CheckBoxStatus" + holder.checkBox.isChecked() + mDataset.get(position).getTag());
                 database.getParametersDAO().updateParam(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getTag());
-                return false;
+
             }
         });
-        holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.card_view.setOnLongClickListener(new View.OnLongClickListener()
+        {
             @Override
 
             public boolean onLongClick(View v) {

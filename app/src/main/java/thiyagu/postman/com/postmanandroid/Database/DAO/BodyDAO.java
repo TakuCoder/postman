@@ -32,4 +32,9 @@ public interface BodyDAO {
     @Query("SELECT * FROM body where flag ='true'")
     public List<Body> getBodyFlagged();
 
+
+    @Query("DELETE FROM body")
+    public void nukeBody();
+
+
 }

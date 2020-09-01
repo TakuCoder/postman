@@ -58,6 +58,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.RequestActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_nav_drawer_main"
             android:theme="@style/MatterialAppTheme" />
         <activity

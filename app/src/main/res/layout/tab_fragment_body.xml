@@ -5,14 +5,24 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp"
     android:orientation="vertical">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:weightSum="100">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <!--<RadioButton-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <!--<RadioButton-->
             <!--android:id="@+id/radio_formdata"-->0
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
@@ -22,75 +32,80 @@
             <!--android:textColor="@color/white"-->
             <!--android:visibility="gone" />-->
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/req_type_spinner"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:layout_weight="0.2"
-            android:hint=""
-            app:boxBackgroundColor="@color/orange"
-            app:errorEnabled="false"
-            app:helperText=""
-            app:helperTextEnabled="false">
-
-            <AutoCompleteTextView
-                android:id="@+id/outlined_exposed_dropdown"
-                style="@style/MyAutoCompleteTextView"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/req_type_spinner"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/orange"
-                android:inputType="none" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_margin="4dp"
+                android:layout_weight="0.2"
+                android:hint=""
+                app:boxBackgroundColor="@color/orange"
+                app:errorEnabled="false"
+                app:helperText=""
+                app:helperTextEnabled="false">
+
+                <AutoCompleteTextView
+                    android:id="@+id/outlined_exposed_dropdown"
+                    style="@style/MyAutoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/orange"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+
+        </LinearLayout>
+
+        <Button
+
+            android:id="@+id/AddBody"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="#ff6c37"
+            android:text="Add Body"
+            android:textColor="@android:color/white" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="4dp"
+            android:id="@+id/my_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/fab"
+            android:layout_marginTop="10dp"
+            android:scrollbars="vertical" />
+
+        <EditText
+            android:id="@+id/raw_textfield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_roundborder"
+            android:gravity="top|left"
+            android:lines="5"
+            android:maxLines="100"
+            android:minLines="2"
+            android:padding="20dp"
+            android:scrollbars="vertical" />
+
+        <Button
+
+            android:id="@+id/button_addRawText"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ff6c37"
+            android:text="add raw body"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-    <Button
+</ScrollView>
 
-        android:id="@+id/AddBody"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:background="#ff6c37"
-        android:text="Add Body"
-        android:textColor="@android:color/white" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_margin="4dp"
-        android:id="@+id/my_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/fab"
-        android:layout_marginTop="10dp"
-        android:scrollbars="vertical" />
-
-    <EditText
-        android:id="@+id/raw_textfield"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_roundborder"
-        android:gravity="top|left"
-        android:lines="5"
-        android:maxLines="100"
-        android:minLines="2"
-        android:padding="20dp"
-        android:scrollbars="vertical" />
-
-    <Button
-
-        android:id="@+id/button_addRawText"
-        android:layout_width="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#ff6c37"
-        android:text="add raw body"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
 
 </LinearLayout>

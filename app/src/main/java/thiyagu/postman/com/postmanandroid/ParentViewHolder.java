@@ -20,6 +20,7 @@ public class ParentViewHolder extends RecyclerView.ViewHolder implements View.On
          */
         void onParentListItemExpanded(int position);
 
+
         /**
          * Called when a list item is collapsed.
          *
@@ -130,24 +131,26 @@ public class ParentViewHolder extends RecyclerView.ViewHolder implements View.On
     /**
      * Triggers expansion of the parent.
      */
-    protected void expandView() {
+    protected int expandView() {
         setExpanded(true);
         onExpansionToggled(false);
 
         if (mParentListItemExpandCollapseListener != null) {
             mParentListItemExpandCollapseListener.onParentListItemExpanded(getAdapterPosition());
         }
+        return getAdapterPosition();
     }
 
     /**
      * Triggers collapse of the parent.
      */
-    protected void collapseView() {
+    protected int collapseView() {
         setExpanded(false);
         onExpansionToggled(true);
 
         if (mParentListItemExpandCollapseListener != null) {
             mParentListItemExpandCollapseListener.onParentListItemCollapsed(getAdapterPosition());
         }
+        return getAdapterPosition();
     }
 }
