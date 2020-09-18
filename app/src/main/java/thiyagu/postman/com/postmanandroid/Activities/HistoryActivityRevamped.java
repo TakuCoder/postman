@@ -1,4 +1,5 @@
 package thiyagu.postman.com.postmanandroid.Activities;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,18 +42,23 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import thiyagu.postman.com.postmanandroid.CollectionMultiAdapter;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
+import thiyagu.postman.com.postmanandroid.Database.DAO.HistoryDAO;
 import thiyagu.postman.com.postmanandroid.Database.Databases.CollectionDatabase;
+import thiyagu.postman.com.postmanandroid.Database.Databases.TelleriumDataDatabase;
+import thiyagu.postman.com.postmanandroid.Database.History;
 import thiyagu.postman.com.postmanandroid.ExpandableRecyclerAdapter;
+import thiyagu.postman.com.postmanandroid.Model.HistoryClass;
 import thiyagu.postman.com.postmanandroid.Model.MovieCategory;
 import thiyagu.postman.com.postmanandroid.Model.Movies;
-import thiyagu.postman.com.postmanandroid.CollectionMultiAdapter;
 import thiyagu.postman.com.postmanandroid.R;
 import thiyagu.postman.com.postmanandroid.Utils.CollectionsParser;
 import thiyagu.postman.com.postmanandroid.Utils.PublicShareCollectionParser;
-public class CollectionsActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class HistoryActivityRevamped extends AppCompatActivity implements View.OnClickListener {
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
     public static Bus bus = new Bus(ThreadEnforcer.MAIN);
@@ -64,57 +70,112 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     private RecyclerView recyclerView;
-    private Boolean isFabOpen = false;
-    private FloatingActionButton fab, fab_url, fab2;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+
+
+    List<HistoryClass> historyClassList;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collections);
-        builder = new AlertDialog.Builder(this);
-        bus.register(this);
+        setContentView(R.layout.activity_history_revamped);
         inflater = this.getLayoutInflater();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        collectionDatabase = Room.databaseBuilder(CollectionsActivity.this, CollectionDatabase.class, "collection_db")
+        collectionDatabase = Room.databaseBuilder(this, CollectionDatabase.class, "collection_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab_url = (FloatingActionButton) findViewById(R.id.fab_url);
-        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
-        fab.setOnClickListener(this);
-        fab_url.setOnClickListener(this);
-        fab2.setOnClickListener(this);
-        animation_view = findViewById(R.id.animation_view);
+
         getData();
+
+
+
+//        builder = new AlertDialog.Builder(this);
+//        bus.register(this);
+//        inflater = this.getLayoutInflater();
+//        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        collectionDatabase = Room.databaseBuilder(HistoryActivityRevamped.this, CollectionDatabase.class, "collection_db")
+//                .allowMainThreadQueries()   //Allows room to do operation on main thread
+//                .build();
+//
+//
+//       // animation_view = findViewById(R.id.animation_view);
+//        getData();
     }
     public void getData()
     {
         // mAdapter = null;
         movieCategories.clear();
         recyclerView.setAdapter(mAdapter);
-        InfoDAO info = collectionDatabase.getInfoDAO();
-        List<InfoTable> infoTable = info.getInfo();
-        if (infoTable.size() > 0)
+        TelleriumDataDatabase database = Room.databaseBuilder(this, TelleriumDataDatabase.class, "data_db").allowMainThreadQueries().build();
+        HistoryDAO historyDAO = database.getHistoryDAO();
+        List<String> history_data = historyDAO.getDate();
+
+        if (history_data.size() > 0)
         {
-            Log.e("lenghtttt", infoTable.size() + "");
-            List<MovieCategory> arrayList = new ArrayList<>();
-            for (int i = 0; i < infoTable.size(); i++)
+            //Log.e("lenghtttt", infoTable.size() + "");
+//            List<MovieCategory> arrayList = new ArrayList<>();
+//            for (int i = 0; i < history_data.size(); i++)
+//            {
+//                List<ItemTable> itemTables = collectionDatabase.getItemDAO().getItemByPostId(infoTable.get(i).get_postman_id());
+//                List<Movies> moviesList = new ArrayList<>();
+//                for (int h = 0; h < itemTables.size(); h++) {
+//                    Movies movies = new Movies(itemTables.get(h).getName());
+//                    movies.setParentName(infoTable.get(i).get_postman_id());
+//                    moviesList.add(movies);
+//                }
+//                MovieCategory main_movie = new MovieCategory(infoTable.get(i).getName() + "", moviesList, moviesList.size());
+//                movieCategories.add(main_movie);
+//            }
+//
+
+            for (int k = 0; k < history_data.size(); k++)
             {
-                List<ItemTable> itemTables = collectionDatabase.getItemDAO().getItemByPostId(infoTable.get(i).get_postman_id());
+
+
+                List<History> data = historyDAO.getHistoryByDate(history_data.get(k));
+                Log.v("sdsdssd",data.size()+"");
                 List<Movies> moviesList = new ArrayList<>();
-                for (int h = 0; h < itemTables.size(); h++) {
-                    Movies movies = new Movies(itemTables.get(h).getName());
-                    movies.setParentName(infoTable.get(i).get_postman_id());
+                MovieCategory main_movie=null;
+                for (int u = 0; u < data.size(); u++)
+                {
+
+                    Log.v("sdsdsdsdds",u+"");
+
+
+                    Movies movies = new Movies(data.get(u).getUrl());
+                    movies.setParentName(data.get(u).getDate());
                     moviesList.add(movies);
+                    main_movie = new MovieCategory(moviesList.get(u).getParentName() + "", moviesList, moviesList.size());
+
                 }
-                MovieCategory main_movie = new MovieCategory(infoTable.get(i).getName() + "", moviesList, moviesList.size());
+
                 movieCategories.add(main_movie);
+                mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
+                mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener()
+                {
+                    @Override
+                    public void onListItemExpanded(int position) {
+                        MovieCategory expandedMovieCategory = movieCategories.get(position);
+                    }
+                    @Subscribe
+                    public void getMessage(String s) {
+                        Toast.makeText(HistoryActivityRevamped.this, s, Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void OnClickListener(int position) {
+                        Log.v("asdsadsadsa", position + "");
+                    }
+                    @Override
+                    public void onListItemCollapsed(int position) {
+                        MovieCategory collapsedMovieCategory = movieCategories.get(position);
+                    }
+                });
+                recyclerView.setAdapter(mAdapter);
+
             }
+
             mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
             mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener()
             {
@@ -124,7 +185,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                 }
                 @Subscribe
                 public void getMessage(String s) {
-                    Toast.makeText(CollectionsActivity.this, s, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HistoryActivityRevamped.this, s, Toast.LENGTH_LONG).show();
                 }
                 @Override
                 public void OnClickListener(int position) {
@@ -138,9 +199,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
             recyclerView.setAdapter(mAdapter);
         } else {
             recyclerView.setVisibility(View.GONE);
-            animation_view.setVisibility(View.VISIBLE);
-            animation_view.playAnimation();
-            Toast.makeText(getApplicationContext(), "Add collection!", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(), "Add collection!", Toast.LENGTH_LONG).show();
         }
     }
     @Override
@@ -164,7 +223,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         switch (id) {
             case R.id.fab:
                 //getData();
-                animateFAB();
+                //animateFAB();
                 break;
             case R.id.fab_url:
                 //Initiate Link Capture
@@ -229,25 +288,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
                 break;
         }
     }
-    public void animateFAB() {
-        if (isFabOpen) {
-            fab.startAnimation(rotate_backward);
-            fab_url.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab_url.setClickable(false);
-            fab2.setClickable(false);
-            isFabOpen = false;
-            Log.d("Raj", "close");
-        } else {
-            fab.startAnimation(rotate_forward);
-            fab_url.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab_url.setClickable(true);
-            fab2.setClickable(true);
-            isFabOpen = true;
-            Log.d("Raj", "open");
-        }
-    }
+
     private void checkPermissionsAndOpenFilePicker() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -302,7 +343,7 @@ public class CollectionsActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Context s) {
             //CollectionsActivity.mAdapter = null;
-            CollectionsActivity collectionsActivity = (CollectionsActivity) s;
+            HistoryActivityRevamped collectionsActivity = (HistoryActivityRevamped) s;
             collectionsActivity.getData();
             super.onPostExecute(s);
         }

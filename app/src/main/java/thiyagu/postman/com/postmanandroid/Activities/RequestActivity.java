@@ -817,7 +817,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             // Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
 
-            Intent intent = new Intent(this, HistoryActivity.class);
+            Intent intent = new Intent(this, HistoryActivityRevamped.class);
             startActivity(intent);
 
         } else if (id == R.id.settings) {

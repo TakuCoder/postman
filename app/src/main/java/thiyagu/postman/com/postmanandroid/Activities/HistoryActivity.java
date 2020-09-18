@@ -32,17 +32,10 @@ public class HistoryActivity extends AppCompatActivity {
         HistoryDAO historyDAO = database.getHistoryDAO();
 
         List<History> history = historyDAO.getHistory();
-
-        Log.v("sadsadsad", history.size() + "xxxvxvxv");
-
-        //   BodyDAO bodyDAO = database.getbodyDAO();
-        //   List<Body> dataa = bodyDAO.getBody();
         historyClassList = new ArrayList<>();
 
 
         List<String> date_values = historyDAO.getDate();
-
-        Log.v("thisistoprintAA", date_values.toString());
 
 
         for (int k = 0; k < date_values.size(); k++)
@@ -50,14 +43,12 @@ public class HistoryActivity extends AppCompatActivity {
 
 
             List<History> data = historyDAO.getHistoryByDate(date_values.get(k));
-            // ArrayList<String> data = feedReaderDbHelper.getAllhistory(aa.get(k));
 
-            for (int u = 0; u < data.size(); u++) {
+            for (int u = 0; u < data.size(); u++)
+            {
 
                 History temp_history = data.get(u);
-                //   String value[] = data.get(u).split("@@");
 
-                // Log.v("sdasdsasa", data.get(u));
 
                 if (u == 0) {
                     historyClassList.add(new HistoryClass("", temp_history.getDate(), "", "", "", "", "", ViewType.CITY_TYPE));

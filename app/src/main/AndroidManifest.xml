@@ -49,6 +49,10 @@
         <activity
             android:name=".Activities.HistoryActivity"
             android:label="History" />
+
+        <activity
+            android:name=".Activities.HistoryActivityRevamped"
+            android:label="History" />
         <activity
             android:name=".Activities.BookmarkActivity"
             android:label="Bookmark" />
