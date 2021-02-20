@@ -43,6 +43,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import thiyagu.postman.com.postmanandroid.CollectionMultiAdapter;
+import thiyagu.postman.com.postmanandroid.CustomAdapters.HistoryMultiAdapter;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoDAO;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.InfoTable;
 import thiyagu.postman.com.postmanandroid.Database.CollectionsDAO.ItemTable;
@@ -62,7 +63,7 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     public static final int FILE_PICKER_REQUEST_CODE = 1;
     public static Bus bus = new Bus(ThreadEnforcer.MAIN);
-    static private CollectionMultiAdapter mAdapter;
+    static private HistoryMultiAdapter mAdapter;
     public List<MovieCategory> movieCategories = new ArrayList<>();
     CollectionDatabase collectionDatabase;
     LayoutInflater inflater;
@@ -85,6 +86,7 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
         collectionDatabase = Room.databaseBuilder(this, CollectionDatabase.class, "collection_db")
                 .allowMainThreadQueries()   //Allows room to do operation on main thread
                 .build();
+        animation_view = findViewById(R.id.animation_view);
 
         getData();
 
@@ -100,7 +102,7 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
 //                .build();
 //
 //
-//       // animation_view = findViewById(R.id.animation_view);
+
 //        getData();
     }
     public void getData()
@@ -152,7 +154,7 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
                 }
 
                 movieCategories.add(main_movie);
-                mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
+                mAdapter = new HistoryMultiAdapter(this, movieCategories, "asas");
                 mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener()
                 {
                     @Override
@@ -176,7 +178,7 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
 
             }
 
-            mAdapter = new CollectionMultiAdapter(this, movieCategories, "asas");
+            mAdapter = new HistoryMultiAdapter(this, movieCategories, "asas");
             mAdapter.setExpandCollapseListener(new ExpandableRecyclerAdapter.ExpandCollapseListener()
             {
                 @Override
@@ -199,6 +201,9 @@ public class HistoryActivityRevamped extends AppCompatActivity implements View.O
             recyclerView.setAdapter(mAdapter);
         } else {
             recyclerView.setVisibility(View.GONE);
+            animation_view.setVisibility(View.VISIBLE);
+            animation_view.playAnimation();
+            Toast.makeText(getApplicationContext(), "Add History!", 0).show();
            // Toast.makeText(getApplicationContext(), "Add collection!", Toast.LENGTH_LONG).show();
         }
     }

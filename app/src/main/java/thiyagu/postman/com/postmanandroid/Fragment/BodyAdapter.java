@@ -126,10 +126,11 @@ public class BodyAdapter extends RecyclerView
                 database.getbodyDAO().updateBody(String.valueOf(holder.checkBox.isChecked()), mDataset.get(position).getReferenceId());
             }
         });
-        holder.card_view.setOnClickListener(new View.OnClickListener() {
-            @Override
 
-            public void onClick(View v) {
+
+        holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
 
                 //  FeedReaderDbHelper feedReaderDbHelper = new FeedReaderDbHelper(mcontext);
                 // feedReaderDbHelper.DeleteSingleRecParam(position);
@@ -169,11 +170,10 @@ public class BodyAdapter extends RecyclerView
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-
-
-
+                return false;
             }
         });
+
 
     }
 

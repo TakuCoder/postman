@@ -111,7 +111,64 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
 
                     String request_method = object_request.get("method").toString();
                     if (object_request.has("url")) {
-                        url_object = object_request.getJSONObject("url");
+                       url_object = object_request.getJSONObject("url");
+
+
+                        String raw = url_object.getString("raw");
+                        System.out.println(raw);
+                        String[] url  = raw.split("\\?");
+
+
+                        String protocol = url_object.getString("protocol");
+                        if(protocol.equalsIgnoreCase("http"))
+                        {
+                            editor.putBoolean("https_check",false);
+                        }
+                        else if(protocol.equalsIgnoreCase("https"))
+                        {
+                            editor.putBoolean("https_check",true);
+
+                        }
+
+JSONArray path = url_object.getJSONArray("path");
+                        StringBuilder stringBuilder =  new StringBuilder();
+                        JSONArray host = url_object.getJSONArray("host");
+
+                        String url_full = host.getString(0)+"."+host.getString(1);
+                        url_full = url_full+"/"+path.getString(0);
+                       //
+                         editor.putString("url_value",url_full);
+                        System.out.println("======================="+url_full+"======================");
+
+                        String req_method =  path.getString(0);
+
+
+                        switch (req_method)
+                        {
+
+                            case "get":
+                                editor.putString("req_value","GET");
+                                System.out.println("one");
+                                break;
+
+
+                            case "post":
+
+
+                                editor.putString("req_value","POST");
+                                System.out.println("two");
+                                break;
+
+                        }
+                        System.out.println("dsdsdsdsdsdsdssd"+req_method);
+                        editor.putString("req_method",req_method);
+                                //https_check
+
+
+
+//editor.putString("url_value",url[0]);
+editor.commit();
+editor.apply();
 
                     }
 
@@ -169,7 +226,8 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
 
                         PrintLog("no found header");
                     }
-                    if (object_request.has("body")) {
+                    if (object_request.has("body"))
+                    {
                         BodyDAO bodyDAO = telleriumDataDatabase.getbodyDAO();
                         bodyDAO.nukeBody();
                         PrintLog("found body");
@@ -321,7 +379,8 @@ public class CollectionMultiAdapter extends ExpandableRecyclerAdapter<Collection
                         PrintLog("no body found");
                     }
 
-                    if (url_object.has("query")) {
+                    if (url_object.has("query"))
+                    {
                         ParametersDAO parametersDAO = telleriumDataDatabase.getParametersDAO();
                         parametersDAO.nukeParams();
                         parameters parameterss;

@@ -164,7 +164,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         InfoDAO infoDAO = collectionDatabase.getInfoDAO();
 
         List<InfoTable> infoTables = infoDAO.getInfo();
-        Log.d("sadasd", infoTables.size() + "");
+
 
         // ((BaseActivity)getApplication()).getComponent().inject(this);
         Intent intent = new Intent(this, NetChecker.class);
@@ -224,10 +224,6 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         dialog = new ProgressDialog(RequestActivity.this);
         dialog.setCancelable(false);
 
-//        Typeface font2 = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Bold.ttf");
-//        SpannableStringBuilder SS = new SpannableStringBuilder("POSTMAN-ANDROID");
-//        SS.setSpan(new CustomTypefaceSpan("", font2), 0, SS.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-//        getSupportActionBar().setTitle(SS);
 
         assetManager = this.getAssets();
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
@@ -241,7 +237,6 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
         final String[] method_array = {"GET", "POST", "DELETE", "PUT"};
-        // final String[] request = {"11", "22", "33", "44"};
         method_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, method_array);
 
         body = tabLayout.getTabAt(3);
@@ -328,21 +323,22 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                 weburl = UrlField.getText().toString();
                 if (isHttps()) {
                     fullurl = "https://" + weburl;
+                    //  fullurl = weburl;
 
                 } else {
                     fullurl = "http://" + weburl;
+                    //   fullurl = weburl;
 
                 }
 
 
-                Log.v("fdfdfd", weburl);
                 editor.putString("url_value", weburl);
                 editor.putString("req_value", autoCompleteTextView.getText().toString());
                 editor.apply();
 
                 if (isValid(fullurl)) {
 
-
+                    Toast.makeText(getContext(), fullurl, Toast.LENGTH_LONG).show();
                     // feedReaderDbHelper = new FeedReaderDbHelper(RequestActivity.this);
                     ArrayList<String> headerlist = feedReaderDbHelper.getAllHeader();
                     HeaderDAO headerDAO = database.getHeaderDAO();
@@ -565,17 +561,17 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         });
         try {
 
-            Log.v(Tag, "==============================================");
+            Log.v(Tag, "=================urlvalue setting=============================");
             Log.v(Tag, "setting default value for url and req type");
             String url_value = prefs.getString("url_value", null);
             String req_value = prefs.getString("req_value", null);
 
             if (req_value == null) {
-
+                System.out.println("=============>if");
                 autoCompleteTextView.setText(method_adapter.getItem(0), false);
-                UrlField.setText("");
-            }
-            else{
+                UrlField.setText(url_value);
+            } else {
+                System.out.println("=============>else");
 
                 autoCompleteTextView.setText(req_value, false);
                 UrlField.setText(url_value);
@@ -591,8 +587,8 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         } catch (Exception e) {
             Log.v(Tag, e.toString());
 
-           // FirebaseCrash.logcat(Log.ERROR, TAG, "NPE caught");
-           // FirebaseCrash.report(e);
+            // FirebaseCrash.logcat(Log.ERROR, TAG, "NPE caught");
+            // FirebaseCrash.report(e);
 
         }
 
@@ -812,7 +808,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
         if (id == R.id.bookmark) {
 //ABC123456789
-            Intent intent = new Intent(this, BookmarkActivity.class);
+            Intent intent = new Intent(this, BookmarkActivityRevamped.class);
             startActivity(intent);
             // Toasty.warning(RequestActivity.this, "Coming Soon!", Toast.LENGTH_SHORT, true).show();
         } else if (id == R.id.history) {
@@ -886,10 +882,6 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
         Log.v(Tag, "======================BEFORE DETECTION========================");
         Log.v(Tag, urlvalue);
         Log.v(Tag, "======================BEFORE DETECTION========================");
-
-
-
-
 
 
         if (paramlist.size() > 0) {
@@ -1012,9 +1004,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                 Toasty.warning(RequestActivity.this, e.toString(), Toast.LENGTH_SHORT, true).show();
             }
 
-        }
-        else if (method.equals("POST"))
-        {
+        } else if (method.equals("POST")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1033,8 +1023,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
                     bodyflag = "4";
 
                 }
-                switch (bodyflag)
-                {
+                switch (bodyflag) {
 
 
                     case "1":
@@ -1152,8 +1141,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
 
 
                 final String finalUrlvalue1 = urlvalue;
-                postClient.newCall(request).enqueue(new Callback()
-                {
+                postClient.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
 
@@ -1238,11 +1226,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             }
 
 
-        }
-
-
-        else if (method.equals("COMMON"))
-        {
+        } else if (method.equals("COMMON")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");
@@ -1462,9 +1446,7 @@ public class RequestActivity extends AppCompatActivity implements NavigationView
             }
 
 
-        }
-
-        else if (method.equals("DELETE")) {
+        } else if (method.equals("DELETE")) {
             try {
                 Request request = null;
                 Log.v(Tag, "======================POST========================");

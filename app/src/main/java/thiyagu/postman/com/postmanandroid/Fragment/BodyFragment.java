@@ -95,7 +95,7 @@ public class BodyFragment extends Fragment {
         AddBody = view.findViewById(R.id.AddBody);
         roboto = Typeface.createFromAsset(assetManager, "fonts/Roboto-Bold.ttf");
         outlined_exposed_dropdown = view.findViewById(R.id.outlined_exposed_dropdown);
-        final String[] request = {"MULTIFORM", "JSON", "XML", "NONE","URLENCODED"};
+        final String[] request = {"MULTIFORM", "JSON", "XML", "NONE"};
          arrayadapter = new MyAdapter<>(context, android.R.layout.simple_dropdown_item_1line, request);
 
 

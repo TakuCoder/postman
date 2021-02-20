@@ -5,11 +5,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +36,7 @@ public class ParamPopUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_activity);
 
-        outlined_exposed_dropdown_key = findViewById(R.id.outlined_exposed_dropdown_key);
+        outlined_exposed_dropdown_key = findViewById(R.id.auth_spinner);
         outlined_exposed_dropdown_value = findViewById(R.id.outlined_exposed_dropdown_value);
 
         ArrayAdapter arrayAdapter_key = new ArrayAdapter(this, android.R.layout.simple_list_item_1, getKeyArray());

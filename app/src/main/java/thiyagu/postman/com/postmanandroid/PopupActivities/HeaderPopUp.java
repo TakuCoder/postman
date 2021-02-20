@@ -2,7 +2,6 @@ package thiyagu.postman.com.postmanandroid.PopupActivities;
 
 import androidx.room.Room;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
@@ -14,8 +13,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.UUID;
 
@@ -280,7 +277,7 @@ public class HeaderPopUp extends AppCompatActivity {
                 "video/x-m4v"};
 
 
-        outlined_exposed_dropdown_key = findViewById(R.id.outlined_exposed_dropdown_key);
+        outlined_exposed_dropdown_key = findViewById(R.id.auth_spinner);
         outlined_exposed_dropdown_value = findViewById(R.id.outlined_exposed_dropdown_value);
         content_types = findViewById(R.id.value_field);
         feedReaderDbHelper = new FeedReaderDbHelper(this);

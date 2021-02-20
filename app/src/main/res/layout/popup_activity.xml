@@ -59,7 +59,7 @@
                 <AutoCompleteTextView
                     style="@style/MyAutoCompleteTextView"
 
-                    android:id="@+id/outlined_exposed_dropdown_key"
+                    android:id="@+id/auth_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/orange"
